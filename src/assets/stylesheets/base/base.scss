@@ -1,0 +1,58 @@
+.f-poppins {
+  font-family: "Poppins";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  letter-spacing: 0.1em;
+  margin: 0;
+  padding: 0;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.material-symbols-outlined {
+  color: inherit;
+  vertical-align: middle;
+  font-variation-settings: "FILL" 0;
+
+  // 一般 icon hover 效果
+  &.icon-hover:hover {
+    color: $orange;
+  }
+
+  // icon 填滿樣式
+  &.icon-fill {
+    font-variation-settings: "FILL" 1;
+    color: $orange;
+  }
+}
+
+.btn-link-style {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.3s ease;
+
+  &:hover{
+    transform: translateX(4px);
+  }
+}

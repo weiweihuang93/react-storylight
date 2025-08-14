@@ -1,0 +1,258 @@
+// 共用標題樣式
+.section-title {
+  text-align: center;
+}
+
+.title-decoration {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 15px;
+  z-index: 0;
+}
+
+.title-decoration::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+  background-image: url("/images/line-decoration.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 280px;
+  height: 50px;
+}
+
+// 共用card hover效果
+.card-trans-style {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease; // 過渡效果
+    box-shadow: 0 2px 8px rgba($accent-300, 0.1); // 初始陰影
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba($accent-300, 0.2); // 懸浮陰影
+  }
+}
+
+// header-banner
+.header-banner {
+  position: relative;
+  height: calc(100vh - 108px);
+
+  @media (max-width: 992px) {
+    height: calc(100vh - 80px);
+  }
+
+  .header-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.08); // 半透明白色
+      z-index: 0;
+    }
+  }
+
+  .header-info {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 6rem;
+    color: $white;
+
+    @media (max-width: 768px) {
+      padding-bottom: 8rem;
+    }
+  }
+
+  .mx-w-search {
+    max-width: 720px;
+  }
+
+  .btn-arrow {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -30px;
+  }
+}
+
+// 最新消息
+.section-news {
+  .news-item {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    padding: 20px;
+    border: 1px solid $primary-300;
+    border-radius: $border-radius-lg;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .news-item:hover {
+    box-shadow: 0 4px 15px rgba(141, 63, 38, 0.2);
+  }
+}
+
+// 書籍分類
+.section-category {
+  .category-card {
+    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid $primary-300;
+    border-radius: $border-radius-lg;
+    color: $dark;
+
+    &:hover {
+      background-color: $accent-100;
+      color: $white;
+    }
+  }
+}
+
+// 新書上架
+// 館藏推薦
+.section-dynamic{
+  .dynamic-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .dynamic-info{
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .info-txt{
+      margin-bottom: 1rem;
+    }
+
+    .btn-link-style{
+      margin-left: auto;
+    }
+  }
+}
+
+// 關於我們
+.section-about {
+  .about-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $white;
+    border-radius: $border-radius-lg;
+    padding: 1.5rem;
+    flex: 1;
+  }
+
+  .bg-diamond-wrapper {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 0;
+      background-color: #f5f5f5;
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      transform: translate(-50%, -50%) rotate(45deg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    img {
+      position: relative;
+      width: 100%;
+      height: auto;
+      z-index: 1;
+    }
+  }
+
+  .about-info {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .title-badge {
+    position: relative;
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: $border-radius-lg;
+    background-color: $accent-100;
+    color: $white;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%; // 佔 h3 一半高度
+      background-color: rgba(255, 255, 255, 0.85);
+      z-index: -1;
+    }
+  }
+
+  .sub-desc {
+    font-weight: $font-weight-semibold;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: $border-radius-lg;
+    padding: 1rem;
+    flex-grow: 1; // 撐滿讓卡片等高
+  }
+}
+
+// FAQ
+.section-faq {
+  .faq-q,
+  .faq-a {
+    position: relative;
+    padding: 16px 40px;
+  }
+
+  .faq-q::before {
+    position: absolute;
+    content: "Q";
+    left: 10px;
+    font-size: 24px;
+  }
+  
+  .accordion-body {
+    background: $neutral-200;
+  }
+}
