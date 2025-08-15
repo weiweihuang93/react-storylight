@@ -25,14 +25,15 @@
     border-radius: $border-radius-lg;
     overflow: hidden;
     
-    .border-custom{
-      border-left: 1px solid $neutral-200;
+  }
+  .border-custom{
+    border-left: 1px solid $neutral-200;
 
-      @media (max-width: 992px) {
-        border-left: 0;
-        border-top: 1px solid $neutral-200;
-        margin: 0;
-      }
+    @media (max-width: 992px) {
+      border-left: 0;
+      border-top: 1px solid $neutral-200;
+      margin: 0;
+    }
     }
   
     /* 圖片區 */
@@ -131,5 +132,19 @@
       flex-direction: column;
       padding: 12px 0;
     }
+
+    .card-shop{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-quantity-wrapper {
+      border-radius: $border-radius-lg;
+      border: 1px solid $neutral-200;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
   }
-}
