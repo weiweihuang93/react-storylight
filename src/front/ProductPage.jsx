@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Thumbs } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/thumbs";
+
 export default function ProductPage() {
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
   const [productsData, setProductsData] = useState([]);
 
   // 取得商品
@@ -55,36 +62,49 @@ export default function ProductPage() {
               <div className="" key={product.id}>
                 <div className="row g-3">
                   {/* 圖片區 */}
-                  <div className="col-lg-6 col-sm-12 d-flex flex-column">
-                    {/* 主圖片 */}
-                    <div className="card-img-wrapper">
-                      <img src={product.imageUrl} alt={product.title} />
-                      <span className="card-img-tag">{product.condition}</span>
-                    </div>
-
-                    {/* 縮圖區占位 */}
-                    <div className="thumbnail-row d-flex gap-2 mt-2">
-                      <img
-                        src="./images/book.png"
-                        alt="thumb1"
-                        className="img-thumbnail w-25"
-                      />
-                      <img
-                        src="./images/book.png"
-                        alt="thumb2"
-                        className="img-thumbnail w-25"
-                      />
-                      <img
-                        src="./images/book.png"
-                        alt="thumb3"
-                        className="img-thumbnail w-25"
-                      />
-                    </div>
+                  <div className="col-lg-6 col-12 d-flex flex-column">
+                    {/* 主圖片 Swiper */}
+                    <Swiper
+                      modules={[Thumbs]}
+                      spaceBetween={10}
+                      loop
+                      thumbs={{ swiper: thumbsSwiper }}
+                      className="product-main-swiper mb-3"
+                    >
+                      {[product.imageUrl, ...(product.imagesUrl || [])].map(
+                        (url, index) => (
+                          <SwiperSlide key={index}>
+                            <div className="card-img-wrapper">
+                              <img src={url} alt={`book-${index}`} />
+                              <span className="card-img-tag">
+                                {product.condition}
+                              </span>
+                            </div>
+                          </SwiperSlide>
+                        )
+                      )}
+                    </Swiper>
+                    {/* 縮圖區 */}
+                    <Swiper
+                      modules={[Thumbs]}
+                      onSwiper={setThumbsSwiper}
+                      spaceBetween={10}
+                      slidesPerView={4}
+                      className="product-thumb-swiper"
+                    >
+                      {[product.imageUrl, ...(product.imagesUrl || [])].map(
+                        (url, index) => (
+                          <SwiperSlide key={index}>
+                            <img src={url} alt={`thumb-${index}`} />
+                          </SwiperSlide>
+                        )
+                      )}
+                    </Swiper>
                   </div>
 
                   {/* 商品資訊 */}
-                  <div className="col-lg-6 col-sm-12">
-                    <div className="card-info h-100 d-flex flex-column">
+                  <div className="col-lg-6 col-12">
+                    <div className="card-info h-100 py-0 d-flex flex-column">
                       <h3 className="fs-5 mb-2 title-cp2 h-2em">
                         {product.title}
                       </h3>
@@ -137,7 +157,7 @@ export default function ProductPage() {
                       </div>
 
                       {/* 操作按鈕 */}
-                      <div className="card-operation mt-auto d-flex gap-2">
+                      <div className="card-operation mt-auto">
                         <button className="btn btn-icon">
                           <i className="material-symbols-outlined">favorite</i>
                         </button>
