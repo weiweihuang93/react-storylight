@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
@@ -222,11 +225,21 @@ export default function HomePage() {
       <section className="section-product">
         <div className="container py-6">
           <div className="section-title mb-6">
-            <h2 className="fs-lg-2 fs-3 title-decoration">館藏推薦</h2>
+            <h2 className="fs-lg-2 fs-3 title-decoration">新書上架</h2>
           </div>
-          <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+
+          <Swiper
+            spaceBetween={16} // 卡片間距
+            slidesPerView={1} // 預設一次顯示1張
+            loop={productsData.length > 5}
+            breakpoints={{
+              768: { slidesPerView: 3 }, // md
+              992: { slidesPerView: 4 }, // lg
+              1200: { slidesPerView: 5 }, // xl
+            }}
+          >
             {productsData.map((product) => (
-              <div className="col" key={product.id}>
+              <SwiperSlide key={product.id}>
                 <div className="product-card">
                   {/* 圖片區 + 書況標籤 */}
                   <div className="card-img-wrapper">
@@ -236,7 +249,7 @@ export default function HomePage() {
 
                   {/* 商品資訊 */}
                   <div className="card-info">
-                    <h3 className="fs-6 mb-2 title-cp2 h-2em">
+                    <h3 className="fs-5 mb-2 title-cp2 h-2em">
                       {product.title}
                     </h3>
                     <ul className="product-list">
@@ -268,9 +281,9 @@ export default function HomePage() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         </div>
       </section>
 
