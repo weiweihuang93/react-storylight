@@ -96,55 +96,67 @@ export default function CategoryPage() {
           <div className="container">
             <div className="row g-3">
               {productsData.map((product) => (
-                <div className="product-card row g-3" key={product.id}>
-                  {/* 圖片區 */}
-                  <div className="col-lg-4 col-sm-6 col-6 d-flex flex-column">
-                    <div className="card-img-wrapper">
-                      <img src={product.imageUrl} alt={product.title} />
-                      <span className="card-img-tag">{product.condition}</span>
-                    </div>
-                    <div className="card-operation mt-auto">
-                      <button className="btn btn-icon">
-                        <i className="material-symbols-outlined">favorite</i>
-                      </button>
-                      <button className="btn btn-icon">
-                        <i className="material-symbols-outlined">
-                          shopping_cart
-                        </i>
-                      </button>
-                    </div>
-                  </div>
+                <div className="col-12">
+                  <div className="product-card">
+                    <div className=" row g-3" key={product.id}>
+                      {/* 圖片區 */}
+                      <div className="col-lg-4 col-sm-6 col-6 d-flex flex-column">
+                        <div className="card-img-wrapper">
+                          <img src={product.imageUrl} alt={product.title} />
+                          <span className="card-img-tag">
+                            {product.condition}
+                          </span>
+                        </div>
+                        <div className="card-operation mt-auto">
+                          <button className="btn btn-icon">
+                            <i className="material-symbols-outlined">
+                              favorite
+                            </i>
+                          </button>
+                          <button className="btn btn-icon">
+                            <i className="material-symbols-outlined">
+                              shopping_cart
+                            </i>
+                          </button>
+                        </div>
+                      </div>
 
-                  {/* 商品資訊 */}
-                  <div className="col-lg-4 col-sm-6 col-6">
-                    <div className="card-info h-100 d-flex flex-column">
-                      <h3 className="fs-6 mb-2">{product.title}</h3>
-                      <ul className="product-list gap-2">
-                        <li className="title-cp1">ISBN：{product.isbn}</li>
-                        <li className="title-cp1">作者：{product.author}</li>
-                        <li className="title-cp1">
-                          出版社：{product.publisher}
-                        </li>
-                        <li className="title-cp1">
-                          出版日期：{product.publishDate}
-                        </li>
-                        <li className="title-cp1">
-                          適讀對象：{product.audience}
-                        </li>
-                      </ul>
-                      <p className="fs-5 text-danger fw-bold text-center mt-auto">
-                        <span className="material-symbols-outlined text-primary fs-5 me-3">
-                          paid
-                        </span>
-                        {product.price}
-                      </p>
-                    </div>
-                  </div>
+                      {/* 商品資訊 */}
+                      <div className="col-lg-4 col-sm-6 col-6">
+                        <div className="card-info h-100 d-flex flex-column">
+                          <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                            {product.title}
+                          </h3>
+                          <ul className="product-list gap-2">
+                            <li className="title-cp1">ISBN：{product.isbn}</li>
+                            <li className="title-cp1">
+                              作者：{product.author}
+                            </li>
+                            <li className="title-cp1">
+                              出版社：{product.publisher}
+                            </li>
+                            <li className="title-cp1">
+                              出版日期：{product.publishDate}
+                            </li>
+                            <li className="title-cp1">
+                              適讀對象：{product.audience}
+                            </li>
+                          </ul>
+                          <p className="fs-5 text-danger fw-bold text-center mt-auto">
+                            <span className="material-symbols-outlined text-primary fs-5 me-3">
+                              paid
+                            </span>
+                            {product.price}
+                          </p>
+                        </div>
+                      </div>
 
-                  {/* Content 區 */}
-                  <div className="col-lg-4 col-sm-12 col-12 border-custom m-0">
-                    <div className="card-content">
-                      <p>{product.content}</p>
+                      {/* Content 區 */}
+                      <div className="col-lg-4 col-sm-12 col-12 border-custom">
+                        <div className="card-content">
+                          <p>{product.content}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
