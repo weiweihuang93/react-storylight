@@ -1,4 +1,31 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function CategoryPage() {
+  const [productsData, setProductsData] = useState([]);
+
+  // 取得商品
+  const getAllProducts = async () => {
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/v2/api/${API_PATH}/products/all`
+      );
+      console.log(res);
+
+      const filter10Products = res.data.products.slice(-10);
+      setProductsData(filter10Products);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
   return (
     <>
       <section className="category-navbar py-5">
@@ -67,57 +94,61 @@ export default function CategoryPage() {
       <section className="section-product">
         <div className="bg-neutral-100 py-6">
           <div className="container">
-            <div className="product-card">
-              <div className="row">
-                {/* 圖片區 */}
-                <div className="col-lg-4 col-6">
-                  {/* 圖片區 + 書況標籤 */}
-                  <div className="card-img-wrapper">
-                    <img src="./images/book.png" alt="book" />
-                    <span className="card-img-tag">A</span>
+            <div className="row g-3">
+              {productsData.map((product) => (
+                <div className="product-card row g-3" key={product.id}>
+                  {/* 圖片區 */}
+                  <div className="col-lg-4 col-sm-6 col-6 d-flex flex-column">
+                    <div className="card-img-wrapper">
+                      <img src={product.imageUrl} alt={product.title} />
+                      <span className="card-img-tag">{product.condition}</span>
+                    </div>
+                    <div className="card-operation mt-auto">
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">favorite</i>
+                      </button>
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">
+                          shopping_cart
+                        </i>
+                      </button>
+                    </div>
                   </div>
 
-                  {/* 操作按鈕 */}
-                  <div className="card-operation">
-                    <button className="btn btn-icon">
-                      <i className="material-symbols-outlined">favorite</i>
-                    </button>
-                    <button className="btn btn-icon">
-                      <i className="material-symbols-outlined">shopping_cart</i>
-                    </button>
+                  {/* 商品資訊 */}
+                  <div className="col-lg-4 col-sm-6 col-6">
+                    <div className="card-info h-100 d-flex flex-column">
+                      <h3 className="fs-6 mb-2">{product.title}</h3>
+                      <ul className="product-list gap-2">
+                        <li className="title-cp1">ISBN：{product.isbn}</li>
+                        <li className="title-cp1">作者：{product.author}</li>
+                        <li className="title-cp1">
+                          出版社：{product.publisher}
+                        </li>
+                        <li className="title-cp1">
+                          出版日期：{product.publishDate}
+                        </li>
+                        <li className="title-cp1">
+                          適讀對象：{product.audience}
+                        </li>
+                      </ul>
+                      <p className="fs-5 text-danger fw-bold text-center mt-auto">
+                        <span className="material-symbols-outlined text-primary fs-5 me-3">
+                          paid
+                        </span>
+                        {product.price}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Content 區 */}
+                  <div className="col-lg-4 col-sm-12 col-12 border-custom m-0">
+                    <div className="card-content">
+                      <p>{product.content}</p>
+                    </div>
                   </div>
                 </div>
-                {/* 商品資訊 */}
-                <div className="col-lg-4 col-6">
-                  <div className="card-info h-100 d-flex flex-column">
-                    <h3 className="fs-6 mb-2">
-                      被討厭的勇氣：自我啟發之父「阿德勒」的教導
-                    </h3>
-                    <ul>
-                      <li>ISBN：9789866481451</li>
-                      <li>作者：蔣志榆</li>
-                      <li>出版社：我識</li>
-                      <li>出版日期：2014/01/15</li>
-                      <li>適讀對象：成人(一般)</li>
-                    </ul>
-                    <p className="fs-5 text-danger fw-bold text-center mt-auto">
-                      <span className="material-symbols-outlined text-primary fs-5">
-                        paid
-                      </span>
-                      300
-                    </p>
-                  </div>
-                </div>
-                {/* Content 區 */}
-                <div className="col-lg-4">
-                  <div className="card-content h-100">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur, adipisicing
-                      elit...
-                    </p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -1,4 +1,31 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function HomePage() {
+  const [productsData, setProductsData] = useState([]);
+
+  // 取得商品
+  const getAllProducts = async () => {
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/v2/api/${API_PATH}/products/all`
+      );
+      console.log(res);
+
+      const filter10Products = res.data.products.slice(-10);
+      setProductsData(filter10Products);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
   return (
     <>
       {/* <!-- 輪播圖 --> */}
@@ -197,172 +224,52 @@ export default function HomePage() {
           <div className="section-title mb-6">
             <h2 className="fs-lg-2 fs-3 title-decoration">館藏推薦</h2>
           </div>
-          <div className="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-3">
-            <div className="col">
-              <div className="product-card">
-                {/* 圖片區 + 書況標籤 */}
-                <div className="card-img-wrapper">
-                  <img src="./images/book.png" alt="book" />
-                  <span className="card-img-tag">A</span>
-                </div>
+          <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+            {productsData.map((product) => (
+              <div className="col" key={product.id}>
+                <div className="product-card">
+                  {/* 圖片區 + 書況標籤 */}
+                  <div className="card-img-wrapper">
+                    <img src={product.imageUrl} alt={product.title} />
+                    <span className="card-img-tag">{product.condition}</span>
+                  </div>
 
-                {/* 商品資訊 */}
-                <div className="card-info">
-                  <h3 className="fs-6 mb-2">
-                    被討厭的勇氣：自我啟發之父「阿德勒」的教導
-                  </h3>
-                  <p className="mb-2">Lorem ipsum dolor sit amet consectetur</p>
-                  <p className="fs-5 text-danger fw-bold text-center">
-                    <span className="material-symbols-outlined text-primary fs-5">
-                      paid
-                    </span>
-                    300
-                  </p>
-                </div>
+                  {/* 商品資訊 */}
+                  <div className="card-info">
+                    <h3 className="fs-6 mb-2 title-cp2 h-2em">
+                      {product.title}
+                    </h3>
+                    <ul className="product-list">
+                      <li className="title-cp1">ISBN：{product.isbn}</li>
+                      <li className="title-cp1">作者：{product.author}</li>
+                      <li className="title-cp1">出版社：{product.publisher}</li>
+                      <li className="title-cp1">
+                        出版日期：{product.publishdate}
+                      </li>
+                      <li className="title-cp1">
+                        適讀對象：{product.suitable}
+                      </li>
+                    </ul>
+                    <p className="fs-5 text-danger fw-bold text-center">
+                      <span className="material-symbols-outlined text-primary fs-5 me-3">
+                        paid
+                      </span>
+                      {product.price}
+                    </p>
+                  </div>
 
-                {/* 操作按鈕 */}
-                <div className="card-operation">
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">favorite</i>
-                  </button>
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">shopping_cart</i>
-                  </button>
+                  {/* 操作按鈕 */}
+                  <div className="card-operation">
+                    <button className="btn btn-icon">
+                      <i className="material-symbols-outlined">favorite</i>
+                    </button>
+                    <button className="btn btn-icon">
+                      <i className="material-symbols-outlined">shopping_cart</i>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col">
-              <div className="product-card">
-                {/* 圖片區 + 書況標籤 */}
-                <div className="card-img-wrapper">
-                  <img src="./images/book.png" alt="book" />
-                  <span className="card-img-tag">A</span>
-                </div>
-
-                {/* 商品資訊 */}
-                <div className="card-info">
-                  <h3 className="fs-6 mb-2">
-                    被討厭的勇氣：自我啟發之父「阿德勒」的教導
-                  </h3>
-                  <p className="mb-2">Lorem ipsum dolor sit amet consectetur</p>
-                  <p className="fs-5 text-danger fw-bold text-center">
-                    <span className="material-symbols-outlined text-primary fs-5">
-                      paid
-                    </span>
-                    300
-                  </p>
-                </div>
-
-                {/* 操作按鈕 */}
-                <div className="card-operation">
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">favorite</i>
-                  </button>
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">shopping_cart</i>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col">
-              <div className="product-card">
-                {/* 圖片區 + 書況標籤 */}
-                <div className="card-img-wrapper">
-                  <img src="./images/book.png" alt="book" />
-                  <span className="card-img-tag">A</span>
-                </div>
-
-                {/* 商品資訊 */}
-                <div className="card-info">
-                  <h3 className="fs-6 mb-2">
-                    被討厭的勇氣：自我啟發之父「阿德勒」的教導
-                  </h3>
-                  <p className="mb-2">Lorem ipsum dolor sit amet consectetur</p>
-                  <p className="fs-5 text-danger fw-bold text-center">
-                    <span className="material-symbols-outlined text-primary fs-5">
-                      paid
-                    </span>
-                    300
-                  </p>
-                </div>
-
-                {/* 操作按鈕 */}
-                <div className="card-operation">
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">favorite</i>
-                  </button>
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">shopping_cart</i>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col">
-              <div className="product-card">
-                {/* 圖片區 + 書況標籤 */}
-                <div className="card-img-wrapper">
-                  <img src="./images/book.png" alt="book" />
-                  <span className="card-img-tag">A</span>
-                </div>
-
-                {/* 商品資訊 */}
-                <div className="card-info">
-                  <h3 className="fs-6 mb-2">
-                    被討厭的勇氣：自我啟發之父「阿德勒」的教導
-                  </h3>
-                  <p className="mb-2">Lorem ipsum dolor sit amet consectetur</p>
-                  <p className="fs-5 text-danger fw-bold text-center">
-                    <span className="material-symbols-outlined text-primary fs-5">
-                      paid
-                    </span>
-                    300
-                  </p>
-                </div>
-
-                {/* 操作按鈕 */}
-                <div className="card-operation">
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">favorite</i>
-                  </button>
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">shopping_cart</i>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col">
-              <div className="product-card">
-                {/* 圖片區 + 書況標籤 */}
-                <div className="card-img-wrapper">
-                  <img src="./images/book.png" alt="book" />
-                  <span className="card-img-tag">A</span>
-                </div>
-
-                {/* 商品資訊 */}
-                <div className="card-info">
-                  <h3 className="fs-6 mb-2">
-                    被討厭的勇氣：自我啟發之父「阿德勒」的教導
-                  </h3>
-                  <p className="mb-2">Lorem ipsum dolor sit amet consectetur</p>
-                  <p className="fs-5 text-danger fw-bold text-center">
-                    <span className="material-symbols-outlined text-primary fs-5">
-                      paid
-                    </span>
-                    300
-                  </p>
-                </div>
-
-                {/* 操作按鈕 */}
-                <div className="card-operation">
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">favorite</i>
-                  </button>
-                  <button className="btn btn-icon">
-                    <i className="material-symbols-outlined">shopping_cart</i>
-                  </button>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

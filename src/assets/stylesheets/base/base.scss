@@ -56,3 +56,22 @@ img {
     transform: translateX(4px);
   }
 }
+
+// 文字
+.title-cp1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* 限制最多 2 行 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.title-cp2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 限制最多 2 行 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.h-2em{
+  height: 48px;
+}
