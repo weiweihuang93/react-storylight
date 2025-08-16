@@ -1,4 +1,9 @@
 .category-navbar{
+  background-color: #fffc;
+  position: sticky;
+  top: 88px;
+  z-index: 999;
+
   .category-button{
     display: block;
     display: flex;
