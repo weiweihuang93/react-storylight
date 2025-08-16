@@ -30,13 +30,9 @@ export default function CategoryPage() {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/products/all`
       );
-      console.log(res);
-
       const filter10Products = res.data.products.slice(-10);
       setProductsData(filter10Products);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   // 取得分類商品
@@ -45,13 +41,9 @@ export default function CategoryPage() {
       const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products`, {
         params: { category },
       });
-      console.log(res);
-
       const filter10Products = res.data.products.slice(-10);
       setProductsData(filter10Products);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -91,7 +83,7 @@ export default function CategoryPage() {
           <div className="container">
             <div className="row g-3">
               {productsData.map((product) => (
-                <div className="col-12">
+                <div className="col-12" key={product.id}>
                   <div className="product-card">
                     <NavLink
                       className="product-link text-dark"

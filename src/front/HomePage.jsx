@@ -33,8 +33,6 @@ export default function HomePage() {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/products/all`
       );
-      console.log(res);
-
       const filter10Products = res.data.products.slice(-10);
       setProductsData(filter10Products);
 
@@ -42,9 +40,7 @@ export default function HomePage() {
         (product) => product.price >= 400
       );
       setFeaturedProductsData(filterFeaturedProducts);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {

@@ -16,7 +16,6 @@ export default function ProductPage() {
   const [productData, setProductData] = useState(null);
   const [productsData, setProductsData] = useState([]);
   const { categoryName, productId } = useParams();
-  console.log(productId);
 
   // 取得商品Id
   const getProductId = async () => {
@@ -24,11 +23,8 @@ export default function ProductPage() {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/product/${productId}`
       );
-      console.log(res);
       setProductData(res.data.product);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   // 取得分類商品
@@ -37,13 +33,10 @@ export default function ProductPage() {
       const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products`, {
         params: { category },
       });
-      console.log(res);
 
       const filter10Products = res.data.products.slice(-10);
       setProductsData(filter10Products);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
