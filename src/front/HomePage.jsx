@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { NavLink } from "react-router";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -70,16 +70,19 @@ export default function HomePage() {
                 <span className="material-symbols-outlined">arrow_forward</span>
               </button>
             </form>
-            <button className="btn-link-style btn btn-lg btn-accent-300 mt-4">
+            <Link
+              to="/#category"
+              className="btn-link-style btn btn-lg btn-accent-300 mt-4 d-inline-block"
+            >
               開始探索
               <span className="material-symbols-outlined">arrow_forward</span>
-            </button>
+            </Link>
           </div>
         </div>
       </header>
 
       {/* 最新消息 */}
-      <section className="section-news py-5">
+      <section id="news" className="section-news py-5">
         <div className="bg-primary-200 py-6">
           <div className="container">
             <div className="section-title mb-6">
@@ -119,16 +122,15 @@ export default function HomePage() {
       </section>
 
       {/* 書籍分類 */}
-      <section className="section-category">
+      <section id="category" className="section-category">
         <div className="container py-6">
           <div className="section-title mb-6">
             <h2 className="fs-lg-2 fs-3 title-decoration">書籍分類</h2>
           </div>
           <div className="row g-3">
             {categories.map((category) => (
-              <div className="col-6 col-lg-4">
+              <div className="col-6 col-lg-4" key={category.api}>
                 <NavLink
-                  key={category.api}
                   to={`/${category.api}`}
                   className="card-trans-style category-card p-4 p-lg-6"
                 >
@@ -222,7 +224,7 @@ export default function HomePage() {
       </section>
 
       {/* 關於我們｜書籍如何處理？ */}
-      <section className="section-about py-5">
+      <section id="about" className="section-about py-5">
         <div className="bg-primary-200 py-6">
           <div className="container text-center">
             <div className="section-title mb-6">
@@ -309,7 +311,7 @@ export default function HomePage() {
       </section>
 
       {/* <!-- FAQ --> */}
-      <section className="section-faq">
+      <section id="faq" className="section-faq">
         <div className="container py-6">
           <div className="section-title mb-6">
             <h2 className="fs-lg-2 fs-3 title-decoration">常見問題</h2>

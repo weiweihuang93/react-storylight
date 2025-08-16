@@ -1,6 +1,20 @@
-import { Outlet } from "react-router";
+import { useEffect } from "react";
+import { Link, Outlet, useLocation } from "react-router";
 
 export default function FrontLayout() {
+  function ScrollToHash() {
+    const { hash } = useLocation();
+
+    useEffect(() => {
+      if (hash) {
+        const el = document.querySelector(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, [hash]);
+
+    return null;
+  }
+
   return (
     <>
       {/* nav */}
@@ -20,9 +34,9 @@ export default function FrontLayout() {
           </button>
 
           {/* logo */}
-          <a href="#">
+          <Link to="/">
             <img className="logo" src="./images/logo.png" alt="logo" />
-          </a>
+          </Link>
 
           {/* memberbar */}
           <div className="memberbar d-lg-none">
@@ -43,28 +57,29 @@ export default function FrontLayout() {
           >
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                {/* <NavLink className="nav-link" to="/全部商品"> */}
+                <Link className="nav-link" to="/#category">
                   所有商品
                   <span className="nav-sub">All Products</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="/#news">
                   最新消息
                   <span className="nav-sub">News</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="/#about">
                   關於我們
                   <span className="nav-sub">About Us</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="/#faq">
                   常見問題
                   <span className="nav-sub">FAQ</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-item d-md-block d-lg-none">
                 <a className="nav-link text-accent-300" href="#">
@@ -90,6 +105,7 @@ export default function FrontLayout() {
       </nav>
 
       <main>
+        <ScrollToHash />
         <Outlet />
       </main>
 
@@ -99,13 +115,13 @@ export default function FrontLayout() {
           {/* <img className="wave" src="/images/footer.png" alt="" /> */}
           <div className="container">
             <div className="footer-info">
-              <a className="logo-link" href="#">
+              <Link to="/" className="logo-link">
                 <img
                   className="logo"
                   src="./images/logo-white.png"
                   alt="logo"
                 />
-              </a>
+              </Link>
               <div className="info-txt">
                 <div className="contact-info">
                   <a>
