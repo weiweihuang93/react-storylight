@@ -3,9 +3,25 @@ import { useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { NavLink } from "react-router";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
+
+const categories = [
+  { label: "全部", api: "全部商品", icon: "category" },
+  { label: "親子", api: "親子童書", icon: "nature_people" },
+  { label: "商業", api: "商業理財", icon: "query_stats" },
+  { label: "藝術", api: "藝術領域", icon: "palette" },
+  { label: "社會", api: "社會科學", icon: "people" },
+  { label: "心理", api: "心理勵志", icon: "favorite" },
+  { label: "自然", api: "自然科學", icon: "wb_sunny" },
+  { label: "生活", api: "生活休閒", icon: "sports_martial_arts" },
+  { label: "宗教", api: "宗教文化", icon: "temple_buddhist" },
+  { label: "哲學", api: "哲學思想", icon: "psychology" },
+  { label: "文學", api: "文學小說", icon: "history_edu" },
+  { label: "學習", api: "工具學習", icon: "book_3" },
+];
 
 export default function HomePage() {
   const [productsData, setProductsData] = useState([]);
@@ -109,114 +125,23 @@ export default function HomePage() {
             <h2 className="fs-lg-2 fs-3 title-decoration">書籍分類</h2>
           </div>
           <div className="row g-3">
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">
-                  nature_people
-                </span>
-                <h4 className="fs-lg-4 fs-5">
-                  <span className="d-none d-md-inline-block">親子</span>童書
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">
-                  query_stats
-                </span>
-                <h4 className="fs-lg-4 fs-5">
-                  商業<span className="d-none d-md-inline-block">理財</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">palette</span>
-                <h4 className="fs-lg-4 fs-5">
-                  藝術<span className="d-none d-md-inline-block">領域</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">people</span>
-                <h4 className="fs-lg-4 fs-5">
-                  社會<span className="d-none d-md-inline-block">科學</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">build</span>
-                <h4 className="fs-lg-4 fs-5">
-                  應用<span className="d-none d-md-inline-block">科學</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">wb_sunny</span>
-                <h4 className="fs-lg-4 fs-5">
-                  自然<span className="d-none d-md-inline-block">科學</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">
-                  sports_martial_arts
-                </span>
-                <h4 className="fs-lg-4 fs-5">
-                  <span className="d-none d-md-inline-block">生活</span>休閒
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">
-                  account_balance
-                </span>
-                <h4 className="fs-lg-4 fs-5">
-                  宗教<span className="d-none d-md-inline-block">文化</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">
-                  psychology
-                </span>
-                <h4 className="fs-lg-4 fs-5">
-                  哲學<span className="d-none d-md-inline-block">思想</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">book_3</span>
-                <h4 className="fs-lg-4 fs-5">
-                  文學<span className="d-none d-md-inline-block">小說</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">book_3</span>
-                <h4 className="fs-lg-4 fs-5">
-                  工具<span className="d-none d-md-inline-block">學習</span>
-                </h4>
-              </a>
-            </div>
-            <div className="col-6 col-lg-4">
-              <a className="card-trans-style category-card p-4 p-lg-6">
-                <span className="material-symbols-outlined fs-1">
-                  more_horiz
-                </span>
-                <h4 className="fs-lg-4 fs-5">
-                  <span className="d-none d-md-inline-block">查看</span>更多
-                </h4>
-              </a>
-            </div>
+            {categories.map((category) => (
+              <div className="col-6 col-lg-4">
+                <NavLink
+                  key={category.api}
+                  to={`/${category.api}`}
+                  className="card-trans-style category-card p-4 p-lg-6"
+                >
+                  <span className="material-symbols-outlined fs-1">
+                    {category.icon}
+                  </span>
+                  <h4 className="d-none d-lg-block fs-4">{category.api}</h4>
+                  <h4 className="d-block d-lg-none fs-lg-4 fs-5">
+                    {category.label}
+                  </h4>
+                </NavLink>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -241,45 +166,54 @@ export default function HomePage() {
             {productsData.map((product) => (
               <SwiperSlide key={product.id}>
                 <div className="product-card">
-                  {/* 圖片區 + 書況標籤 */}
-                  <div className="card-img-wrapper">
-                    <img src={product.imageUrl} alt={product.title} />
-                    <span className="card-img-tag">{product.condition}</span>
-                  </div>
+                  <NavLink
+                    className="product-link text-dark"
+                    to={`/${product.category}/${product.id}`}
+                  >
+                    {/* 圖片區 + 書況標籤 */}
+                    <div className="card-img-wrapper">
+                      <img src={product.imageUrl} alt={product.title} />
+                      <span className="card-img-tag">{product.condition}</span>
+                    </div>
 
-                  {/* 商品資訊 */}
-                  <div className="card-info">
-                    <h3 className="fs-5 mb-2 title-cp2 h-2em">
-                      {product.title}
-                    </h3>
-                    <ul className="product-list">
-                      <li className="title-cp1">ISBN：{product.isbn}</li>
-                      <li className="title-cp1">作者：{product.author}</li>
-                      <li className="title-cp1">出版社：{product.publisher}</li>
-                      <li className="title-cp1">
-                        出版日期：{product.publishdate}
-                      </li>
-                      <li className="title-cp1">
-                        適讀對象：{product.suitable}
-                      </li>
-                    </ul>
-                    <p className="fs-5 text-danger fw-bold text-center">
-                      <span className="material-symbols-outlined text-primary fs-5 me-3">
-                        paid
-                      </span>
-                      {product.price}
-                    </p>
-                  </div>
+                    {/* 商品資訊 */}
+                    <div className="card-info">
+                      <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                        {product.title}
+                      </h3>
+                      <ul className="product-list">
+                        <li className="title-cp1">ISBN：{product.isbn}</li>
+                        <li className="title-cp1">作者：{product.author}</li>
+                        <li className="title-cp1">
+                          出版社：{product.publisher}
+                        </li>
+                        <li className="title-cp1">
+                          出版日期：{product.publishdate}
+                        </li>
+                        <li className="title-cp1">
+                          適讀對象：{product.suitable}
+                        </li>
+                      </ul>
+                      <p className="fs-5 text-danger fw-bold text-center">
+                        <span className="material-symbols-outlined text-primary fs-5 me-3">
+                          paid
+                        </span>
+                        {product.price}
+                      </p>
+                    </div>
 
-                  {/* 操作按鈕 */}
-                  <div className="card-operation">
-                    <button className="btn btn-icon">
-                      <i className="material-symbols-outlined">favorite</i>
-                    </button>
-                    <button className="btn btn-icon">
-                      <i className="material-symbols-outlined">shopping_cart</i>
-                    </button>
-                  </div>
+                    {/* 操作按鈕 */}
+                    <div className="card-operation">
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">favorite</i>
+                      </button>
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">
+                          shopping_cart
+                        </i>
+                      </button>
+                    </div>
+                  </NavLink>
                 </div>
               </SwiperSlide>
             ))}

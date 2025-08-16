@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -12,26 +13,25 @@ import "swiper/css/thumbs";
 export default function ProductPage() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  const [productsData, setProductsData] = useState([]);
+  const [productData, setProductData] = useState(null);
+  const { categoryName, productId } = useParams();
 
-  // 取得商品
-  const getAllProducts = async () => {
+  // 取得商品Id
+  const getProductId = async () => {
     try {
       const res = await axios.get(
-        `${BASE_URL}/v2/api/${API_PATH}/products/all`
+        `${BASE_URL}/v2/api/${API_PATH}/product/${productId}`
       );
       console.log(res);
-
-      const filter10Products = res.data.products.slice(-1);
-      setProductsData(filter10Products);
+      setProductData(res.data.product);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    getAllProducts();
-  }, []);
+    getProductId();
+  }, [productId]);
 
   return (
     <>
@@ -40,15 +40,22 @@ export default function ProductPage() {
         <div className="container">
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb mb-0">
-              <li className="breadcrumb-item">
-                <a href="/">首頁</a>
-              </li>
-              <li className="breadcrumb-item">
-                <a href="/category">全部商品</a>
-              </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                被討厭的勇氣
-              </li>
+              <li className="breadcrumb-item">首頁</li>
+              {productData && (
+                <>
+                  <li className="breadcrumb-item text-dark">
+                    <NavLink
+                      className="text-dark"
+                      to={`/${productData.category}`}
+                    >
+                      {productData.category}
+                    </NavLink>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    {productData.title}
+                  </li>
+                </>
+              )}
             </ol>
           </nav>
         </div>
@@ -58,8 +65,8 @@ export default function ProductPage() {
       <section className="section-product">
         <div className="bg-neutral-100 py-6">
           <div className="container">
-            {productsData.map((product) => (
-              <div className="" key={product.id}>
+            {productData && (
+              <div className="" key={productData.id}>
                 <div className="row g-3">
                   {/* 圖片區 */}
                   <div className="col-lg-6 col-12 d-flex flex-column">
@@ -71,18 +78,19 @@ export default function ProductPage() {
                       thumbs={{ swiper: thumbsSwiper }}
                       className="product-main-swiper mb-3"
                     >
-                      {[product.imageUrl, ...(product.imagesUrl || [])].map(
-                        (url, index) => (
-                          <SwiperSlide key={index}>
-                            <div className="card-img-wrapper">
-                              <img src={url} alt={`book-${index}`} />
-                              <span className="card-img-tag">
-                                {product.condition}
-                              </span>
-                            </div>
-                          </SwiperSlide>
-                        )
-                      )}
+                      {[
+                        productData.imageUrl,
+                        ...(productData.imagesUrl || []),
+                      ].map((url, index) => (
+                        <SwiperSlide key={index}>
+                          <div className="card-img-wrapper">
+                            <img src={url} alt={`book-${index}`} />
+                            <span className="card-img-tag">
+                              {productData.condition}
+                            </span>
+                          </div>
+                        </SwiperSlide>
+                      ))}
                     </Swiper>
                     {/* 縮圖區 */}
                     <Swiper
@@ -92,13 +100,14 @@ export default function ProductPage() {
                       slidesPerView={4}
                       className="product-thumb-swiper"
                     >
-                      {[product.imageUrl, ...(product.imagesUrl || [])].map(
-                        (url, index) => (
-                          <SwiperSlide key={index}>
-                            <img src={url} alt={`thumb-${index}`} />
-                          </SwiperSlide>
-                        )
-                      )}
+                      {[
+                        productData.imageUrl,
+                        ...(productData.imagesUrl || []),
+                      ].map((url, index) => (
+                        <SwiperSlide key={index}>
+                          <img src={url} alt={`thumb-${index}`} />
+                        </SwiperSlide>
+                      ))}
                     </Swiper>
                   </div>
 
@@ -106,22 +115,26 @@ export default function ProductPage() {
                   <div className="col-lg-6 col-12">
                     <div className="card-info h-100 py-0 d-flex flex-column">
                       <h3 className="fs-5 mb-2 title-cp2 h-2em">
-                        {product.title}
+                        {productData.title}
                       </h3>
-                      <p className="mb-2">{product.content}</p>
+                      <p className="mb-3">{productData.content}</p>
                       <ul className="product-list gap-3 border-top">
-                        <li className="title-cp1">ISBN：{product.isbn}</li>
-                        <li className="title-cp1">作者：{product.author}</li>
+                        <li className="title-cp1">ISBN：{productData.isbn}</li>
                         <li className="title-cp1">
-                          出版社：{product.publisher}
+                          作者：{productData.author}
                         </li>
                         <li className="title-cp1">
-                          出版日期：{product.publishDate}
+                          出版社：{productData.publisher}
                         </li>
                         <li className="title-cp1">
-                          適讀對象：{product.audience}
+                          出版日期：{productData.publishDate}
                         </li>
-                        <li className="title-cp1">語言：{product.language}</li>
+                        <li className="title-cp1">
+                          適讀對象：{productData.audience}
+                        </li>
+                        <li className="title-cp1">
+                          語言：{productData.language}
+                        </li>
                         <li className="title-cp1 text-accent-300">
                           更多書況說明：有折書角
                         </li>
@@ -146,12 +159,14 @@ export default function ProductPage() {
                         </div>
                         {/* 價格區 */}
                         <div className="text-end mb-3">
-                          <del className="me-3">NT {product.origin_price}</del>
+                          <del className="me-3">
+                            NT {productData.origin_price}
+                          </del>
                           <p className="fs-5 text-danger fw-bold text-center">
                             <span className="material-symbols-outlined text-primary fs-5 me-3">
                               paid
                             </span>
-                            {product.price}
+                            {productData.price}
                           </p>
                         </div>
                       </div>
@@ -172,16 +187,18 @@ export default function ProductPage() {
 
                   {/* 商品描述 */}
                   <div className="col-12">
-                    <div className="product-info py-5">
-                      <h4 className="text-accent-300 text-center mb-3">
-                        書籍簡介
-                      </h4>
-                      <p>{product.description}</p>
+                    <div className="product-info py-7">
+                      <div className="section-title mb-6">
+                        <h2 className="fs-lg-4 fs-5 title-decoration">
+                          書籍簡介
+                        </h2>
+                      </div>
+                      <p>{productData.description}</p>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>

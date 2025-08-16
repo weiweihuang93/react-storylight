@@ -14,11 +14,11 @@ const routes = [
         element: <HomePage />,
       },
       {
-        path: "category",
+        path: "/:categoryName",
         element: <CategoryPage />,
       },
       {
-        path: "product",
+        path: ":categoryName/:productId",
         element: <ProductPage />,
       },
     ],
