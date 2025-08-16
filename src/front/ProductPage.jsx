@@ -14,7 +14,9 @@ export default function ProductPage() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const [productData, setProductData] = useState(null);
+  const [productsData, setProductsData] = useState([]);
   const { categoryName, productId } = useParams();
+  console.log(productId);
 
   // 取得商品Id
   const getProductId = async () => {
@@ -29,8 +31,30 @@ export default function ProductPage() {
     }
   };
 
+  // 取得分類商品
+  const getCategoryProducts = async (category) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products`, {
+        params: { category },
+      });
+      console.log(res);
+
+      const filter10Products = res.data.products.slice(-10);
+      setProductsData(filter10Products);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
+    getCategoryProducts(categoryName);
+  }, [categoryName]);
+
+  useEffect(() => {
+    setThumbsSwiper(null); // 先清掉舊的縮圖
     getProductId();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [productId]);
 
   return (
@@ -43,7 +67,7 @@ export default function ProductPage() {
               <li className="breadcrumb-item">首頁</li>
               {productData && (
                 <>
-                  <li className="breadcrumb-item text-dark">
+                  <li className="breadcrumb-item">
                     <NavLink
                       className="text-dark"
                       to={`/${productData.category}`}
@@ -74,23 +98,21 @@ export default function ProductPage() {
                     <Swiper
                       modules={[Thumbs]}
                       spaceBetween={10}
-                      loop
                       thumbs={{ swiper: thumbsSwiper }}
                       className="product-main-swiper mb-3"
                     >
-                      {[
-                        productData.imageUrl,
-                        ...(productData.imagesUrl || []),
-                      ].map((url, index) => (
-                        <SwiperSlide key={index}>
-                          <div className="card-img-wrapper">
-                            <img src={url} alt={`book-${index}`} />
-                            <span className="card-img-tag">
-                              {productData.condition}
-                            </span>
-                          </div>
-                        </SwiperSlide>
-                      ))}
+                      {[productData.imageUrl, ...(productData.imagesUrl || [])]
+                        .filter((url) => url)
+                        .map((url, index) => (
+                          <SwiperSlide key={index}>
+                            <div className="card-img-wrapper">
+                              <img src={url} alt={`book-${index}`} />
+                              <span className="card-img-tag">
+                                {productData.condition}
+                              </span>
+                            </div>
+                          </SwiperSlide>
+                        ))}
                     </Swiper>
                     {/* 縮圖區 */}
                     <Swiper
@@ -100,14 +122,13 @@ export default function ProductPage() {
                       slidesPerView={4}
                       className="product-thumb-swiper"
                     >
-                      {[
-                        productData.imageUrl,
-                        ...(productData.imagesUrl || []),
-                      ].map((url, index) => (
-                        <SwiperSlide key={index}>
-                          <img src={url} alt={`thumb-${index}`} />
-                        </SwiperSlide>
-                      ))}
+                      {[productData.imageUrl, ...(productData.imagesUrl || [])]
+                        .filter((url) => url)
+                        .map((url, index) => (
+                          <SwiperSlide key={index}>
+                            <img src={url} alt={`thumb-${index}`} />
+                          </SwiperSlide>
+                        ))}
                     </Swiper>
                   </div>
 
@@ -204,6 +225,78 @@ export default function ProductPage() {
       </section>
 
       {/* 更多相似產品 */}
+      <section className="section-product">
+        <div className="container py-6">
+          <h2 className="fs-lg-4 fs-5 text-accent-300 text-center mb-6">
+            瀏覽此商品的人，也瀏覽...
+          </h2>
+          <Swiper
+            spaceBetween={16} // 卡片間距
+            slidesPerView={1} // 預設一次顯示1張
+            loop={productsData.length > 5}
+            breakpoints={{
+              768: { slidesPerView: 3 }, // md
+              992: { slidesPerView: 4 }, // lg
+              1200: { slidesPerView: 5 }, // xl
+            }}
+          >
+            {productsData.map((product) => (
+              <SwiperSlide key={product.id}>
+                <div className="product-card">
+                  <NavLink
+                    className="product-link text-dark"
+                    to={`/${product.category}/${product.id}`}
+                  >
+                    {/* 圖片區 + 書況標籤 */}
+                    <div className="card-img-wrapper">
+                      <img src={product.imageUrl} alt={product.title} />
+                      <span className="card-img-tag">{product.condition}</span>
+                    </div>
+
+                    {/* 商品資訊 */}
+                    <div className="card-info">
+                      <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                        {product.title}
+                      </h3>
+                      <ul className="product-list">
+                        <li className="title-cp1">ISBN：{product.isbn}</li>
+                        <li className="title-cp1">作者：{product.author}</li>
+                        <li className="title-cp1">
+                          出版社：{product.publisher}
+                        </li>
+                        <li className="title-cp1">
+                          出版日期：{product.publishdate}
+                        </li>
+                        <li className="title-cp1">
+                          適讀對象：{product.suitable}
+                        </li>
+                      </ul>
+                      <p className="fs-5 text-danger fw-bold text-center">
+                        <span className="material-symbols-outlined text-primary fs-5 me-3">
+                          paid
+                        </span>
+                        {product.price}
+                      </p>
+                    </div>
+
+                    {/* 操作按鈕 */}
+                    <div className="card-operation">
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">favorite</i>
+                      </button>
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">
+                          shopping_cart
+                        </i>
+                      </button>
+                    </div>
+                  </NavLink>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
     </>
   );
 }
