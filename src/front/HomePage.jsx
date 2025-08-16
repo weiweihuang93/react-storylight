@@ -25,6 +25,7 @@ const categories = [
 
 export default function HomePage() {
   const [productsData, setProductsData] = useState([]);
+  const [featuredproductsData, setFeaturedProductsData] = useState([]);
 
   // 取得商品
   const getAllProducts = async () => {
@@ -36,6 +37,11 @@ export default function HomePage() {
 
       const filter10Products = res.data.products.slice(-10);
       setProductsData(filter10Products);
+
+      const filterFeaturedProducts = res.data.products.filter(
+        (product) => product.price >= 400
+      );
+      setFeaturedProductsData(filterFeaturedProducts);
     } catch (err) {
       console.log(err);
     }
@@ -148,7 +154,82 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 新書上架SWIPER / 館藏推薦 */}
+      {/* 館藏推薦 */}
+      <section className="section-product">
+        <div className="container py-6">
+          <div className="section-title mb-6">
+            <h2 className="fs-lg-2 fs-3 title-decoration">館藏推薦</h2>
+          </div>
+
+          <Swiper
+            spaceBetween={16} // 卡片間距
+            slidesPerView={1} // 預設一次顯示1張
+            loop={featuredproductsData.length > 5}
+            breakpoints={{
+              768: { slidesPerView: 3 }, // md
+              992: { slidesPerView: 4 }, // lg
+              1200: { slidesPerView: 5 }, // xl
+            }}
+          >
+            {featuredproductsData.map((product) => (
+              <SwiperSlide key={product.id}>
+                <div className="product-card">
+                  <NavLink
+                    className="product-link text-dark"
+                    to={`/${product.category}/${product.id}`}
+                  >
+                    {/* 圖片區 + 書況標籤 */}
+                    <div className="card-img-wrapper">
+                      <img src={product.imageUrl} alt={product.title} />
+                      <span className="card-img-tag">{product.condition}</span>
+                    </div>
+
+                    {/* 商品資訊 */}
+                    <div className="card-info">
+                      <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                        {product.title}
+                      </h3>
+                      <ul className="product-list">
+                        <li className="title-cp1">ISBN：{product.isbn}</li>
+                        <li className="title-cp1">作者：{product.author}</li>
+                        <li className="title-cp1">
+                          出版社：{product.publisher}
+                        </li>
+                        <li className="title-cp1">
+                          出版日期：{product.publishdate}
+                        </li>
+                        <li className="title-cp1">
+                          適讀對象：{product.suitable}
+                        </li>
+                      </ul>
+                      <p className="fs-5 text-danger fw-bold text-center">
+                        <span className="material-symbols-outlined text-primary fs-5 me-3">
+                          paid
+                        </span>
+                        {product.price}
+                      </p>
+                    </div>
+
+                    {/* 操作按鈕 */}
+                    <div className="card-operation">
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">favorite</i>
+                      </button>
+                      <button className="btn btn-icon">
+                        <i className="material-symbols-outlined">
+                          shopping_cart
+                        </i>
+                      </button>
+                    </div>
+                  </NavLink>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
+
+      {/* 新書上架 */}
       <section className="section-product">
         <div className="container py-6">
           <div className="section-title mb-6">
