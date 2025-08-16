@@ -14,7 +14,7 @@ const routes = [
         element: <HomePage />,
       },
       {
-        path: "/:categoryName",
+        path: ":categoryName",
         element: <CategoryPage />,
       },
       {
