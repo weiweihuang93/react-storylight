@@ -1,8 +1,12 @@
-import CategoryPage from "../front/CategoryPage";
 import FrontLayout from "../front/FrontLayout";
 import HomePage from "../front/HomePage";
-import NotFound from "../front/Notfound";
+import CategoryPage from "../front/CategoryPage";
 import ProductPage from "../front/ProductPage";
+import NotFound from "../front/Notfound";
+import AdminLogin from "../admin/AdminLogin";
+import CheckedRoute from "../admin/CheckedRoute";
+import AdminLayout from "../admin/AdminLayout";
+import AdminProduct from "../admin/AdminProduct";
 
 const routes = [
   {
@@ -22,6 +26,27 @@ const routes = [
         element: <ProductPage />,
       },
     ],
+  },
+  {
+    path: "/admin",
+    element: <CheckedRoute />,
+    children: [
+      {
+        path: "",
+        element: <AdminLayout />,
+        children: [
+          {
+            path: "product",
+            element: <AdminProduct />,
+          },
+        ],
+      },
+      ,
+    ],
+  },
+  {
+    path: "/admin/login",
+    element: <AdminLogin />,
   },
   {
     path: "*",

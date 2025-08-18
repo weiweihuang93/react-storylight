@@ -1690,7 +1690,8 @@ $list-group-item-color-scale: 40% !default; // Deprecated in v5.3.0
 
 $list-group-hover-bg: var(--#{$prefix}tertiary-bg) !default;
 $list-group-active-color: $component-active-color !default;
-$list-group-active-bg: $component-active-bg !default;
+// $list-group-active-bg: $component-active-bg !default; 
+$list-group-active-bg: $accent-100 !default; // 自定義
 $list-group-active-border-color: $list-group-active-bg !default;
 
 $list-group-disabled-color: var(--#{$prefix}secondary-color) !default;
