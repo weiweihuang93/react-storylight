@@ -18,7 +18,7 @@ export default function FrontLayout() {
   return (
     <>
       {/* nav */}
-      <nav className="navbar navbar-expand-lg">
+      <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
           {/* 選單 */}
           <button
@@ -45,7 +45,9 @@ export default function FrontLayout() {
                 <span className="material-symbols-outlined">shopping_cart</span>
               </li>
               <li className="icon-badge">
-                <span className="material-symbols-outlined">person</span>
+                <Link to="/login" className="d-flex">
+                  <span className="material-symbols-outlined">person</span>
+                </Link>
               </li>
             </ul>
           </div>
@@ -58,34 +60,34 @@ export default function FrontLayout() {
             <ul className="navbar-nav">
               <li className="nav-item">
                 {/* <NavLink className="nav-link" to="/全部商品"> */}
-                <Link className="nav-link" to="/#category">
+                <Link to="/#category" className="nav-link">
                   所有商品
                   <span className="nav-sub">All Products</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/#news">
+                <Link to="/#news" className="nav-link">
                   最新消息
                   <span className="nav-sub">News</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/#about">
+                <Link to="/#about" className="nav-link">
                   關於我們
                   <span className="nav-sub">About Us</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/#faq">
+                <Link to="/#faq" className="nav-link">
                   常見問題
                   <span className="nav-sub">FAQ</span>
                 </Link>
               </li>
               <li className="nav-item d-md-block d-lg-none">
-                <a className="nav-link text-accent-300" href="#">
+                <Link to="/login" className="nav-link text-accent-300">
                   登入 / 註冊
                   <span className="nav-sub">Sign In / Join</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -97,7 +99,9 @@ export default function FrontLayout() {
                 <span className="material-symbols-outlined">shopping_cart</span>
               </li>
               <li className="icon-badge">
-                <span className="material-symbols-outlined">person</span>
+                <Link to="/login" className="d-flex">
+                  <span className="material-symbols-outlined">person</span>
+                </Link>
               </li>
             </ul>
           </div>

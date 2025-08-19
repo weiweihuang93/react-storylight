@@ -3,6 +3,8 @@ import HomePage from "../front/HomePage";
 import CategoryPage from "../front/CategoryPage";
 import ProductPage from "../front/ProductPage";
 import NotFound from "../front/Notfound";
+import LoginPage from "../front/LoginPage";
+import SigninPage from "../front/SigninPage";
 import AdminLogin from "../admin/AdminLogin";
 import CheckedRoute from "../admin/CheckedRoute";
 import AdminLayout from "../admin/AdminLayout";
@@ -24,6 +26,14 @@ const routes = [
       {
         path: ":categoryName/:productId",
         element: <ProductPage />,
+      },
+      {
+        path: "signin",
+        element: <SigninPage />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
       },
     ],
   },

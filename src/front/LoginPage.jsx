@@ -1,18 +1,13 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
+export default function LoginPage() {
+  const navigate = useNavigate();
 
-export default function AdminLogin() {
   const [account, setAccount] = useState({
     username: "",
     password: "",
   });
-
-  const [token, setToken] = useState();
-  const navigate = useNavigate();
 
   const handleSigninInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,18 +17,15 @@ export default function AdminLogin() {
     });
   };
 
-  const handleSignin = async (e) => {
+  const handleSignin = (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post(`${BASE_URL}/v2/admin/signin`, account);
-      const { token, expired } = res.data;
-      setToken(token);
-      document.cookie = `hexToken=${token}; expires=${new Date(expired).toUTCString()}`;
-      axios.defaults.headers.common["Authorization"] = token;
-
-      // 加上提示文字
-      setTimeout(() => navigate("/admin"), 2000);
-    } catch (err) {}
+    if (account.username && account.password) {
+      // 模擬登入成功
+      alert("登入成功！");
+      setTimeout(() => navigate("/"), 1000);
+    } else {
+      alert("請輸入帳號密碼");
+    }
   };
 
   return (
@@ -41,14 +33,14 @@ export default function AdminLogin() {
       <main>
         <div className="bg-neutral-100">
           <div className="container">
-            <div className="login-wrapper vh-100">
+            <div className="login-wrapper py-7">
               <div className="login p-5">
                 <div className="text-center mb-4">
                   <a>
                     <img className="logo" src="./images/logo.png" alt="logo" />
                   </a>
                 </div>
-                <h1 className="fs-5 text-accent-300 text-center">管理員登入</h1>
+                <h1 className="fs-5 text-accent-300 text-center">會員登入</h1>
                 <form onSubmit={handleSignin} className="py-5">
                   {/* 帳號 */}
                   <div className="mb-5">
@@ -56,7 +48,7 @@ export default function AdminLogin() {
                       htmlFor="adminAccount"
                       className="form-label fw-bold"
                     >
-                      管理員帳號
+                      會員帳號
                     </label>
                     <input
                       value={account.username}
@@ -75,7 +67,7 @@ export default function AdminLogin() {
                       htmlFor="adminPassword"
                       className="form-label fw-bold"
                     >
-                      管理員密碼
+                      會員密碼
                     </label>
                     <input
                       value={account.password}
@@ -95,9 +87,10 @@ export default function AdminLogin() {
                     </button>
                   </div>
                 </form>
-                <div className="text-center">
-                  <Link to="/" className="text-secondary">
-                    返回首頁
+                <div className="d-flex justify-content-center gap-2">
+                  <p>新朋友嗎？</p>
+                  <Link to="/signin" className="text-primary">
+                    點此註冊
                   </Link>
                 </div>
               </div>
