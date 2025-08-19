@@ -314,7 +314,7 @@ export default function AdminProduct() {
 
   return (
     <>
-      <section className="section-seller py-3 vh-100">
+      <section className="section-seller py-3">
         <div className="container">
           <div className="dashboard-card mb-5">
             <h2 className="fs-4 mb-3">儀錶板</h2>

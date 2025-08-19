@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { NavLink, Outlet } from "react-router";
 
 const AdminRoutes = [
@@ -6,10 +7,23 @@ const AdminRoutes = [
 ];
 
 export default function AdminLayout() {
+  useEffect(() => {
+    // 設置 body 背景色
+    document.body.style.backgroundColor = "#F8F9FA";
+    // 可選：設置最小高度
+    document.body.style.minHeight = "100vh";
+
+    // 組件卸載時清理
+    return () => {
+      document.body.style.backgroundColor = "";
+      document.body.style.minHeight = "";
+    };
+  }, []);
+
   return (
     <>
-      <main>
-        <div className="container py-3 bg-neutral-100">
+      <main className="main">
+        <div className="container py-3">
           <div className="row g-3">
             <div className="col-lg-3">
               <aside className="section-aside py-3">
