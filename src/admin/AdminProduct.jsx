@@ -43,7 +43,11 @@ export default function AdminProduct() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [pagination, setPagination] = useState({});
 
+  const [search, setSearch] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
   // 取得所有商品數量
+  // 實現搜尋商品功能
   const getAllProducts = async () => {
     try {
       const res = await axios.get(
@@ -291,6 +295,23 @@ export default function AdminProduct() {
     } catch (err) {}
   };
 
+  // 搜尋書名
+  const handleSearch = (e) => {
+    const keyword = e.target.value;
+    setSearch(keyword);
+
+    if (keyword.trim()) {
+      const lowerKeyword = keyword.trim().toLowerCase();
+      const filtered = allProducts.filter((product) =>
+        product.title?.toLowerCase().includes(lowerKeyword)
+      );
+      setFilteredProducts(filtered); // 更新列表顯示
+    } else {
+      // 若搜尋欄清空，重新抓分頁 API
+      getCategoryProducts();
+    }
+  };
+
   return (
     <>
       <section className="section-seller py-3 vh-100">
@@ -330,6 +351,8 @@ export default function AdminProduct() {
               <div className="col-12 col-md-5">
                 <div className="form-search d-flex w-100">
                   <input
+                    value={search}
+                    onChange={handleSearch}
                     type="search"
                     className="form-control"
                     placeholder="請輸入書名"
@@ -377,11 +400,11 @@ export default function AdminProduct() {
                 </div>
                 {/* 內容 */}
                 <div className="product-body">
-                  {categoryProducts &&
-                    categoryProducts.map((product) => (
+                  {(search ? filteredProducts : categoryProducts)?.map(
+                    (product) => (
                       <div className="product-item py-3" key={product.id}>
-                        <span className="product-name">
-                          {product.maintitle}
+                        <span className="product-name d-flex flex-wrap align-items-center">
+                          <span>{product.maintitle}</span>
                           <small className="tag-category ms-2">
                             {product.category}
                           </small>
@@ -418,62 +441,65 @@ export default function AdminProduct() {
                           </div>
                         </span>
                       </div>
-                    ))}
+                    )
+                  )}
                 </div>
+
+                {/* 分頁 */}
+                {!search && categoryProducts && (
+                  <nav className="pagination-container" aria-label="分頁導航">
+                    <ul className="pagination">
+                      {/* 上一頁按鈕 */}
+                      <li
+                        className={`page-item ${pagination.has_pre ? "" : "disabled"}`}
+                      >
+                        <a
+                          onClick={(e) =>
+                            handlePageChange(e, pagination.current_page - 1)
+                          }
+                          className="page-link"
+                          href="#"
+                        >
+                          上一頁
+                        </a>
+                      </li>
+                      {/* 頁碼 */}
+                      {Array.from({ length: pagination.total_pages }).map(
+                        (_, index) => (
+                          <li
+                            key={index}
+                            className={`page-item ${pagination.current_page === index + 1 ? "active" : ""}`}
+                          >
+                            <a
+                              onClick={(e) => handlePageChange(e, index + 1)}
+                              className="page-link"
+                              href="#"
+                            >
+                              {index + 1}
+                            </a>
+                          </li>
+                        )
+                      )}
+                      {/* 下一頁按鈕 */}
+                      <li
+                        className={`page-item ${pagination.has_pre ? "disabled" : ""}`}
+                      >
+                        <a
+                          onClick={(e) =>
+                            handlePageChange(e, pagination.current_page + 1)
+                          }
+                          className="page-link"
+                          href="#"
+                        >
+                          下一頁
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                )}
               </div>
             </div>
           </div>
-
-          {/* 分頁 */}
-          <nav className="pagination-container" aria-label="分頁導航">
-            <ul className="pagination">
-              {/* 上一頁按鈕 */}
-              <li
-                className={`page-item ${pagination.has_pre ? "" : "disabled"}`}
-              >
-                <a
-                  onClick={(e) =>
-                    handlePageChange(e, pagination.current_page - 1)
-                  }
-                  className="page-link"
-                  href="#"
-                >
-                  上一頁
-                </a>
-              </li>
-              {/* 頁碼 */}
-              {Array.from({ length: pagination.total_pages }).map(
-                (_, index) => (
-                  <li
-                    key={index}
-                    className={`page-item ${pagination.current_page === index + 1 ? "active" : ""}`}
-                  >
-                    <a
-                      onClick={(e) => handlePageChange(e, index + 1)}
-                      className="page-link"
-                      href="#"
-                    >
-                      {index + 1}
-                    </a>
-                  </li>
-                )
-              )}
-              {/* 下一頁按鈕 */}
-              <li
-                className={`page-item ${pagination.has_pre ? "disabled" : ""}`}
-              >
-                <a
-                  onClick={(e) =>
-                    handlePageChange(e, pagination.current_page + 1)
-                  }
-                  className="page-link"
-                  href="#"
-                >
-                  下一頁
-                </a>
-              </li>
-            </ul>
-          </nav>
 
           {/* modal */}
           <div
@@ -528,7 +554,7 @@ export default function AdminProduct() {
                           />
                         </div>
                         <img
-                          src={tempProduct.imageUrl}
+                          src={tempProduct.imageUrl || null}
                           alt={tempProduct.title}
                           className="img-fluid"
                         />
