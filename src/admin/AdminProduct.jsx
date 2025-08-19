@@ -34,24 +34,60 @@ const defaultModalState = {
 
 export default function AdminProduct() {
   const [allProducts, setAllProducts] = useState([]);
+  const [categoryProducts, setCategoryProducts] = useState([]);
+  const [tempProduct, setTempProduct] = useState(defaultModalState);
 
   const productModalRef = useRef(null);
   const [modalMode, setModalMode] = useState("");
-  const [tempProduct, setTempProduct] = useState(defaultModalState);
 
-  // 取得所有商品
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [pagination, setPagination] = useState({});
+
+  // 取得所有商品數量
   const getAllProducts = async () => {
     try {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/admin/products/all`
       );
-      setAllProducts(Object.values(res.data.products).reverse());
+      setAllProducts(Object.values(res.data.products));
+    } catch (err) {}
+  };
+
+  // 取得所有商品 或 分類商品
+  const getCategoryProducts = async (category = "", page = 1) => {
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/v2/api/${API_PATH}/admin/products`,
+        {
+          params: { category, page },
+        }
+      );
+      setCategoryProducts(res.data.products);
+      setPagination(res.data.pagination);
     } catch (err) {}
   };
 
   useEffect(() => {
     getAllProducts();
+    getCategoryProducts();
   }, []);
+
+  const handleSelectedCategory = async (e) => {
+    const category = e.target.value;
+    setSelectedCategory(category);
+
+    if (category === "全部商品") {
+      await getCategoryProducts("");
+    } else {
+      await getCategoryProducts(category);
+    }
+  };
+
+  // 取得分頁商品
+  const handlePageChange = (e, page) => {
+    e.preventDefault();
+    getCategoryProducts(selectedCategory, page);
+  };
 
   // Modal
   const openModal = (mode, product) => {
@@ -97,6 +133,7 @@ export default function AdminProduct() {
     const apiCall = modalMode === "create" ? createProduct : editProduct;
     try {
       await apiCall();
+      await getCategoryProducts();
       await getAllProducts();
     } catch (err) {}
   };
@@ -150,7 +187,8 @@ export default function AdminProduct() {
       const res = await axios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${product_id}`
       );
-      getAllProducts();
+      await getCategoryProducts();
+      await getAllProducts();
     } catch (err) {}
   };
 
@@ -261,19 +299,27 @@ export default function AdminProduct() {
             <h2 className="fs-4 mb-3">儀錶板</h2>
             <ul className="card-list">
               <li>
-                <p className="fs-5 text-accent-300 fw-bold">100本</p>
+                <p className="fs-5 text-accent-300 fw-bold">
+                  {allProducts.length}
+                </p>
                 <p>上架數量</p>
               </li>
               <li>
-                <p className="fs-5 text-accent-300 fw-bold">10</p>
+                <p className="fs-5 text-accent-300 fw-bold">
+                  {allProducts.filter((p) => p.qty === 0).length}
+                </p>
                 <p>售完數量</p>
               </li>
               <li>
-                <p className="fs-5 text-accent-300 fw-bold">100本</p>
+                <p className="fs-5 text-accent-300 fw-bold">
+                  {allProducts.filter((p) => p.is_enabled === 1).length}
+                </p>
                 <p>啟用數量</p>
               </li>
               <li>
-                <p className="fs-5 text-accent-300 fw-bold">100本</p>
+                <p className="fs-5 text-accent-300 fw-bold">
+                  {allProducts.filter((p) => p.is_enabled === 0).length}
+                </p>
                 <p>未啟用數量</p>
               </li>
             </ul>
@@ -294,7 +340,11 @@ export default function AdminProduct() {
                 </div>
               </div>
               <div className="col-12 col-md-5">
-                <select className="form-select">
+                <select
+                  value={selectedCategory}
+                  onChange={handleSelectedCategory}
+                  className="form-select"
+                >
                   <option disabled>請選擇分類</option>
                   {categories.map((category) => (
                     <option key={category.api} value={category.api}>
@@ -327,8 +377,8 @@ export default function AdminProduct() {
                 </div>
                 {/* 內容 */}
                 <div className="product-body">
-                  {allProducts &&
-                    allProducts.map((product) => (
+                  {categoryProducts &&
+                    categoryProducts.map((product) => (
                       <div className="product-item py-3" key={product.id}>
                         <span className="product-name">
                           {product.maintitle}
@@ -373,6 +423,57 @@ export default function AdminProduct() {
               </div>
             </div>
           </div>
+
+          {/* 分頁 */}
+          <nav className="pagination-container" aria-label="分頁導航">
+            <ul className="pagination">
+              {/* 上一頁按鈕 */}
+              <li
+                className={`page-item ${pagination.has_pre ? "" : "disabled"}`}
+              >
+                <a
+                  onClick={(e) =>
+                    handlePageChange(e, pagination.current_page - 1)
+                  }
+                  className="page-link"
+                  href="#"
+                >
+                  上一頁
+                </a>
+              </li>
+              {/* 頁碼 */}
+              {Array.from({ length: pagination.total_pages }).map(
+                (_, index) => (
+                  <li
+                    key={index}
+                    className={`page-item ${pagination.current_page === index + 1 ? "active" : ""}`}
+                  >
+                    <a
+                      onClick={(e) => handlePageChange(e, index + 1)}
+                      className="page-link"
+                      href="#"
+                    >
+                      {index + 1}
+                    </a>
+                  </li>
+                )
+              )}
+              {/* 下一頁按鈕 */}
+              <li
+                className={`page-item ${pagination.has_pre ? "disabled" : ""}`}
+              >
+                <a
+                  onClick={(e) =>
+                    handlePageChange(e, pagination.current_page + 1)
+                  }
+                  className="page-link"
+                  href="#"
+                >
+                  下一頁
+                </a>
+              </li>
+            </ul>
+          </nav>
 
           {/* modal */}
           <div

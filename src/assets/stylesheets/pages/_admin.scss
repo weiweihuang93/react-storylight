@@ -11,6 +11,10 @@
     justify-content: space-between;
     align-items: center;
     text-align: center;
+
+    li{
+      padding: 0 16px;
+    }
   }
   .dashboard-card{
     background-color: $white;
