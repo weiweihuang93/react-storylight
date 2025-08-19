@@ -1,25 +1,14 @@
 import axios from "axios";
 import { Modal } from "bootstrap";
 import { useEffect, useRef, useState } from "react";
+import categories from "../data/categories";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 const GOOGLE_BOOKS_API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
-const categories = [
-  { label: "親子", api: "親子童書", icon: "nature_people" },
-  { label: "商業", api: "商業理財", icon: "query_stats" },
-  { label: "藝術", api: "藝術領域", icon: "palette" },
-  { label: "社會", api: "人文史地", icon: "people" },
-  { label: "心理", api: "心理勵志", icon: "favorite" },
-  { label: "自然", api: "自然科學", icon: "wb_sunny" },
-  { label: "生活", api: "生活休閒", icon: "sports_martial_arts" },
-  { label: "宗教", api: "宗教命理", icon: "temple_buddhist" },
-  { label: "哲學", api: "哲學思想", icon: "psychology" },
-  { label: "文學", api: "文學小說", icon: "history_edu" },
-  { label: "學習", api: "工具學習", icon: "book_3" },
-];
+const categoriesWithoutAll = categories.filter((c) => c.label !== "全部");
 
 const defaultModalState = {
   imageUrl: "",
@@ -307,9 +296,10 @@ export default function AdminProduct() {
               <div className="col-12 col-md-5">
                 <select className="form-select">
                   <option disabled>請選擇分類</option>
-                  <option>全部商品</option>
                   {categories.map((category) => (
-                    <option key={category.api}>{category.api}</option>
+                    <option key={category.api} value={category.api}>
+                      {category.api}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -586,7 +576,7 @@ export default function AdminProduct() {
                             <option value="" disabled>
                               請選擇分類
                             </option>
-                            {categories.map((category) => (
+                            {categoriesWithoutAll.map((category) => (
                               <option key={category.api} value={category.api}>
                                 {category.api}
                               </option>

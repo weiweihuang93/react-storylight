@@ -1,27 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
+import categories from "../data/categories";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
-
-const categories = [
-  { label: "全部", api: "全部商品", icon: "category" },
-  { label: "親子", api: "親子童書", icon: "nature_people" },
-  { label: "商業", api: "商業理財", icon: "query_stats" },
-  { label: "藝術", api: "藝術領域", icon: "palette" },
-  { label: "社會", api: "社會科學", icon: "people" },
-  { label: "心理", api: "心理勵志", icon: "favorite" },
-  { label: "自然", api: "自然科學", icon: "wb_sunny" },
-  { label: "生活", api: "生活休閒", icon: "sports_martial_arts" },
-  { label: "宗教", api: "宗教文化", icon: "temple_buddhist" },
-  { label: "哲學", api: "哲學思想", icon: "psychology" },
-  { label: "文學", api: "文學小說", icon: "history_edu" },
-  { label: "學習", api: "工具學習", icon: "book_3" },
-];
 
 export default function HomePage() {
   const [productsData, setProductsData] = useState([]);
@@ -37,7 +23,7 @@ export default function HomePage() {
       setProductsData(filter10Products);
 
       const filterFeaturedProducts = res.data.products.filter(
-        (product) => product.price >= 400
+        (product) => product.price >= 500
       );
       setFeaturedProductsData(filterFeaturedProducts);
     } catch (err) {}
@@ -194,9 +180,7 @@ export default function HomePage() {
                         <li className="title-cp1">
                           出版日期：{product.publishdate}
                         </li>
-                        <li className="title-cp1">
-                          適讀對象：{product.suitable}
-                        </li>
+                        <li className="title-cp1">語言：{product.language}</li>
                       </ul>
                       <p className="fs-5 text-danger fw-bold text-center">
                         <span className="material-symbols-outlined text-primary fs-5 me-3">
@@ -269,9 +253,7 @@ export default function HomePage() {
                         <li className="title-cp1">
                           出版日期：{product.publishdate}
                         </li>
-                        <li className="title-cp1">
-                          適讀對象：{product.suitable}
-                        </li>
+                        <li className="title-cp1">語言：{product.language}</li>
                       </ul>
                       <p className="fs-5 text-danger fw-bold text-center">
                         <span className="material-symbols-outlined text-primary fs-5 me-3">

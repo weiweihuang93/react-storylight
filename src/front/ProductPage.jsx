@@ -131,8 +131,13 @@ export default function ProductPage() {
                       <h3 className="fs-5 mb-2 title-cp2 h-2em">
                         {productData.title}
                       </h3>
-                      <p className="mb-3">{productData.content}</p>
-                      <ul className="product-list gap-3 border-top">
+                      <p style={{ whiteSpace: "pre-line" }} className="mb-3">
+                        {productData.mainDescription?.replace(
+                          /<\/?br\s*\/?>/gi,
+                          "\n"
+                        )}
+                      </p>
+                      <ul className="product-list gap-3 border-top mt-auto">
                         <li className="title-cp1">ISBN：{productData.isbn}</li>
                         <li className="title-cp1">
                           作者：{productData.author}
@@ -141,16 +146,16 @@ export default function ProductPage() {
                           出版社：{productData.publisher}
                         </li>
                         <li className="title-cp1">
-                          出版日期：{productData.publishDate}
-                        </li>
-                        <li className="title-cp1">
-                          適讀對象：{productData.audience}
+                          出版日期：{productData.publishdate}
                         </li>
                         <li className="title-cp1">
                           語言：{productData.language}
                         </li>
                         <li className="title-cp1 text-accent-300">
-                          更多書況說明：有折書角
+                          更多書況說明：
+                          {productData.conditionDescription
+                            ? productData.conditionDescription
+                            : "無"}
                         </li>
                       </ul>
                       {/* 購買操作區 */}
@@ -163,7 +168,9 @@ export default function ProductPage() {
                           >
                             －
                           </button>
-                          <span className="fs-6 fw-bold mx-3">10</span>
+                          <span className="fs-6 fw-bold mx-3">
+                            {productData.qty}
+                          </span>
                           <button
                             type="button"
                             className="btn btn-outline-accent-300"
@@ -207,7 +214,12 @@ export default function ProductPage() {
                           書籍簡介
                         </h2>
                       </div>
-                      <p>{productData.description}</p>
+                      <p style={{ whiteSpace: "pre-line" }}>
+                        {productData.description?.replace(
+                          /<\/?br\s*\/?>/gi,
+                          "\n"
+                        )}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -260,9 +272,7 @@ export default function ProductPage() {
                         <li className="title-cp1">
                           出版日期：{product.publishdate}
                         </li>
-                        <li className="title-cp1">
-                          適讀對象：{product.suitable}
-                        </li>
+                        <li className="title-cp1">語言：{product.language}</li>
                       </ul>
                       <p className="fs-5 text-danger fw-bold text-center">
                         <span className="material-symbols-outlined text-primary fs-5 me-3">
