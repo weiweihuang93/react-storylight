@@ -1,0 +1,85 @@
+// CartLayout
+.section-progress {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  text-align: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  .circle {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 50%;
+    background-color: $neutral-300;
+    color: $white;
+    font-weight: $font-weight-bold;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .title {
+    color: $neutral-300;
+    font-weight: $font-weight-bold;
+
+  }
+
+  // active 狀態統一在 col 控制
+  .col.active {
+    .circle {
+      background-color: $accent-300;
+    }
+    .title {
+      color: $accent-300;
+    }
+  }
+}
+
+.section-cart{
+  .cart-title{
+    display: flex;
+    justify-content: space-between;
+  }
+  .card-header, .cart-item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  .cart-item img {
+    width: 80px;
+    height: auto;
+    border-radius: 5px;
+  }
+  .cart-info {
+    flex-grow: 1;
+  }
+  .cart-price,
+  .cart-qty,
+  .cart-total {
+    min-width: 100px;
+    text-align: center;
+  }
+  // 訂單明細定位
+  .sticky{
+    position: sticky;
+    top: 150px;
+  }
+  .cart-button{
+    width: 100%;
+    transition: transform 0.3s ease;
+
+    @media (max-width: 1200px) {
+      width: auto;
+      display: flex;
+      margin-left: auto;
+    }
+  }
+}

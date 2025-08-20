@@ -9,6 +9,11 @@ import AdminLogin from "../admin/AdminLogin";
 import CheckedRoute from "../admin/CheckedRoute";
 import AdminLayout from "../admin/AdminLayout";
 import AdminProduct from "../admin/AdminProduct";
+import CartLayout from "../front_cart/CartLayout";
+import CartPage from "../front_cart/CartPage";
+import OrderPage from "../front_cart/OrderPage";
+import PaymentPage from "../front_cart/PaymentPage";
+import CompletePage from "../front_cart/CompletePage";
 
 const routes = [
   {
@@ -34,6 +39,16 @@ const routes = [
       {
         path: "login",
         element: <LoginPage />,
+      },
+      {
+        path: "cart",
+        element: <CartLayout />,
+        children: [
+          { path: "", element: <CartPage /> },
+          { path: "order", element: <OrderPage /> },
+          { path: "payment", element: <PaymentPage /> },
+          { path: "complete", element: <CompletePage /> },
+        ],
       },
     ],
   },
