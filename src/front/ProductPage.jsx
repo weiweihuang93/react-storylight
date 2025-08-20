@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
+import { AppContext } from "../context/AppContext";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -11,6 +12,8 @@ import "swiper/css";
 import "swiper/css/thumbs";
 
 export default function ProductPage() {
+  const { addToCart, cartData } = useContext(AppContext);
+
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   const [productData, setProductData] = useState(null);
@@ -197,7 +200,20 @@ export default function ProductPage() {
                         <button className="btn btn-icon">
                           <i className="material-symbols-outlined">favorite</i>
                         </button>
-                        <button className="btn btn-icon">
+                        <button
+                          onClick={() => addToCart(productData.id)}
+                          className={`btn btn-icon ${
+                            cartData?.carts?.some(
+                              (cartItem) =>
+                                cartItem.product_id === productData.id
+                            )
+                              ? "active"
+                              : ""
+                          }`}
+                          disabled={cartData?.carts?.some(
+                            (cartItem) => cartItem.product_id === productData.id
+                          )}
+                        >
                           <i className="material-symbols-outlined">
                             shopping_cart
                           </i>
@@ -245,18 +261,26 @@ export default function ProductPage() {
               1200: { slidesPerView: 5 }, // xl
             }}
           >
-            {productsData.map((product) => (
-              <SwiperSlide key={product.id}>
-                <div className="product-card">
-                  <NavLink
-                    className="product-link text-dark"
-                    to={`/${product.category}/${product.id}`}
-                  >
-                    {/* 圖片區 + 書況標籤 */}
-                    <div className="card-img-wrapper">
-                      <img src={product.imageUrl} alt={product.title} />
-                      <span className="card-img-tag">{product.condition}</span>
-                    </div>
+            {productsData.map((product) => {
+              const isProductInCart = cartData?.carts?.some(
+                (cartItem) => cartItem.product_id === product.id
+              );
+
+              return (
+                <SwiperSlide key={product.id}>
+                  <div className="product-card">
+                    <NavLink
+                      className="product-link text-dark"
+                      to={`/${product.category}/${product.id}`}
+                    >
+                      {/* 圖片區 + 書況標籤 */}
+                      <div className="card-img-wrapper">
+                        <img src={product.imageUrl} alt={product.title} />
+                        <span className="card-img-tag">
+                          {product.condition}
+                        </span>
+                      </div>
+                    </NavLink>
 
                     {/* 商品資訊 */}
                     <div className="card-info">
@@ -287,16 +311,20 @@ export default function ProductPage() {
                       <button className="btn btn-icon">
                         <i className="material-symbols-outlined">favorite</i>
                       </button>
-                      <button className="btn btn-icon">
+                      <button
+                        onClick={() => addToCart(product.id)}
+                        className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
+                        disabled={isProductInCart}
+                      >
                         <i className="material-symbols-outlined">
                           shopping_cart
                         </i>
                       </button>
                     </div>
-                  </NavLink>
-                </div>
-              </SwiperSlide>
-            ))}
+                  </div>
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </section>

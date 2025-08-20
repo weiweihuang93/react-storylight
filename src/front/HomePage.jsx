@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import categories from "../data/categories";
+import { AppContext } from "../context/AppContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -10,6 +11,8 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function HomePage() {
+  const { addToCart, cartData } = useContext(AppContext);
+
   const [productsData, setProductsData] = useState([]);
   const [featuredproductsData, setFeaturedProductsData] = useState([]);
 
@@ -153,18 +156,28 @@ export default function HomePage() {
               1200: { slidesPerView: 5 }, // xl
             }}
           >
-            {featuredproductsData.map((product) => (
-              <SwiperSlide key={product.id}>
-                <div className="product-card">
-                  <NavLink
-                    className="product-link text-dark"
-                    to={`/${product.category}/${product.id}`}
-                  >
+            {featuredproductsData.map((product) => {
+              const isProductInCart = cartData?.carts?.some(
+                (cartItem) => cartItem.product_id === product.id
+              );
+
+              return (
+                <SwiperSlide key={product.id}>
+                  <div className="product-card">
                     {/* 圖片區 + 書況標籤 */}
-                    <div className="card-img-wrapper">
-                      <img src={product.imageUrl} alt={product.title} />
-                      <span className="card-img-tag">{product.condition}</span>
-                    </div>
+                    <NavLink
+                      className="product-link text-dark"
+                      to={`/${product.category}/${product.id}`}
+                    >
+                      <div className="card-img-wrapper">
+                        {product.imageUrl && (
+                          <img src={product.imageUrl} alt={product.title} />
+                        )}
+                        <span className="card-img-tag">
+                          {product.condition}
+                        </span>
+                      </div>
+                    </NavLink>
 
                     {/* 商品資訊 */}
                     <div className="card-info">
@@ -195,16 +208,20 @@ export default function HomePage() {
                       <button className="btn btn-icon">
                         <i className="material-symbols-outlined">favorite</i>
                       </button>
-                      <button className="btn btn-icon">
+                      <button
+                        onClick={() => addToCart(product.id)}
+                        className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
+                        disabled={isProductInCart}
+                      >
                         <i className="material-symbols-outlined">
                           shopping_cart
                         </i>
                       </button>
                     </div>
-                  </NavLink>
-                </div>
-              </SwiperSlide>
-            ))}
+                  </div>
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </section>
@@ -226,18 +243,28 @@ export default function HomePage() {
               1200: { slidesPerView: 5 }, // xl
             }}
           >
-            {productsData.map((product) => (
-              <SwiperSlide key={product.id}>
-                <div className="product-card">
-                  <NavLink
-                    className="product-link text-dark"
-                    to={`/${product.category}/${product.id}`}
-                  >
+            {productsData.map((product) => {
+              const isProductInCart = cartData?.carts?.some(
+                (cartItem) => cartItem.product_id === product.id
+              );
+
+              return (
+                <SwiperSlide key={product.id}>
+                  <div className="product-card">
                     {/* 圖片區 + 書況標籤 */}
-                    <div className="card-img-wrapper">
-                      <img src={product.imageUrl} alt={product.title} />
-                      <span className="card-img-tag">{product.condition}</span>
-                    </div>
+                    <NavLink
+                      className="product-link text-dark"
+                      to={`/${product.category}/${product.id}`}
+                    >
+                      <div className="card-img-wrapper">
+                        {product.imageUrl && (
+                          <img src={product.imageUrl} alt={product.title} />
+                        )}
+                        <span className="card-img-tag">
+                          {product.condition}
+                        </span>
+                      </div>
+                    </NavLink>
 
                     {/* 商品資訊 */}
                     <div className="card-info">
@@ -268,16 +295,20 @@ export default function HomePage() {
                       <button className="btn btn-icon">
                         <i className="material-symbols-outlined">favorite</i>
                       </button>
-                      <button className="btn btn-icon">
+                      <button
+                        onClick={() => addToCart(product.id)}
+                        className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
+                        disabled={isProductInCart}
+                      >
                         <i className="material-symbols-outlined">
                           shopping_cart
                         </i>
                       </button>
                     </div>
-                  </NavLink>
-                </div>
-              </SwiperSlide>
-            ))}
+                  </div>
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </section>

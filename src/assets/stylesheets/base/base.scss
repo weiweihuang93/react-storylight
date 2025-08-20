@@ -57,6 +57,13 @@ img {
     transform: translateX(4px);
   }
 }
+.btn-link-translateX{
+  transition: transform 0.3s ease;
+
+  &:hover{
+    transform: translateX(4px);
+  }
+}
 
 // 文字
 .title-cp1 {
@@ -75,4 +82,9 @@ img {
 }
 .h-2em{
   height: 60px;
+}
+
+.d-flex-between{
+  display: flex;
+  justify-content: space-between;
 }

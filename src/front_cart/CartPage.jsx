@@ -1,42 +1,28 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
+import { AppContext } from "../context/AppContext";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function CartPage() {
+  const { user, cartData, getCartData } = useContext(AppContext);
+
   const navigate = useNavigate();
-
-  const [cartData, setCartData] = useState([]);
-
-  // 取得購物車資料
-  const getCartData = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/cart`);
-      console.log("getCartData", res);
-      setCartData(res.data.data.carts);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const delAllCart = async () => {
     try {
       await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/carts`);
       getCartData();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const delIdCart = async (cart_id) => {
     try {
       await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/cart/${cart_id}`);
       getCartData();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const handleNextStep = () => {
@@ -46,10 +32,6 @@ export default function CartPage() {
       navigate("/cart/order");
     }
   };
-
-  useEffect(() => {
-    getCartData();
-  }, []);
 
   return (
     <>
@@ -78,7 +60,7 @@ export default function CartPage() {
                 </div>
                 {/* 購物車列表 */}
                 <div className="card-body">
-                  {cartData?.map((cart) => (
+                  {cartData?.carts?.map((cart) => (
                     <div className="cart-item" key={cart.id}>
                       <img
                         src={cart.product.imageUrl}
@@ -107,54 +89,58 @@ export default function CartPage() {
               </div>
             </div>
             <div className="col-xl-4">
-              <div className="bg-white rounded border p-4 sticky">
-                {/* 標題 */}
-                <h5 className="mb-4 border-bottom pb-2">訂單明細</h5>
+              <div className="sticky">
+                <div className="bg-white rounded border p-4">
+                  {/* 標題 */}
+                  <h5 className="mb-4 border-bottom pb-2">訂單明細</h5>
 
-                {/* 金額清單 */}
-                <div className="d-flex-between mb-3">
-                  <span>總計</span>
-                  <span>NT$ 2800</span>
-                </div>
-                <div className="d-flex-between mb-3">
-                  <span>運費</span>
-                  <span>NT$ 0</span>
-                </div>
-                <div className="d-flex-between fs-5 fw-bold mb-3">
-                  <span>總金額</span>
-                  <span>NT$ 2800</span>
-                </div>
+                  {/* 金額清單 */}
+                  <div className="d-flex-between mb-3">
+                    <span>總計</span>
+                    <span>NT$ 2800</span>
+                  </div>
+                  <div className="d-flex-between mb-3">
+                    <span>運費</span>
+                    <span>NT$ 0</span>
+                  </div>
+                  <div className="d-flex-between fs-5 fw-bold mb-3">
+                    <span>總金額</span>
+                    <span>NT$ 2800</span>
+                  </div>
 
-                {/* 優惠券 */}
-                <div className="border-top py-3">
-                  <label
-                    htmlFor="coupon"
-                    className="fs-5 fw-bold form-label text-muted"
-                  >
-                    折扣碼
-                  </label>
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      id="coupon"
-                      className="form-control shadow-none"
-                      placeholder="請輸入折扣碼"
-                    />
-                    <button
-                      className="btn btn-accent-100 text-white"
-                      type="button"
+                  {/* 優惠券 */}
+                  <div className="border-top py-3">
+                    <label
+                      htmlFor="coupon"
+                      className="fs-5 fw-bold form-label text-muted"
                     >
-                      <span className="material-symbols-outlined">redeem</span>
-                    </button>
+                      折扣碼
+                    </label>
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        id="coupon"
+                        className="form-control shadow-none"
+                        placeholder="請輸入折扣碼"
+                      />
+                      <button
+                        className="btn btn-accent-100 text-white"
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined">
+                          redeem
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
+                <button
+                  onClick={handleNextStep}
+                  className="cart-button btn btn-lg btn-accent-300 mt-4 btn-link-translateX"
+                >
+                  下一步，填寫訂單資料
+                </button>
               </div>
-              <button
-                onClick={handleNextStep}
-                className="cart-button btn btn-lg btn-accent-300 mt-4 btn-link-translateX"
-              >
-                下一步，填寫訂單資料
-              </button>
             </div>
           </div>
         </div>

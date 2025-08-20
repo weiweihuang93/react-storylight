@@ -33,16 +33,12 @@
   .product-card {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
     border-radius: $border-radius-lg;
-    overflow: hidden;    
-  }
-
-  .product-link{
-    display: block;
+    overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .product-link:hover{
-    transform: translateY(-4px); /* 微微上移，帶點浮起效果 */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* 陰影 */
+    
+    &:hover{
+      transform: translateY(-4px); /* 微微上移，帶點浮起效果 */
+    }
   }
 
   .border-custom{
@@ -113,7 +109,7 @@
         padding: 8px 0;
         color: $accent-300;
         transition: color 0.25s ease;
-  
+
         &::before {
           content: "";
           position: absolute;
@@ -125,19 +121,28 @@
           transition: all 0.25s ease;
           z-index: 0;
         }
-  
+
         i {
           position: relative;
           z-index: 1;
         }
-  
+
         &:hover::before {
           height: 100%;
           background: $accent-100;
         }
-  
+
         &:hover i {
-          color: #fff;
+          color: $white;
+        }
+
+        &.active::before {
+          height: 100%;
+          background: $accent-100;
+        }
+
+        &.active i {
+          color: $white;
         }
       }
     }

@@ -1,9 +1,12 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import { AppContext } from "../context/AppContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
+  const { login } = useContext(AppContext);
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -19,13 +22,12 @@ export default function LoginPage() {
 
   const handleSignin = (e) => {
     e.preventDefault();
-    if (account.username && account.password) {
-      // 模擬登入成功
-      alert("登入成功！");
-      setTimeout(() => navigate("/"), 1000);
-    } else {
-      alert("請輸入帳號密碼");
-    }
+    login(account.username, account.password);
+
+    // 取得 redirect 路徑，如果沒有就回首頁
+    const searchParams = new URLSearchParams(location.search);
+    const redirect = searchParams.get("redirect") || "/";
+    navigate(redirect, { replace: true });
   };
 
   return (

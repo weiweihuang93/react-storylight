@@ -42,7 +42,11 @@ export default function FrontLayout() {
           <div className="memberbar d-lg-none">
             <ul>
               <li className="icon-badge">
-                <span className="material-symbols-outlined">shopping_cart</span>
+                <Link to="/cart" className="d-flex">
+                  <span className="material-symbols-outlined">
+                    shopping_cart
+                  </span>
+                </Link>
               </li>
               <li className="icon-badge">
                 <Link to="/login" className="d-flex">
@@ -96,7 +100,11 @@ export default function FrontLayout() {
           <div className="memberbar d-none d-lg-inline-block">
             <ul>
               <li className="icon-badge">
-                <span className="material-symbols-outlined">shopping_cart</span>
+                <Link to="/cart" className="d-flex">
+                  <span className="material-symbols-outlined">
+                    shopping_cart
+                  </span>
+                </Link>
               </li>
               <li className="icon-badge">
                 <Link to="/login" className="d-flex">

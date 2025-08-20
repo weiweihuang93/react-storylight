@@ -1,12 +1,14 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import categories from "../data/categories";
+import { AppContext } from "../context/AppContext";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function CategoryPage() {
+  const { addToCart, cartData } = useContext(AppContext);
   const { categoryName } = useParams();
   const [productsData, setProductsData] = useState([]);
 
@@ -66,29 +68,39 @@ export default function CategoryPage() {
         <div className="bg-neutral-100 py-6">
           <div className="container">
             <div className="row g-3">
-              {productsData.map((product) => (
-                <div className="col-12" key={product.id}>
-                  <div className="product-card">
-                    <NavLink
-                      className="product-link text-dark"
-                      to={`/${product.category}/${product.id}`}
-                    >
+              {productsData.map((product) => {
+                const isProductInCart = cartData?.carts?.some(
+                  (cartItem) => cartItem.product_id === product.id
+                );
+
+                return (
+                  <div className="col-12" key={product.id}>
+                    <div className="product-card">
                       <div className=" row g-3" key={product.id}>
                         {/* 圖片區 */}
                         <div className="col-lg-4 col-sm-6 col-6 d-flex flex-column">
-                          <div className="card-img-wrapper">
-                            <img src={product.imageUrl} alt={product.title} />
-                            <span className="card-img-tag">
-                              {product.condition}
-                            </span>
-                          </div>
+                          <NavLink
+                            className="product-link text-dark"
+                            to={`/${product.category}/${product.id}`}
+                          >
+                            <div className="card-img-wrapper">
+                              <img src={product.imageUrl} alt={product.title} />
+                              <span className="card-img-tag">
+                                {product.condition}
+                              </span>
+                            </div>
+                          </NavLink>
                           <div className="card-operation mt-auto">
                             <button className="btn btn-icon">
                               <i className="material-symbols-outlined">
                                 favorite
                               </i>
                             </button>
-                            <button className="btn btn-icon">
+                            <button
+                              onClick={() => addToCart(product.id)}
+                              className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
+                              disabled={isProductInCart}
+                            >
                               <i className="material-symbols-outlined">
                                 shopping_cart
                               </i>
@@ -135,10 +147,10 @@ export default function CategoryPage() {
                           </div>
                         </div>
                       </div>
-                    </NavLink>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
