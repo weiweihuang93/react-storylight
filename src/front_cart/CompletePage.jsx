@@ -1,4 +1,28 @@
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../context/AppContext";
+import { Link, useNavigate } from "react-router";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_PATH = import.meta.env.VITE_API_PATH;
+
 export default function CompletePage() {
+  const { order } = useContext(AppContext);
+  const [orderData, setOrderData] = useState({});
+
+  useEffect(() => {
+    getOrderId();
+  }, [order]);
+
+  const getOrderId = async () => {
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/v2/api/${API_PATH}/order/${order.orderId}`
+      );
+      setOrderData(res.data.order);
+    } catch (err) {}
+  };
+
   return (
     <>
       <section className="section-order pb-6">
@@ -13,54 +37,62 @@ export default function CompletePage() {
                   <h3 className="mb-0">已收到您的訂單，感謝你的購買</h3>
                 </div>
 
-                <div className="order-content mt-4 p-4 border rounded bg-light">
+                <div className="order-content bg-light border rounded p-4">
                   <h5 className="mb-3">訂單資訊</h5>
-                  <ul className="list-unstyled mb-0">
-                    <li className="d-flex justify-content-between">
+                  <ul className="order-list">
+                    <li>
                       <span>訂單編號：</span>
-                      <span>123456789</span>
+                      <span>{orderData.id}</span>
                     </li>
-                    <li className="d-flex justify-content-between">
+                    <li>
                       <span>訂單時間：</span>
-                      <span>2025-08-20 14:30</span>
+                      <span>
+                        {new Date(orderData.create_at * 1000).toLocaleString()}
+                      </span>
                     </li>
-                    <li className="d-flex justify-content-between">
+                    <li>
                       <span>運送方式：</span>
-                      <span>宅配</span>
+                      <span>{orderData.shippingMethod || "宅配"}</span>
                     </li>
                     <li className="d-flex justify-content-between text-danger">
                       <span>預計出貨時間：</span>
-                      <span>2-3 個工作天內</span>
+                      <span>1 個工作天內</span>
                     </li>
-                    <li className="d-flex justify-content-between">
+                    <li>
                       <span>總金額：</span>
-                      <span>NT$ 3,500</span>
+                      <span>{orderData.total}</span>
                     </li>
-                    <li className="d-flex justify-content-between">
+                    <li>
                       <span>付款狀態：</span>
-                      <span>已付款</span>
+                      <span>{orderData.is_paid ? "已付款" : "未付款"}</span>
+                    </li>
+                    <li>
+                      <span>備註訊息：</span>
+                      <span>{orderData.message || "-"}</span>
                     </li>
                   </ul>
                 </div>
 
                 <div className="order-content mt-4 p-4 border rounded bg-light">
                   <h5 className="mb-3">訂單明細</h5>
-                  <ul className="list-unstyled mb-0">
-                    <li className="d-flex justify-content-between">
-                      <span>商品名稱 A x1</span>
-                      <span>NT$ 1,500</span>
-                    </li>
-                    <li className="d-flex justify-content-between">
-                      <span>商品名稱 B x2</span>
-                      <span>NT$ 2,000</span>
-                    </li>
+                  <ul className="order-list">
+                    {orderData.products &&
+                      Object.values(orderData.products).map((item) => (
+                        <li key={item.product_id}>
+                          <span>
+                            {item.product?.title || "商品名稱"} x{" "}
+                            {item.qty || 1}
+                          </span>
+                          <span>NT$ {item.final_total || 0}</span>
+                        </li>
+                      ))}
                   </ul>
                 </div>
 
                 <div className="mt-5">
-                  <a href="/" className="btn btn-lg btn-accent-300 w-100">
+                  <Link to="/" className="btn btn-lg btn-accent-300 w-100">
                     返回首頁
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

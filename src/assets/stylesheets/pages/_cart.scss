@@ -83,3 +83,15 @@
     }
   }
 }
+
+.section-order{
+  .order-list{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  & li{
+    display: flex;
+    justify-content: space-between;
+  }
+}

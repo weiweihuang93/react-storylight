@@ -11,6 +11,9 @@ export default function AppProvider({ children }) {
   const [user, setUser] = useState(null);
   const [cartData, setCartData] = useState([]);
 
+  // 取得訂單
+  const [order, setOrder] = useState(null);
+
   // 模擬登入
   const login = (username, password) => {
     if (username && password) {
@@ -58,7 +61,10 @@ export default function AppProvider({ children }) {
         logout,
         cartData,
         getCartData,
+        setCartData,
         addToCart,
+        order,
+        setOrder,
       }}
     >
       {children}
