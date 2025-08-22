@@ -14,6 +14,12 @@ export default function AppProvider({ children }) {
   // 取得訂單
   const [order, setOrder] = useState(null);
 
+  // 取得運送方式
+  const [shippingMethod, setShippingMethod] = useState("");
+
+  // loading效果
+  const [isScreenLoading, setIsScreenLoading] = useState(false);
+
   // 模擬登入
   const login = (username, password) => {
     if (username && password) {
@@ -65,6 +71,9 @@ export default function AppProvider({ children }) {
         addToCart,
         order,
         setOrder,
+        setShippingMethod,
+        isScreenLoading,
+        setIsScreenLoading,
       }}
     >
       {children}

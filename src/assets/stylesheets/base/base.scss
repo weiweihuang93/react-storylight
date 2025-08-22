@@ -47,7 +47,7 @@ img {
   }
 }
 
-.btn-link-style {
+.btn-transX {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -57,12 +57,23 @@ img {
     transform: translateX(4px);
   }
 }
-.btn-link-translateX{
-  transition: transform 0.3s ease;
 
-  &:hover{
-    transform: translateX(4px);
+// 共用card hover效果
+.card-transY {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba($accent-300, 0.1); // 初始陰影
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba($accent-300, 0.2); // 懸浮陰影
   }
+}
+
+.card-wrapper{
+  background-color: $white;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
 }
 
 // 文字

@@ -63,7 +63,7 @@ export default function HomePage() {
             </form>
             <Link
               to="/#category"
-              className="btn-link-style btn btn-lg btn-accent-300 mt-4 d-inline-block"
+              className="btn-transX btn btn-lg btn-accent-300 mt-4 d-inline-block"
             >
               開始探索
               <span className="material-symbols-outlined">arrow_forward</span>
@@ -123,7 +123,7 @@ export default function HomePage() {
               <div className="col-6 col-lg-4" key={category.api}>
                 <NavLink
                   to={`/${category.api}`}
-                  className="card-trans-style category-card p-4 p-lg-6"
+                  className="card-transY category-card p-4 p-lg-6"
                 >
                   <span className="material-symbols-outlined fs-1">
                     {category.icon}
@@ -147,6 +147,7 @@ export default function HomePage() {
           </div>
 
           <Swiper
+            className="py-3"
             spaceBetween={16} // 卡片間距
             slidesPerView={1} // 預設一次顯示1張
             loop={featuredproductsData.length > 5}
@@ -163,7 +164,7 @@ export default function HomePage() {
 
               return (
                 <SwiperSlide key={product.id}>
-                  <div className="product-card">
+                  <div className="product-card card-transY">
                     {/* 圖片區 + 書況標籤 */}
                     <NavLink
                       className="product-link text-dark"
@@ -234,6 +235,7 @@ export default function HomePage() {
           </div>
 
           <Swiper
+            className="py-3"
             spaceBetween={16} // 卡片間距
             slidesPerView={1} // 預設一次顯示1張
             loop={productsData.length > 5}
@@ -250,7 +252,7 @@ export default function HomePage() {
 
               return (
                 <SwiperSlide key={product.id}>
-                  <div className="product-card">
+                  <div className="product-card card-transY">
                     {/* 圖片區 + 書況標籤 */}
                     <NavLink
                       className="product-link text-dark"
@@ -330,7 +332,7 @@ export default function HomePage() {
 
             <div className="row py-5 g-4">
               <div className="col-12 col-md-4 d-flex">
-                <div className="card-trans-style about-card">
+                <div className="about-card card-transY">
                   <div className="bg-diamond-wrapper mb-4">
                     <img src="./images/ic-1.png" alt="安心清潔" />
                   </div>
@@ -344,7 +346,7 @@ export default function HomePage() {
               </div>
 
               <div className="col-12 col-md-4 d-flex">
-                <div className="card-trans-style about-card">
+                <div className="about-card card-transY">
                   <div className="bg-diamond-wrapper mb-4">
                     <img src="./images/ic-2.png" alt="書況分級" />
                   </div>
@@ -358,7 +360,7 @@ export default function HomePage() {
               </div>
 
               <div className="col-12 col-md-4 d-flex">
-                <div className="card-trans-style about-card">
+                <div className="about-card card-transY">
                   <div className="bg-diamond-wrapper mb-4">
                     <img src="./images/ic-3.png" alt="快速出貨" />
                   </div>
@@ -391,7 +393,7 @@ export default function HomePage() {
                   </span>
                 </p>
               </div>
-              <button className="btn-link-style btn btn-lg btn-accent-300">
+              <button className="btn-transX btn btn-lg btn-accent-300">
                 立即徵求
                 <span className="material-symbols-outlined">arrow_forward</span>
               </button>
@@ -430,7 +432,7 @@ export default function HomePage() {
                 >
                   <div className="faq-a accordion-body">
                     <p>
-                      是的，為了提供更完善的購物體驗與後續服務，本站採會員制購買，請先註冊成為會員，才能進行下單。
+                      是的！為了提供更完善的購物體驗與後續服務，本站採會員制購買，請先註冊成為會員，才能進行下單。
                     </p>
                   </div>
                 </div>
@@ -488,15 +490,15 @@ export default function HomePage() {
                       <li className="fw-bold">
                         為方便您了解書況，依據書籍狀況分類為：
                       </li>
-                      <li>A級：極少翻閱，書況接近新書。</li>
+                      <li>A級：書況近乎全新，極少翻閱。</li>
                       <li>
-                        B級：有輕微使用痕跡，可能有自然泛黃、書斑，不影響閱讀。
+                        B級：書況良好，有輕微使用痕跡，可能出現自然泛黃或書斑，但不影響閱讀。
                       </li>
                       <li>
-                        C級：可能含有筆記、劃線或重點標記。可能有書皮磨損、封面折痕、自然泛黃、書斑、髒污。但內容完整且可正常閱讀。
+                        C級：書況普通，可能有筆記、劃線或重點標記，亦可能有書皮磨損、封面折痕、自然泛黃、書斑或輕微髒污，但內容完整，可正常閱讀。
                       </li>
                       <li>
-                        D級：較舊書況，年份較久遠，嚴重泛黃、書斑、髒污、封面或內頁磨損折痕，但仍保有閱讀價值。
+                        D級：書況較舊，多為年份久遠書籍，常見嚴重泛黃、書斑、髒污，或封面、內頁明顯磨損與折痕，但仍保有閱讀價值。
                       </li>
                     </ul>
                   </div>
@@ -527,7 +529,10 @@ export default function HomePage() {
                   data-bs-parent="#faqAccordion"
                 >
                   <div className="faq-a accordion-body">
-                    <p>您可以選擇使用信用卡刷卡、銀行轉帳、超商付款取貨。</p>
+                    <p>
+                      您可以選擇使用信用卡刷卡 或 銀行 ATM
+                      轉帳，提供多元安全的付款方式。
+                    </p>
                   </div>
                 </div>
               </div>
@@ -549,7 +554,9 @@ export default function HomePage() {
                   data-bs-parent="#faqAccordion"
                 >
                   <div className="faq-a accordion-body">
-                    <p>中華郵政、超商付款取貨等多種方式，方便您選擇。</p>
+                    <p>
+                      您可以選擇賣家宅配 或 超商取貨，提供彈性便利的配送選項。
+                    </p>
                   </div>
                 </div>
               </div>
@@ -572,8 +579,7 @@ export default function HomePage() {
                 >
                   <div className="faq-a accordion-body">
                     <p>
-                      無論訂購數量多少，運費皆為固定收費 60
-                      元，讓您享受透明、公平的運費價格。
+                      無論訂購數量，運費皆為 0 元，享受透明又公平的購物體驗。
                     </p>
                   </div>
                 </div>
@@ -596,7 +602,7 @@ export default function HomePage() {
                   data-bs-parent="#faqAccordion"
                 >
                   <div className="faq-a accordion-body">
-                    <p>當日下單完成訂購，訂單將於次個工作日排入出貨流程。</p>
+                    <p>當日下單完成訂購，訂單將於次 1 個工作日排入出貨流程。</p>
                   </div>
                 </div>
               </div>

@@ -3,33 +3,43 @@ import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import categories from "../data/categories";
 import { AppContext } from "../context/AppContext";
+import ScreenLoading from "../components/ScreenLoading";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function CategoryPage() {
-  const { addToCart, cartData } = useContext(AppContext);
+  const { addToCart, cartData, isScreenLoading, setIsScreenLoading } =
+    useContext(AppContext);
   const { categoryName } = useParams();
   const [productsData, setProductsData] = useState([]);
 
   // 取得全部商品
   const getAllProducts = async () => {
+    setIsScreenLoading(true);
     try {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/products/all`
       );
       setProductsData(res.data.products);
-    } catch (err) {}
+    } catch (err) {
+    } finally {
+      setIsScreenLoading(false);
+    }
   };
 
   // 取得分類商品
   const getCategoryProducts = async (category) => {
+    setIsScreenLoading(true);
     try {
       const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products`, {
         params: { category },
       });
       setProductsData(res.data.products);
-    } catch (err) {}
+    } catch (err) {
+    } finally {
+      setIsScreenLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -42,6 +52,7 @@ export default function CategoryPage() {
 
   return (
     <>
+      {isScreenLoading && <ScreenLoading />}
       <section className="category-navbar py-5">
         <div className="container">
           {/* 分類按鈕 */}
@@ -75,7 +86,7 @@ export default function CategoryPage() {
 
                 return (
                   <div className="col-12" key={product.id}>
-                    <div className="product-card">
+                    <div className="product-card card-transY">
                       <div className=" row g-3" key={product.id}>
                         {/* 圖片區 */}
                         <div className="col-lg-4 col-sm-6 col-6 d-flex flex-column">

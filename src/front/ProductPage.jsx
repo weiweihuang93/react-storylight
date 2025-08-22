@@ -10,9 +10,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/thumbs";
+import ScreenLoading from "../components/ScreenLoading";
 
 export default function ProductPage() {
-  const { addToCart, cartData } = useContext(AppContext);
+  const { addToCart, cartData, isScreenLoading, setIsScreenLoading } =
+    useContext(AppContext);
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
@@ -22,16 +24,21 @@ export default function ProductPage() {
 
   // 取得商品Id
   const getProductId = async () => {
+    setIsScreenLoading(true);
     try {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/product/${productId}`
       );
       setProductData(res.data.product);
-    } catch (err) {}
+    } catch (err) {
+    } finally {
+      setIsScreenLoading(false);
+    }
   };
 
   // 取得分類商品
   const getCategoryProducts = async (category) => {
+    setIsScreenLoading(true);
     try {
       const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products`, {
         params: { category },
@@ -39,7 +46,10 @@ export default function ProductPage() {
 
       const filter10Products = res.data.products.slice(-10);
       setProductsData(filter10Products);
-    } catch (err) {}
+    } catch (err) {
+    } finally {
+      setIsScreenLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -55,6 +65,7 @@ export default function ProductPage() {
 
   return (
     <>
+      {isScreenLoading && <ScreenLoading />}
       {/* 麵包屑導航 */}
       <section className="bg-neutral-100 py-3 border-bottom">
         <div className="container">
@@ -252,6 +263,7 @@ export default function ProductPage() {
             瀏覽此商品的人，也瀏覽...
           </h2>
           <Swiper
+            className="py-3"
             spaceBetween={16} // 卡片間距
             slidesPerView={1} // 預設一次顯示1張
             loop={productsData.length > 5}
@@ -268,7 +280,7 @@ export default function ProductPage() {
 
               return (
                 <SwiperSlide key={product.id}>
-                  <div className="product-card">
+                  <div className="product-card card-transY">
                     <NavLink
                       className="product-link text-dark"
                       to={`/${product.category}/${product.id}`}

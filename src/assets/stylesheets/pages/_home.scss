@@ -24,19 +24,6 @@
   height: 50px;
 }
 
-// 共用card hover效果
-.card-trans-style {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease; // 過渡效果
-    box-shadow: 0 2px 8px rgba($accent-300, 0.1); // 初始陰影
-
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba($accent-300, 0.2); // 懸浮陰影
-  }
-}
-
 // header-banner
 .header-banner {
   position: relative;
@@ -149,7 +136,7 @@
       margin-bottom: 1rem;
     }
 
-    .btn-link-style{
+    .btn-transX{
       margin-left: auto;
     }
   }
