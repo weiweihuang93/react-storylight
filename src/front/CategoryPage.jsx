@@ -1,12 +1,10 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import categories from "../data/categories";
 import { AppContext } from "../context/AppContext";
 import ScreenLoading from "../components/ScreenLoading";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function CategoryPage() {
   const { addToCart, cartData, isScreenLoading, setIsScreenLoading } =
@@ -68,7 +66,7 @@ export default function CategoryPage() {
                 <span className="material-symbols-outlined">
                   {category.icon}
                 </span>
-                <h4 className="fs-6">{category.label}</h4>
+                <h2 className="fs-6">{category.label}</h2>
               </NavLink>
             ))}
           </div>
@@ -122,9 +120,9 @@ export default function CategoryPage() {
                         {/* 商品資訊 */}
                         <div className="col-lg-4 col-sm-6 col-6">
                           <div className="card-info h-100 d-flex flex-column">
-                            <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                            <h1 className="fs-5 mb-2 title-cp2 h-2em">
                               {product.title}
-                            </h3>
+                            </h1>
                             <ul className="product-list gap-2">
                               <li className="title-cp1">
                                 ISBN：{product.isbn}

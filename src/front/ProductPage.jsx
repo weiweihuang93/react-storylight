@@ -1,10 +1,8 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import { AppContext } from "../context/AppContext";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
@@ -296,9 +294,9 @@ export default function ProductPage() {
 
                     {/* 商品資訊 */}
                     <div className="card-info">
-                      <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                      <h1 className="fs-5 mb-2 title-cp2 h-2em">
                         {product.title}
-                      </h3>
+                      </h1>
                       <ul className="product-list">
                         <li className="title-cp1">ISBN：{product.isbn}</li>
                         <li className="title-cp1">作者：{product.author}</li>

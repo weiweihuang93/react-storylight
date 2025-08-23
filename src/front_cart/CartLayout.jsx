@@ -22,7 +22,9 @@ export default function CartLayout() {
                   className={`col ${location.pathname === step.path ? "active" : ""}`}
                 >
                   <div className="circle">{index + 1}</div>
-                  <div className="title">{step.title}</div>
+                  <div className="title">
+                    <h1 className="fs-6">{step.title}</h1>
+                  </div>
                 </div>
               ))}
             </div>

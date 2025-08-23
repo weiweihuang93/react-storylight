@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import categories from "../data/categories";
@@ -6,9 +7,6 @@ import { AppContext } from "../context/AppContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function HomePage() {
   const { addToCart, cartData } = useContext(AppContext);
@@ -63,7 +61,7 @@ export default function HomePage() {
             </form>
             <Link
               to="/#category"
-              className="btn-transX btn btn-lg btn-accent-300 mt-4 d-inline-block"
+              className="btn btn-lg btn-accent-300 btn-flex btn-transX mt-4"
             >
               開始探索
               <span className="material-symbols-outlined">arrow_forward</span>
@@ -393,7 +391,7 @@ export default function HomePage() {
                   </span>
                 </p>
               </div>
-              <button className="btn-transX btn btn-lg btn-accent-300">
+              <button className="btn btn-lg btn-accent-300 btn-flex btn-transX mt-4">
                 立即徵求
                 <span className="material-symbols-outlined">arrow_forward</span>
               </button>

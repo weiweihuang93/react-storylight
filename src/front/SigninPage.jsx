@@ -32,9 +32,9 @@ export default function SigninPage() {
     <>
       <main>
         <div className="bg-neutral-100">
-          <div className="container">
+          <div className="container d-flex justify-content-center">
             <div className="login-wrapper py-7">
-              <div className="login p-5">
+              <div className="card-base p-5">
                 <div className="text-center mb-4">
                   <a>
                     <img className="logo" src="./images/logo.png" alt="logo" />

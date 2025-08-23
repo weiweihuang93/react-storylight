@@ -1,32 +1,30 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function PaymentPage() {
   const { order } = useContext(AppContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!order?.orderId) {
-      navigate("/cart");
-      return;
-    }
+  if (!order?.orderId) {
+    navigate("/cart");
+    return null;
+  }
 
+  useEffect(() => {
     const handlePayment = async () => {
       try {
-        const res = await axios.post(
-          `${BASE_URL}/v2/api/${API_PATH}/pay/${order.orderId}`
-        );
+        await axios.post(`${BASE_URL}/v2/api/${API_PATH}/pay/${order.orderId}`);
         navigate("/cart/complete");
-      } catch (err) {}
+      } catch (err) {
+        console.error("付款失敗", err);
+        navigate("/cart");
+      }
     };
 
     const timer = setTimeout(handlePayment, 3000);
-
     return () => clearTimeout(timer);
   }, [order]);
 

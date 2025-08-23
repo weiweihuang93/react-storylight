@@ -1,14 +1,12 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
-
 export default function OrderPage() {
-  const { cartData, setCartData, setOrder } = useContext(AppContext);
+  const { setCartData, setOrder, setShippingMethod } = useContext(AppContext);
   const navigate = useNavigate();
 
   const {
@@ -18,7 +16,7 @@ export default function OrderPage() {
     watch,
     reset,
   } = useForm({
-    mode: "onBlur", // 即時檢查錯誤
+    mode: "onBlur",
   });
 
   // 即時監聽付款方式 運送方式
@@ -40,10 +38,9 @@ export default function OrderPage() {
       data: {
         user: { name, email, tel, address },
         message,
-        paymentMethod,
-        shippingMethod,
       },
     };
+    setShippingMethod(shippingMethod);
     submitOrder(userData);
     reset();
   };
@@ -68,195 +65,208 @@ export default function OrderPage() {
             <div className="row justify-content-center g-3">
               {/* 付款方式 */}
               <div className="col-lg-8">
-                <div className="bg-white border rounded p-5 shadow-sm">
+                <div className="card-base p-5">
                   <h2 className="fs-4 mb-4">付款方式</h2>
-                  <div className="d-flex flex-column gap-3 p-3">
-                    <label className="d-flex align-items-center">
-                      <input
-                        {...register("paymentMethod", {
-                          required: "請選擇付款方式",
-                        })}
-                        type="radio"
-                        value="creditCard"
-                        className="me-2"
-                      />
-                      信用卡
-                    </label>
+                  <div className="form-group p-3">
+                    {/* 信用卡 */}
+                    <div className="mb-3">
+                      <label className="d-flex align-items-center">
+                        <input
+                          {...register("paymentMethod", {
+                            required: "請選擇付款方式",
+                          })}
+                          type="radio"
+                          value="creditCard"
+                          className="me-2"
+                        />
+                        信用卡
+                      </label>
 
-                    {/* 信用卡付款欄位 watch */}
-                    {paymentMethod === "creditCard" && (
-                      <div className="border p-5 mt-3">
-                        <h5 className="mb-3">信用卡資訊</h5>
+                      {/* 信用卡付款欄位 */}
+                      {paymentMethod === "creditCard" && (
+                        <div className="border p-5 mt-3">
+                          <h3 className="fs-5 mb-3">信用卡資訊</h3>
 
-                        {/* 卡號 */}
-                        <div className="mb-3">
-                          <label className="form-label">信用卡號</label>
-                          <input
-                            type="text"
-                            placeholder="請輸入卡號"
-                            className="form-control"
-                            {...register("creditCardNumber", {
-                              required: "信用卡號必填",
-                              pattern: {
-                                value: /^\d{16}$/, // 16 位數字
-                                message: "信用卡號格式錯誤，需為 16 位數字",
-                              },
-                            })}
-                          />
-                          {errors.creditCardNumber && (
-                            <p className="text-danger my-2">
-                              {errors.creditCardNumber.message}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* 持卡人 */}
-                        <div className="mb-3">
-                          <label className="form-label">持卡人姓名</label>
-                          <input
-                            type="text"
-                            placeholder="請輸入持卡人姓名"
-                            className="form-control"
-                            {...register("cardHolder", {
-                              required: "持卡人姓名必填",
-                              minLength: {
-                                value: 2,
-                                message: "姓名至少需 2 個字",
-                              },
-                              pattern: {
-                                value: /^[^\d]+$/, // 不允許數字
-                                message: "姓名不能包含數字",
-                              },
-                            })}
-                          />
-                          {errors.cardHolder && (
-                            <p className="text-danger my-2">
-                              {errors.cardHolder.message}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* 有效期限 + CVC */}
-                        <div className="row">
-                          <div className="col">
-                            <label className="form-label">有效期限</label>
+                          {/* 卡號 */}
+                          <div className="mb-3">
+                            <label className="form-label">信用卡號</label>
                             <input
                               type="text"
-                              placeholder="MM/YY"
+                              placeholder="請輸入卡號"
                               className="form-control"
-                              {...register("expiryDate", {
-                                required: "有效期限必填",
+                              {...register("creditCardNumber", {
+                                required: "信用卡號必填",
                                 pattern: {
-                                  value: /^(0[1-9]|1[0-2])\/\d{2}$/, // MM/YY 格式
-                                  message: "格式必須為 MM/YY",
+                                  value: /^\d{16}$/,
+                                  message: "信用卡號格式錯誤，需為 16 位數字",
                                 },
                               })}
                             />
-                            {errors.expiryDate && (
+                            {errors.creditCardNumber && (
                               <p className="text-danger my-2">
-                                {errors.expiryDate.message}
+                                {errors.creditCardNumber.message}
                               </p>
                             )}
                           </div>
 
-                          <div className="col">
-                            <label className="form-label">CVC</label>
+                          {/* 持卡人 */}
+                          <div className="mb-3">
+                            <label className="form-label">持卡人姓名</label>
                             <input
                               type="text"
-                              placeholder="三位數"
+                              placeholder="請輸入持卡人姓名"
                               className="form-control"
-                              {...register("cvc", {
-                                required: "CVC 必填",
+                              {...register("cardHolder", {
+                                required: "持卡人姓名必填",
+                                minLength: {
+                                  value: 2,
+                                  message: "姓名至少需 2 個字",
+                                },
                                 pattern: {
-                                  value: /^[0-9]{3}$/, // 3 位數字
-                                  message: "CVC 必須為 3 位數字",
+                                  value: /^[^\d]+$/,
+                                  message: "姓名不能包含數字",
                                 },
                               })}
                             />
-                            {errors.cvc && (
+                            {errors.cardHolder && (
                               <p className="text-danger my-2">
-                                {errors.cvc.message}
+                                {errors.cardHolder.message}
                               </p>
                             )}
                           </div>
+
+                          {/* 有效期限 + CVC */}
+                          <div className="row">
+                            <div className="col">
+                              <label className="form-label">有效期限</label>
+                              <input
+                                type="text"
+                                placeholder="MM/YY"
+                                className="form-control"
+                                {...register("expiryDate", {
+                                  required: "有效期限必填",
+                                  pattern: {
+                                    value: /^(0[1-9]|1[0-2])\/\d{2}$/,
+                                    message: "格式必須為 MM/YY",
+                                  },
+                                })}
+                              />
+                              {errors.expiryDate && (
+                                <p className="text-danger my-2">
+                                  {errors.expiryDate.message}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="col">
+                              <label className="form-label">CVC</label>
+                              <input
+                                type="text"
+                                placeholder="三位數"
+                                className="form-control"
+                                {...register("cvc", {
+                                  required: "CVC 必填",
+                                  pattern: {
+                                    value: /^[0-9]{3}$/,
+                                    message: "CVC 必須為 3 位數字",
+                                  },
+                                })}
+                              />
+                              {errors.cvc && (
+                                <p className="text-danger my-2">
+                                  {errors.cvc.message}
+                                </p>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
-                    <label className="d-flex align-items-center">
-                      <input
-                        {...register("paymentMethod", {
-                          required: "請選擇付款方式",
-                        })}
-                        type="radio"
-                        value="atm"
-                        className="me-2"
-                      />
-                      ATM轉帳
-                    </label>
+                    {/* ATM */}
+                    <div className="mb-3">
+                      <label className="d-flex align-items-center">
+                        <input
+                          {...register("paymentMethod", {
+                            required: "請選擇付款方式",
+                          })}
+                          type="radio"
+                          value="atm"
+                          className="me-2"
+                        />
+                        ATM 轉帳
+                      </label>
 
-                    {/* ATM付款欄位 watch */}
-                    {paymentMethod === "atm" && (
-                      <div className="border p-5 mt-3">
-                        <h5>ATM 轉帳資訊</h5>
-                        <p>
-                          銀行代碼：<strong>123</strong>
-                        </p>
-                        <p>
-                          帳戶號碼：<strong>9876543210</strong>
-                        </p>
-                      </div>
+                      {/* ATM付款欄位 */}
+                      {paymentMethod === "atm" && (
+                        <div className="border p-5 mt-3">
+                          <h3 className="fs-5">ATM 轉帳資訊</h3>
+                          <p>
+                            銀行代碼：<strong>123</strong>
+                          </p>
+                          <p>
+                            帳戶號碼：<strong>9876543210</strong>
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 表單錯誤提示 */}
+                    {errors?.paymentMethod && (
+                      <p className="text-danger my-2">
+                        {errors.paymentMethod.message}
+                      </p>
                     )}
                   </div>
-                  {errors?.paymentMethod && (
-                    <p className="text-danger my-2">
-                      {errors.paymentMethod.message}
-                    </p>
-                  )}
                 </div>
               </div>
 
               {/* 運送方式 */}
               <div className="col-lg-8">
-                <div className="bg-white border rounded p-5 shadow-sm">
+                <div className="card-base p-5">
                   <h2 className="fs-4 mb-4">運送方式</h2>
-                  <div className="d-flex flex-column gap-3 p-3">
+                  <div className="form-group p-3">
                     {/* 賣家宅配 */}
-                    <label className="d-flex align-items-center">
-                      <input
-                        {...register("shippingMethod", {
-                          required: "請選擇運送方式",
-                        })}
-                        type="radio"
-                        value="homedelivery"
-                        className="me-2"
-                      />
-                      賣家宅配
-                    </label>
+                    <div className="mb-3">
+                      <label className="d-flex align-items-center">
+                        <input
+                          {...register("shippingMethod", {
+                            required: "請選擇運送方式",
+                          })}
+                          type="radio"
+                          value="homedelivery"
+                          className="me-2"
+                        />
+                        賣家宅配
+                      </label>
+                    </div>
 
                     {/* 超商取貨 */}
-                    <label className="d-flex align-items-center">
-                      <input
-                        {...register("shippingMethod", {
-                          required: "請選擇運送方式",
-                        })}
-                        type="radio"
-                        value="storedelivery"
-                        className="me-2"
-                      />
-                      超商取貨
-                      <small className="ms-3 text-muted">需先付款</small>
-                    </label>
+                    <div className="mb-3">
+                      <label className="d-flex align-items-center">
+                        <input
+                          {...register("shippingMethod", {
+                            required: "請選擇運送方式",
+                          })}
+                          type="radio"
+                          value="storedelivery"
+                          className="me-2"
+                        />
+                        超商取貨
+                        <small className="ms-3 text-muted">需先付款</small>
+                      </label>
+                    </div>
+                    {/* 表單錯誤提示 */}
+                    {errors?.shippingMethod && (
+                      <p className="text-danger my-2">
+                        {errors.shippingMethod.message}
+                      </p>
+                    )}
                   </div>
-                  {errors?.shippingMethod && (
-                    <p className="text-danger my-2">
-                      {errors.shippingMethod.message}
-                    </p>
-                  )}
 
                   {/* 超商取貨付款欄位 watch */}
                   {shippingMethod === "storedelivery" && (
-                    <div className="mt-3 bg-light p-3 rounded">
+                    <div className="bg-light rounded p-3">
                       <div className="mb-3">
                         <label className="form-label">收件人</label>
                         <input
@@ -326,10 +336,10 @@ export default function OrderPage() {
 
               {/* 訂單資料 */}
               <div className="col-lg-8">
-                <div className="bg-white border rounded p-5 shadow-sm">
+                <div className="card-base p-5">
                   <h2 className="fs-4 mb-4">訂購人資訊</h2>
-                  <div className="d-flex flex-column gap-3 p-3">
-                    <div>
+                  <div className="form-group p-3">
+                    <div className="mb-3">
                       <label
                         htmlFor="email"
                         className="form-label fw-bold mb-2"
@@ -356,7 +366,7 @@ export default function OrderPage() {
                         </p>
                       )}
                     </div>
-                    <div>
+                    <div className="mb-3">
                       <label htmlFor="name" className="form-label fw-bold mb-2">
                         姓名
                       </label>
@@ -383,7 +393,7 @@ export default function OrderPage() {
                         </p>
                       )}
                     </div>
-                    <div>
+                    <div className="mb-3">
                       <label htmlFor="tel" className="form-label fw-bold mb-2">
                         電話
                       </label>
@@ -404,7 +414,7 @@ export default function OrderPage() {
                         <p className="text-danger my-2">{errors.tel.message}</p>
                       )}
                     </div>
-                    <div>
+                    <div className="mb-3">
                       <label
                         htmlFor="address"
                         className="form-label fw-bold mb-2"
@@ -431,7 +441,7 @@ export default function OrderPage() {
                         </p>
                       )}
                     </div>
-                    <div>
+                    <div className="mb-3">
                       <label
                         htmlFor="message"
                         className="form-label fw-bold mb-2"
@@ -450,11 +460,8 @@ export default function OrderPage() {
                   </div>
 
                   {/* 送出按鈕 */}
-                  <div className="text-center mt-4">
-                    <button
-                      type="submit"
-                      className="btn btn-lg btn-accent-300 w-100"
-                    >
+                  <div className="text-center">
+                    <button type="submit" className="btn btn-accent-300 w-100">
                       送出訂單
                     </button>
                   </div>

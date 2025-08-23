@@ -1,13 +1,11 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
-import { Link, useNavigate } from "react-router";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
+import { Link } from "react-router";
 
 export default function CompletePage() {
-  const { order } = useContext(AppContext);
+  const { order, shippingMethod } = useContext(AppContext);
   const [orderData, setOrderData] = useState({});
 
   useEffect(() => {
@@ -29,16 +27,19 @@ export default function CompletePage() {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-8">
-              <div className="bg-white border rounded p-5 text-center shadow-sm">
-                <div className="d-flex flex-column align-items-center mb-3">
-                  <span className="material-symbols-outlined fs-1 text-success bg-light rounded-circle p-3 mb-3">
+              <div className="card-base border text-center p-5">
+                <div className="mb-3">
+                  <span className="material-symbols-outlined icon-circle fs-1 mb-3">
                     check_circle
                   </span>
-                  <h3 className="mb-0">已收到您的訂單，感謝你的購買</h3>
+                  <h2 className="fs-4">
+                    已收到您的訂單，
+                    <span className="d-block d-lg-inline">感謝你的購買</span>
+                  </h2>
                 </div>
 
-                <div className="order-content bg-light border rounded p-4">
-                  <h5 className="mb-3">訂單資訊</h5>
+                <div className="order-content bg-light border rounded p-5 mb-3">
+                  <h3 className="fs-5 mb-3">訂單資訊</h3>
                   <ul className="order-list">
                     <li>
                       <span>訂單編號：</span>
@@ -52,9 +53,9 @@ export default function CompletePage() {
                     </li>
                     <li>
                       <span>運送方式：</span>
-                      <span>{orderData.shippingMethod || "宅配"}</span>
+                      <span>{shippingMethod}</span>
                     </li>
-                    <li className="d-flex justify-content-between text-danger">
+                    <li className="text-danger">
                       <span>預計出貨時間：</span>
                       <span>1 個工作天內</span>
                     </li>
@@ -73,14 +74,14 @@ export default function CompletePage() {
                   </ul>
                 </div>
 
-                <div className="order-content mt-4 p-4 border rounded bg-light">
-                  <h5 className="mb-3">訂單明細</h5>
+                <div className="order-content bg-light border rounded p-5">
+                  <h3 className="fs-5 mb-3">訂單明細</h3>
                   <ul className="order-list">
                     {orderData.products &&
                       Object.values(orderData.products).map((item) => (
                         <li key={item.product_id}>
                           <span>
-                            {item.product?.title || "商品名稱"} x{" "}
+                            {item.product?.maintitle || "商品名稱"} x{" "}
                             {item.qty || 1}
                           </span>
                           <span>NT$ {item.final_total || 0}</span>

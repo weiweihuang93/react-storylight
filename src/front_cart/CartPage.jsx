@@ -1,13 +1,13 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { AppContext } from "../context/AppContext";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
+import ScreenLoading from "../components/ScreenLoading";
 
 export default function CartPage() {
-  const { user, cartData, getCartData } = useContext(AppContext);
+  const { user, cartData, getCartData, isScreenLoading, setIsScreenLoading } =
+    useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -15,20 +15,29 @@ export default function CartPage() {
   const [discount, setDiscount] = useState(null);
 
   const delAllCart = async () => {
+    setIsScreenLoading(true);
     try {
       await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/carts`);
-      getCartData();
-    } catch (err) {}
+      await getCartData();
+    } catch (err) {
+    } finally {
+      setIsScreenLoading(false);
+    }
   };
 
   const delIdCart = async (cart_id) => {
+    setIsScreenLoading(true);
     try {
       await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/cart/${cart_id}`);
-      getCartData();
-    } catch (err) {}
+      await getCartData();
+    } catch (err) {
+    } finally {
+      setIsScreenLoading(false);
+    }
   };
 
   const handleCoupon = async () => {
+    setIsScreenLoading(true);
     try {
       const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/coupon`, {
         data: {
@@ -37,7 +46,10 @@ export default function CartPage() {
       });
       setDiscount(res.data);
       alert(res.data.message);
-    } catch (err) {}
+    } catch (err) {
+    } finally {
+      setIsScreenLoading(false);
+    }
   };
 
   const handleNextStep = () => {
@@ -50,15 +62,16 @@ export default function CartPage() {
 
   return (
     <>
+      {isScreenLoading && <ScreenLoading />}
       <section className="section-cart pb-6">
         <div className="container">
           <div className="row g-3">
             {cartData?.carts?.length > 0 ? (
               <>
                 <div className="col-xl-8">
-                  <div className="bg-white rounded p-5 h-100">
+                  <div className="card-base p-5 h-100">
                     <div className="cart-title mb-4">
-                      <h2>購物車</h2>
+                      <h2 className="fs-4">購物車</h2>
                       <button
                         onClick={() => delAllCart()}
                         className="btn btn-outline-danger"
@@ -109,9 +122,9 @@ export default function CartPage() {
                 </div>
                 <div className="col-xl-4">
                   <div className="sticky">
-                    <div className="bg-white rounded border p-4">
+                    <div className="card-base border p-5">
                       {/* 標題 */}
-                      <h3 className="border-bottom pb-2">結帳明細</h3>
+                      <h3 className="fs-4 pb-2 border-bottom">結帳明細</h3>
 
                       {/* 金額清單 */}
                       <div className="py-3 border-bottom">
@@ -176,7 +189,7 @@ export default function CartPage() {
                     </div>
                     <button
                       onClick={handleNextStep}
-                      className="cart-button btn btn-lg btn-accent-300 mt-4 btn-link-translateX"
+                      className="btn-transX cart-button btn btn-accent-300 mt-4"
                     >
                       下一步，填寫訂單資料
                     </button>
@@ -185,14 +198,14 @@ export default function CartPage() {
               </>
             ) : (
               <div className="col-12">
-                <div className="bg-white rounded p-5 text-center">
-                  <h2 className="mb-4">購物車是空的</h2>
+                <div className="card-base text-center p-5">
+                  <h2 className="fs-4 mb-4">購物車是空的</h2>
                   <p className="text-muted mb-4">
                     您還沒有將任何商品加入購物車，快去挑選喜歡的商品吧！
                   </p>
                   <Link
                     to="/全部商品"
-                    className="btn-link-style btn btn-lg btn-accent-300 mt-4 d-inline-block"
+                    className="btn-transX btn btn-accent-300 mt-4 d-inline-block"
                   >
                     前往購物
                     <span className="material-symbols-outlined">
