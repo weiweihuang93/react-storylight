@@ -1,7 +1,10 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
+import { AppContext } from "../context/AppContext";
 
 export default function FrontLayout() {
+  const { cartData } = useContext(AppContext);
+
   function ScrollToHash() {
     const { hash } = useLocation();
 
@@ -44,7 +47,10 @@ export default function FrontLayout() {
               <li className="icon-badge">
                 <Link to="/cart" className="d-flex">
                   <span className="material-symbols-outlined">
-                    shopping_cart
+                    shopping_cart{" "}
+                    <span className="badge badge-secondary badge-count">
+                      {cartData?.carts?.length}
+                    </span>
                   </span>
                 </Link>
               </li>
@@ -102,7 +108,10 @@ export default function FrontLayout() {
               <li className="icon-badge">
                 <Link to="/cart" className="d-flex">
                   <span className="material-symbols-outlined">
-                    shopping_cart
+                    shopping_cart{" "}
+                    <span className="badge badge-secondary badge-count">
+                      {cartData?.carts?.length}
+                    </span>
                   </span>
                 </Link>
               </li>
@@ -164,7 +173,6 @@ export default function FrontLayout() {
             <hr />
             <div className="copyright text-center">
               <p>作品僅作學習使用，無商業用途，若有侵權請來信告知</p>
-              <p>@gmail.com，我們將立即移除</p>
               <p>Copyright © WEIWEI 2025 All Right Reserved</p>
             </div>
           </div>
