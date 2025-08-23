@@ -5,7 +5,7 @@ import { AppContext } from "../context/AppContext";
 import { Link } from "react-router";
 
 export default function CompletePage() {
-  const { order, shippingMethod } = useContext(AppContext);
+  const { order } = useContext(AppContext);
   const [orderData, setOrderData] = useState({});
 
   useEffect(() => {
@@ -50,10 +50,6 @@ export default function CompletePage() {
                       <span>
                         {new Date(orderData.create_at * 1000).toLocaleString()}
                       </span>
-                    </li>
-                    <li>
-                      <span>運送方式：</span>
-                      <span>{shippingMethod}</span>
                     </li>
                     <li className="text-danger">
                       <span>預計出貨時間：</span>

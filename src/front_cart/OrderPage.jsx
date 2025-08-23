@@ -6,7 +6,7 @@ import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router";
 
 export default function OrderPage() {
-  const { setCartData, setOrder, setShippingMethod } = useContext(AppContext);
+  const { setCartData, setOrder } = useContext(AppContext);
   const navigate = useNavigate();
 
   const {
@@ -40,7 +40,6 @@ export default function OrderPage() {
         message,
       },
     };
-    setShippingMethod(shippingMethod);
     submitOrder(userData);
     reset();
   };

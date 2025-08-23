@@ -14,6 +14,7 @@ import CartPage from "../front_cart/CartPage";
 import OrderPage from "../front_cart/OrderPage";
 import PaymentPage from "../front_cart/PaymentPage";
 import CompletePage from "../front_cart/CompletePage";
+import MemberPage from "../front/MemberPage";
 
 const routes = [
   {
@@ -39,6 +40,10 @@ const routes = [
       {
         path: "login",
         element: <LoginPage />,
+      },
+      {
+        path: "member",
+        element: <MemberPage />,
       },
       {
         path: "cart",

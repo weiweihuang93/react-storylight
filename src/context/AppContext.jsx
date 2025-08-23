@@ -14,9 +14,6 @@ export default function AppProvider({ children }) {
   // 取得訂單
   const [order, setOrder] = useState(null);
 
-  // 取得運送方式
-  const [shippingMethod, setShippingMethod] = useState("");
-
   // loading效果
   const [isScreenLoading, setIsScreenLoading] = useState(false);
 
@@ -71,7 +68,6 @@ export default function AppProvider({ children }) {
         addToCart,
         order,
         setOrder,
-        setShippingMethod,
         isScreenLoading,
         setIsScreenLoading,
       }}

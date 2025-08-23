@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { AppContext } from "../context/AppContext";
 
@@ -6,7 +6,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { login } = useContext(AppContext);
+  const { login, user } = useContext(AppContext);
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -23,20 +23,24 @@ export default function LoginPage() {
   const handleSignin = (e) => {
     e.preventDefault();
     login(account.username, account.password);
-
-    // 取得 redirect 路徑，如果沒有就回首頁
-    const searchParams = new URLSearchParams(location.search);
-    const redirect = searchParams.get("redirect") || "/";
-    navigate(redirect, { replace: true });
   };
+
+  // 登入後自動跳回原本頁面
+  useEffect(() => {
+    if (user?.username) {
+      const searchParams = new URLSearchParams(location.search);
+      const redirect = searchParams.get("redirect") || "/member";
+      navigate(redirect, { replace: true });
+    }
+  }, [user]);
 
   return (
     <>
       <main>
         <div className="bg-neutral-100">
-          <div className="container">
+          <div className="container d-flex justify-content-center">
             <div className="login-wrapper py-7">
-              <div className="login p-5">
+              <div className="card-base p-5">
                 <div className="text-center mb-4">
                   <a>
                     <img className="logo" src="./images/logo.png" alt="logo" />
