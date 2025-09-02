@@ -1,9 +1,7 @@
 import axios from "axios";
+import { BASE_URL } from "../data/config";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function AdminLogin() {
   const [account, setAccount] = useState({

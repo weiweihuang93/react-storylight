@@ -1,9 +1,7 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 export default function CheckedRoute() {
   const [isAuth, setIsAuth] = useState(null);

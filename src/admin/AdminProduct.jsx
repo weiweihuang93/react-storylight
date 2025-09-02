@@ -1,10 +1,8 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { Modal } from "bootstrap";
 import { useEffect, useRef, useState } from "react";
 import categories from "../data/categories";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 const GOOGLE_BOOKS_API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
