@@ -356,7 +356,7 @@ export default function OrderPage() {
                         })}
                         id="email"
                         type="email"
-                        className="form-control"
+                        className={`form-control ${errors.email ? "is-invalid" : ""}`}
                         placeholder="請輸入Email"
                       />
                       {errors?.email && (
@@ -383,7 +383,7 @@ export default function OrderPage() {
                         })}
                         id="name"
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.name ? "is-invalid" : ""}`}
                         placeholder="請輸入姓名"
                       />
                       {errors?.name && (
@@ -406,7 +406,7 @@ export default function OrderPage() {
                         })}
                         id="tel"
                         type="tel"
-                        className="form-control"
+                        className={`form-control ${errors.tel ? "is-invalid" : ""}`}
                         placeholder="請輸入電話"
                       />
                       {errors?.tel && (
@@ -431,7 +431,7 @@ export default function OrderPage() {
                         })}
                         id="address"
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.address ? "is-invalid" : ""}`}
                         placeholder="請輸入地址"
                       />
                       {errors?.address && (
@@ -460,7 +460,11 @@ export default function OrderPage() {
 
                   {/* 送出按鈕 */}
                   <div className="text-center">
-                    <button type="submit" className="btn btn-accent-300 w-100">
+                    <button
+                      type="submit"
+                      className="btn btn-accent-300 w-100"
+                      disabled={!isValid}
+                    >
                       送出訂單
                     </button>
                   </div>
