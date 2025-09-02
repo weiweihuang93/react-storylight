@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "../data/config";
 import { Modal } from "bootstrap";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import categories from "../data/categories";
 
 const GOOGLE_BOOKS_API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
@@ -294,20 +294,22 @@ export default function AdminProduct() {
   };
 
   // 搜尋書名
-  const handleSearch = (e) => {
-    const keyword = e.target.value;
-    setSearch(keyword);
+  const filteredSearchProducts = useMemo(() => {
+    if (!search.trim()) return allProducts;
 
-    if (keyword.trim()) {
-      const lowerKeyword = keyword.trim().toLowerCase();
-      const filtered = allProducts.filter((product) =>
-        product.title?.toLowerCase().includes(lowerKeyword)
-      );
-      setFilteredProducts(filtered); // 更新列表顯示
-    } else {
-      // 若搜尋欄清空，重新抓分頁 API
-      getCategoryProducts();
-    }
+    const lowerKeyword = search.trim().toLowerCase();
+    return allProducts.filter((product) =>
+      product.title?.toLowerCase().includes(lowerKeyword)
+    );
+  }, [allProducts, search]);
+
+  // 每次 filteredData 變化時更新列表顯示
+  useEffect(() => {
+    setFilteredProducts(filteredSearchProducts);
+  }, [filteredSearchProducts]);
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
   };
 
   return (
