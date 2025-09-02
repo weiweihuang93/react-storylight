@@ -601,12 +601,14 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075) !default;
 // scss-docs-end box-shadow-variables
 
 $component-active-color: $white !default;
-$component-active-bg: $primary !default;
+// $component-active-bg: $primary !default;
+$component-active-bg: $accent-100 !default; // 自定義
 
 // scss-docs-start focus-ring-variables
 $focus-ring-width: 0.25rem !default;
 $focus-ring-opacity: 0.25 !default;
-$focus-ring-color: rgba($primary, $focus-ring-opacity) !default;
+// $focus-ring-color: rgba($primary, $focus-ring-opacity) !default;
+$focus-ring-color: rgba($accent-100, $focus-ring-opacity) !default; // 自定義
 $focus-ring-blur: 0 !default;
 $focus-ring-box-shadow: 0 0 $focus-ring-blur $focus-ring-width $focus-ring-color !default;
 // scss-docs-end focus-ring-variables
@@ -1337,8 +1339,11 @@ $dropdown-divider-margin-y: $spacer * 0.5 !default;
 $dropdown-box-shadow: var(--#{$prefix}box-shadow) !default;
 
 $dropdown-link-color: var(--#{$prefix}body-color) !default;
-$dropdown-link-hover-color: $dropdown-link-color !default;
-$dropdown-link-hover-bg: var(--#{$prefix}tertiary-bg) !default;
+// $dropdown-link-hover-color: $dropdown-link-color !default;
+// $dropdown-link-hover-bg: var(--#{$prefix}tertiary-bg) !default;
+
+$dropdown-link-hover-color: $component-active-color !default; // 自定義
+$dropdown-link-hover-bg: $component-active-bg !default; // 自定義
 
 $dropdown-link-active-color: $component-active-color !default;
 $dropdown-link-active-bg: $component-active-bg !default;
@@ -1348,9 +1353,13 @@ $dropdown-link-disabled-color: var(--#{$prefix}tertiary-color) !default;
 $dropdown-item-padding-y: $spacer * 0.25 !default;
 $dropdown-item-padding-x: $spacer !default;
 
-$dropdown-header-color: $gray-600 !default;
-$dropdown-header-padding-x: $dropdown-item-padding-x !default;
-$dropdown-header-padding-y: $dropdown-padding-y !default;
+// $dropdown-header-color: $gray-600 !default;
+// $dropdown-header-padding-x: $dropdown-item-padding-x !default;
+// $dropdown-header-padding-y: $dropdown-padding-y !default;
+
+$dropdown-header-color: $accent-300 !default;
+$dropdown-header-padding-x: $spacer * 0.5 !default; // 自定義
+$dropdown-header-padding-y: $spacer * 1 !default; // 自定義
 // fusv-disable
 $dropdown-header-padding: $dropdown-header-padding-y $dropdown-header-padding-x !default; // Deprecated in v5.2.0
 // fusv-enable

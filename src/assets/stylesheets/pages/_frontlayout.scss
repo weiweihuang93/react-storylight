@@ -3,6 +3,17 @@
   max-width: 100px;
 }
 
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
 // navbar
 .navbar {
   padding: 0.75rem 0;
@@ -89,7 +100,7 @@
       padding: 0;
     }
   
-    .icon-badge {
+    .icon-badge, .login-dropdown {
       position: relative;
       display: flex;
       align-items: center;
@@ -126,6 +137,27 @@
         text-align: center;
         font-weight: 600;
       }
+
+      .dropdown-menu-position {
+        width: 237px;
+        top: 90px;
+        right: 0px;
+        left: auto;
+      }
+
+      .dropdown-header{
+        display: flex;
+        align-items: center;
+         gap: 8px;
+        padding: 8px 12px;
+      }
+
+      .dropdown-item{
+        display: flex;
+        align-items: center;
+        padding: 12px 24px;
+      }
+
     }
   }
 }

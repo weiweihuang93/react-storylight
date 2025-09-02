@@ -1,9 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { AppContext } from "../context/AppContext";
+import Dropdown from "bootstrap/js/dist/dropdown";
 
 export default function FrontLayout() {
-  const { cartData } = useContext(AppContext);
+  const { cartData, user, logout } = useContext(AppContext);
 
   function ScrollToHash() {
     const { hash } = useLocation();
@@ -18,11 +19,20 @@ export default function FrontLayout() {
     return null;
   }
 
+  // 初始化 Bootstrap Dropdown
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (dropdownRef.current) {
+      Dropdown.getOrCreateInstance(dropdownRef.current);
+    }
+  }, []);
+
   return (
     <>
       {/* nav */}
       <nav className="navbar navbar-expand-lg navbar-light">
-        <div className="container">
+        <div className="container d-flex align-items-center justify-content-between">
           {/* 選單 */}
           <button
             className="navbar-toggler"
@@ -41,35 +51,13 @@ export default function FrontLayout() {
             <img className="logo" src="./images/logo.png" alt="logo" />
           </Link>
 
-          {/* memberbar */}
-          <div className="memberbar d-lg-none">
-            <ul>
-              <li className="icon-badge">
-                <Link to="/cart" className="d-flex">
-                  <span className="material-symbols-outlined">
-                    shopping_cart{" "}
-                    <span className="badge badge-secondary badge-count">
-                      {cartData?.carts?.length}
-                    </span>
-                  </span>
-                </Link>
-              </li>
-              <li className="icon-badge">
-                <Link to="/login" className="d-flex">
-                  <span className="material-symbols-outlined">person</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
           {/* 導覽選單 */}
           <div
-            className="collapse navbar-collapse py-2"
+            className="collapse navbar-collapse order-3 order-lg-2 py-2"
             id="navbarSupportedContent"
           >
             <ul className="navbar-nav">
               <li className="nav-item">
-                {/* <NavLink className="nav-link" to="/全部商品"> */}
                 <Link to="/#category" className="nav-link">
                   所有商品
                   <span className="nav-sub">All Products</span>
@@ -103,7 +91,7 @@ export default function FrontLayout() {
           </div>
 
           {/* memberbar */}
-          <div className="memberbar d-none d-lg-inline-block">
+          <div className="memberbar order-2 order-lg-3">
             <ul>
               <li className="icon-badge">
                 <Link to="/cart" className="d-flex">
@@ -115,10 +103,62 @@ export default function FrontLayout() {
                   </span>
                 </Link>
               </li>
-              <li className="icon-badge">
-                <Link to="/login" className="d-flex">
+              <li className="dropdown login-dropdown">
+                <a
+                  ref={dropdownRef}
+                  className="dropdown-toggle d-flex"
+                  id="memberDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   <span className="material-symbols-outlined">person</span>
-                </Link>
+                </a>
+
+                <div
+                  className="dropdown-menu dropdown-menu-position"
+                  aria-labelledby="memberDropdown"
+                >
+                  <h6 className="dropdown-header">
+                    <img
+                      className="avatar"
+                      src="./images/avatar-1.png"
+                      alt="avatar"
+                    />
+                    {user ? `歡迎回來，${user.username}` : "訪客模式中"}
+                  </h6>
+
+                  {/* 共用區塊 */}
+                  <Link to="/member" className="dropdown-item">
+                    <span className="material-symbols-outlined me-2">
+                      account_circle
+                    </span>
+                    我的帳戶
+                  </Link>
+                  <Link to="/member" className="dropdown-item">
+                    <span className="material-symbols-outlined me-2">
+                      article
+                    </span>
+                    訂單紀錄
+                  </Link>
+                  <div className="dropdown-divider"></div>
+
+                  {/* 登入 / 登出差異 */}
+                  {user ? (
+                    <a className="dropdown-item" onClick={logout}>
+                      <span className="material-symbols-outlined me-2">
+                        logout
+                      </span>
+                      登出
+                    </a>
+                  ) : (
+                    <Link to="/login" className="dropdown-item">
+                      <span className="material-symbols-outlined me-2">
+                        login
+                      </span>
+                      登入
+                    </Link>
+                  )}
+                </div>
               </li>
             </ul>
           </div>
