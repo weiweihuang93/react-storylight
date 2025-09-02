@@ -12,7 +12,8 @@ export default function HomePage() {
   const { addToCart, cartData } = useContext(AppContext);
 
   const [productsData, setProductsData] = useState([]);
-  const [featuredproductsData, setFeaturedProductsData] = useState([]);
+  const [products10Data, setProducts10Data] = useState([]);
+  const [featuredProductsData, setFeaturedProductsData] = useState([]);
 
   // 取得商品
   const getAllProducts = async () => {
@@ -20,8 +21,9 @@ export default function HomePage() {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/products/all`
       );
+      setProductsData(res.data.products);
       const filter10Products = res.data.products.slice(-10);
-      setProductsData(filter10Products);
+      setProducts10Data(filter10Products);
 
       const filterFeaturedProducts = res.data.products.filter(
         (product) => product.price >= 500
@@ -33,6 +35,27 @@ export default function HomePage() {
   useEffect(() => {
     getAllProducts();
   }, []);
+
+  // 搜尋商品
+  const [keyword, setKeyword] = useState("");
+  const [results, setResults] = useState([]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!keyword.trim()) return;
+
+    // 先篩選 使用商品名稱 (title) 或描述 (description) 進行比對
+    const filteredAndSorted = productsData
+      .filter(
+        (product) =>
+          product.title.toLowerCase().includes(keyword.toLowerCase()) ||
+          product.description.toLowerCase().includes(keyword.toLowerCase())
+      )
+      // 再排序
+      .sort((a, b) => a.price - b.price);
+
+    setResults(filteredAndSorted);
+  };
 
   return (
     <>
@@ -48,14 +71,21 @@ export default function HomePage() {
             <h2 className="fs-lg-3 fs-6 mb-4">
               追尋時光，從經典到絕版，帶你發現更多閱讀寶藏
             </h2>
-            <form className="d-flex align-items-center">
+            <form className="d-flex align-items-center" onSubmit={handleSearch}>
               <input
                 className="form-control mx-w-search"
                 type="search"
-                placeholder="Search"
+                placeholder="請輸入關鍵字"
                 aria-label="Search"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
               />
-              <button className="btn btn-accent-300 btn-arrow">
+              <button
+                type="submit"
+                className="btn btn-accent-300 btn-arrow border-0"
+                data-bs-toggle="modal"
+                data-bs-target="#searchModal"
+              >
                 <span className="material-symbols-outlined">arrow_forward</span>
               </button>
             </form>
@@ -66,6 +96,90 @@ export default function HomePage() {
               開始探索
               <span className="material-symbols-outlined">arrow_forward</span>
             </Link>
+          </div>
+        </div>
+
+        {/* <!-- 搜尋結果 Modal --> */}
+        <div
+          className="modal fade"
+          id="searchModal"
+          tabIndex="-1"
+          aria-labelledby="searchModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content rounded-3 shadow">
+              {/* header */}
+              <div className="modal-header">
+                <h5 className="modal-title fw-bold" id="searchModalLabel">
+                  搜尋結果
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+
+              {/* body */}
+              <div className="modal-body">
+                <p className="text-muted mb-4">
+                  關鍵字：「
+                  <span className="fw-semibold text-dark">{keyword}</span>
+                  」，共找到{" "}
+                  <span className="fw-semibold">{results.length}</span> 筆結果
+                </p>
+
+                {/* <!-- 結果清單 --> */}
+
+                {results.length > 0 ? (
+                  <div className="list-group">
+                    {results.map((product) => (
+                      <NavLink
+                        key={product.id}
+                        to={`/${product.category}/${product.id}`}
+                        className="text-decoration-none text-dark"
+                      >
+                        <div className="list-group-item d-flex align-items-center">
+                          <img
+                            src={product.imageUrl}
+                            alt={product.title}
+                            className="me-3 rounded"
+                            style={{
+                              width: "60px",
+                              height: "80px",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <div>
+                            <h6 className="mb-1 fw-semibold">
+                              {product.title}
+                            </h6>
+                            <small className="text-muted">
+                              NT$ {product.price}
+                            </small>
+                          </div>
+                        </div>
+                      </NavLink>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-danger">沒有找到相關商品</p>
+                )}
+              </div>
+
+              {/* footer */}
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  關閉
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -148,14 +262,14 @@ export default function HomePage() {
             className="py-3"
             spaceBetween={16} // 卡片間距
             slidesPerView={1} // 預設一次顯示1張
-            loop={featuredproductsData.length > 5}
+            loop={featuredProductsData.length > 5}
             breakpoints={{
               768: { slidesPerView: 3 }, // md
               992: { slidesPerView: 4 }, // lg
               1200: { slidesPerView: 5 }, // xl
             }}
           >
-            {featuredproductsData.map((product) => {
+            {featuredProductsData.map((product) => {
               const isProductInCart = cartData?.carts?.some(
                 (cartItem) => cartItem.product_id === product.id
               );
@@ -236,14 +350,14 @@ export default function HomePage() {
             className="py-3"
             spaceBetween={16} // 卡片間距
             slidesPerView={1} // 預設一次顯示1張
-            loop={productsData.length > 5}
+            loop={products10Data.length > 5}
             breakpoints={{
               768: { slidesPerView: 3 }, // md
               992: { slidesPerView: 4 }, // lg
               1200: { slidesPerView: 5 }, // xl
             }}
           >
-            {productsData.map((product) => {
+            {products10Data.map((product) => {
               const isProductInCart = cartData?.carts?.some(
                 (cartItem) => cartItem.product_id === product.id
               );
