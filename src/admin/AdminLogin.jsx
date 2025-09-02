@@ -37,10 +37,10 @@ export default function AdminLogin() {
   return (
     <>
       <main>
-        <div className="bg-neutral-100">
-          <div className="container">
-            <div className="login-wrapper vh-100">
-              <div className="login p-5">
+        <div className="bg-neutral-100 vh-center">
+          <div className="container d-flex justify-content-center">
+            <div className="login-wrapper">
+              <div className="card-base p-5">
                 <div className="text-center mb-4">
                   <a>
                     <img className="logo" src="./images/logo.png" alt="logo" />
