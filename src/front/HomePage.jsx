@@ -15,6 +15,8 @@ export default function HomePage() {
   const [products10Data, setProducts10Data] = useState([]);
   const [featuredProductsData, setFeaturedProductsData] = useState([]);
 
+  const [searchModalVisible, setSearchModalVisible] = useState(false);
+
   // 取得商品
   const getAllProducts = async () => {
     try {
@@ -55,6 +57,7 @@ export default function HomePage() {
       .sort((a, b) => a.price - b.price);
 
     setResults(filteredAndSorted);
+    setSearchModalVisible(true);
   };
 
   return (
@@ -100,88 +103,83 @@ export default function HomePage() {
         </div>
 
         {/* <!-- 搜尋結果 Modal --> */}
-        <div
-          className="modal fade"
-          id="searchModal"
-          tabIndex="-1"
-          aria-labelledby="searchModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-lg modal-dialog-centered">
-            <div className="modal-content rounded-3 shadow">
-              {/* header */}
-              <div className="modal-header">
-                <h5 className="modal-title fw-bold" id="searchModalLabel">
-                  搜尋結果
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
+        {searchModalVisible && (
+          <div
+            className="modal fade show d-block"
+            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          >
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content rounded-3 shadow">
+                {/* header */}
+                <div className="modal-header">
+                  <h5 className="modal-title fw-bold">搜尋結果</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setSearchModalVisible(false)}
+                  ></button>
+                </div>
 
-              {/* body */}
-              <div className="modal-body">
-                <p className="text-muted mb-4">
-                  關鍵字：「
-                  <span className="fw-semibold text-dark">{keyword}</span>
-                  」，共找到{" "}
-                  <span className="fw-semibold">{results.length}</span> 筆結果
-                </p>
+                {/* body */}
+                <div className="modal-body">
+                  <p className="text-muted mb-4">
+                    關鍵字：「
+                    <span className="fw-semibold text-dark">{keyword}</span>
+                    」共找到{" "}
+                    <span className="fw-semibold">{results.length}</span> 筆結果
+                  </p>
 
-                {/* <!-- 結果清單 --> */}
-
-                {results.length > 0 ? (
-                  <div className="list-group">
-                    {results.map((product) => (
-                      <NavLink
-                        key={product.id}
-                        to={`/${product.category}/${product.id}`}
-                        className="text-decoration-none text-dark"
-                      >
-                        <div className="list-group-item d-flex align-items-center">
-                          <img
-                            src={product.imageUrl}
-                            alt={product.title}
-                            className="me-3 rounded"
-                            style={{
-                              width: "60px",
-                              height: "80px",
-                              objectFit: "cover",
-                            }}
-                          />
-                          <div>
-                            <h6 className="mb-1 fw-semibold">
-                              {product.title}
-                            </h6>
-                            <small className="text-muted">
-                              NT$ {product.price}
-                            </small>
+                  {results.length > 0 ? (
+                    <div className="list-group">
+                      {results.map((product) => (
+                        <NavLink
+                          key={product.id}
+                          to={`/${product.category}/${product.id}`}
+                          className="text-decoration-none text-dark"
+                          onClick={() => setSearchModalVisible(false)} // 點擊後關閉
+                        >
+                          <div className="list-group-item d-flex align-items-center">
+                            <img
+                              src={product.imageUrl}
+                              alt={product.title}
+                              className="me-3 rounded"
+                              style={{
+                                width: "60px",
+                                height: "80px",
+                                objectFit: "cover",
+                              }}
+                            />
+                            <div>
+                              <h6 className="mb-1 fw-semibold">
+                                {product.title}
+                              </h6>
+                              <small className="text-muted">
+                                NT$ {product.price}
+                              </small>
+                            </div>
                           </div>
-                        </div>
-                      </NavLink>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-danger">沒有找到相關商品</p>
-                )}
-              </div>
+                        </NavLink>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-danger">沒有找到相關商品</p>
+                  )}
+                </div>
 
-              {/* footer */}
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  關閉
-                </button>
+                {/* footer */}
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setSearchModalVisible(false)}
+                  >
+                    關閉
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </header>
 
       {/* 最新消息 */}
