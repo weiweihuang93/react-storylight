@@ -1,7 +1,6 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { AppContext } from "../context/AppContext";
-import Dropdown from "bootstrap/js/dist/dropdown";
 
 export default function FrontLayout() {
   const { cartData, user, logout } = useContext(AppContext);
@@ -18,15 +17,6 @@ export default function FrontLayout() {
 
     return null;
   }
-
-  // 初始化 Bootstrap Dropdown
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    if (dropdownRef.current) {
-      Dropdown.getOrCreateInstance(dropdownRef.current);
-    }
-  }, []);
 
   return (
     <>
@@ -105,7 +95,6 @@ export default function FrontLayout() {
               </li>
               <li className="dropdown login-dropdown">
                 <a
-                  ref={dropdownRef}
                   className="dropdown-toggle d-flex"
                   id="memberDropdown"
                   data-bs-toggle="dropdown"

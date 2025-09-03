@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "../data/config";
-import { Modal } from "bootstrap";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import categories from "../data/categories";
 
 const GOOGLE_BOOKS_API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
@@ -33,9 +32,9 @@ const defaultModalState = {
 export default function AdminProduct() {
   const [allProducts, setAllProducts] = useState([]);
   const [categoryProducts, setCategoryProducts] = useState([]);
-  const [tempProduct, setTempProduct] = useState(defaultModalState);
 
-  const productModalRef = useRef(null);
+  const [tempProduct, setTempProduct] = useState(defaultModalState);
+  const [modalVisible, setModalVisible] = useState(false);
   const [modalMode, setModalMode] = useState("");
 
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -108,20 +107,11 @@ export default function AdminProduct() {
       default:
         break;
     }
-    const modalInstance = Modal.getInstance(productModalRef.current);
-    modalInstance.show();
+
+    setModalVisible(true);
   };
 
-  const closeModal = () => {
-    const modalInstance = Modal.getInstance(productModalRef.current);
-    modalInstance.hide();
-  };
-
-  useEffect(() => {
-    new Modal(productModalRef.current, {
-      backdrop: false,
-    });
-  }, []);
+  const closeModal = () => setModalVisible(false);
 
   const handleModalInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -502,183 +492,182 @@ export default function AdminProduct() {
           </div>
 
           {/* modal */}
-          <div
-            id="productModal"
-            ref={productModalRef}
-            className="modal"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-          >
-            <div className="modal-dialog modal-dialog-centered modal-xl">
-              <div className="modal-content border-0 shadow">
-                <div className="modal-header border-bottom">
-                  <h5 className="modal-title">
-                    {modalMode === "create" ? "新增產品" : "編輯產品"}
-                  </h5>
-                  <button
-                    onClick={() => closeModal()}
-                    type="button"
-                    className="btn-close"
-                    aria-label="Close"
-                  ></button>
-                </div>
+          {modalVisible && (
+            <div
+              className="modal show"
+              style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+            >
+              <div className="modal-dialog modal-dialog-centered modal-xl">
+                <div className="modal-content border-0 shadow">
+                  <div className="modal-header border-bottom">
+                    <h5 className="modal-title">
+                      {modalMode === "create" ? "新增產品" : "編輯產品"}
+                    </h5>
+                    <button
+                      onClick={() => closeModal()}
+                      type="button"
+                      className="btn-close"
+                      aria-label="Close"
+                    ></button>
+                  </div>
 
-                <div className="modal-body p-4">
-                  <div className="row g-4">
-                    <div className="col-lg-4">
-                      {/* 圖片上傳 */}
-                      <div className="mb-5">
-                        <label htmlFor="fileInput" className="form-label">
-                          圖片上傳
-                        </label>
-                        <input
-                          onChange={handleFileChange}
-                          type="file"
-                          accept=".jpg,.jpeg,.png"
-                          className="form-control"
-                          id="fileInput"
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label htmlFor="primary-image" className="form-label">
-                          主圖
-                        </label>
-                        <div className="input-group">
-                          <input
-                            value={tempProduct.imageUrl}
-                            onChange={handleModalInputChange}
-                            name="imageUrl"
-                            type="text"
-                            id="primary-image"
-                            className="form-control"
-                            placeholder="請輸入圖片連結"
-                          />
-                        </div>
-                        <img
-                          src={tempProduct.imageUrl || null}
-                          alt={tempProduct.title}
-                          className="img-fluid"
-                        />
-                      </div>
-
-                      {/* 副圖 */}
-                      <div className="border border-2 border-dashed rounded-3 p-3">
-                        {tempProduct.imagesUrl?.map((image, index) => (
-                          <div key={index}>
-                            <label
-                              htmlFor={`images-${index + 1}`}
-                              className="form-label"
-                            >
-                              副圖 {index + 1}
-                            </label>
-                            <input
-                              value={image}
-                              onChange={(e) => handleImageChange(e, index)}
-                              id={`images-${index + 1}`}
-                              type="text"
-                              className="form-control"
-                              placeholder={`圖片網址-${index + 1}`}
-                            />
-                            {image && (
-                              <img
-                                src={image}
-                                alt={`副圖 ${index + 1}`}
-                                className="img-fluid mb-2"
-                              />
-                            )}
-                          </div>
-                        ))}
-
-                        <div className="btn-group w-100">
-                          {tempProduct.imagesUrl.length < 5 &&
-                            tempProduct.imagesUrl.length[
-                              tempProduct.imagesUrl.length - 1
-                            ] !== "" && (
-                              <button
-                                onClick={handleAddImage}
-                                className="btn btn-outline-primary btn-sm w-100"
-                              >
-                                新增圖片
-                              </button>
-                            )}
-                          {tempProduct.imagesUrl.length > 1 && (
-                            <button
-                              onClick={handleRemoveImage}
-                              className="btn btn-outline-danger btn-sm w-100"
-                            >
-                              取消圖片
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-lg-8">
-                      <div className="row g-4">
-                        <div className="col-6">
-                          <label htmlFor="title" className="form-label">
-                            標題
+                  <div className="modal-body p-4">
+                    <div className="row g-4">
+                      <div className="col-lg-4">
+                        {/* 圖片上傳 */}
+                        <div className="mb-5">
+                          <label htmlFor="fileInput" className="form-label">
+                            圖片上傳
                           </label>
                           <input
-                            value={tempProduct.title}
-                            onChange={handleModalInputChange}
-                            name="title"
-                            id="title"
-                            type="text"
+                            onChange={handleFileChange}
+                            type="file"
+                            accept=".jpg,.jpeg,.png"
                             className="form-control"
-                            placeholder="請輸入標題"
+                            id="fileInput"
                           />
                         </div>
-                        <div className="col-6">
-                          <label htmlFor="maintitle" className="form-label">
-                            簡短標題
-                          </label>
-                          <input
-                            value={tempProduct.maintitle}
-                            onChange={handleModalInputChange}
-                            name="maintitle"
-                            id="maintitle"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入簡短標題"
-                          />
-                        </div>
-                        <div className="col-12">
-                          <label htmlFor="isbn" className="form-label">
-                            ISBN
+                        <div className="mb-4">
+                          <label htmlFor="primary-image" className="form-label">
+                            主圖
                           </label>
                           <div className="input-group">
                             <input
-                              value={tempProduct.isbn}
+                              value={tempProduct.imageUrl}
                               onChange={handleModalInputChange}
-                              name="isbn"
-                              id="isbn"
+                              name="imageUrl"
+                              type="text"
+                              id="primary-image"
+                              className="form-control"
+                              placeholder="請輸入圖片連結"
+                            />
+                          </div>
+                          <img
+                            src={tempProduct.imageUrl || null}
+                            alt={tempProduct.title}
+                            className="img-fluid"
+                          />
+                        </div>
+
+                        {/* 副圖 */}
+                        <div className="border border-2 border-dashed rounded-3 p-3">
+                          {tempProduct.imagesUrl?.map((image, index) => (
+                            <div key={index}>
+                              <label
+                                htmlFor={`images-${index + 1}`}
+                                className="form-label"
+                              >
+                                副圖 {index + 1}
+                              </label>
+                              <input
+                                value={image}
+                                onChange={(e) => handleImageChange(e, index)}
+                                id={`images-${index + 1}`}
+                                type="text"
+                                className="form-control"
+                                placeholder={`圖片網址-${index + 1}`}
+                              />
+                              {image && (
+                                <img
+                                  src={image}
+                                  alt={`副圖 ${index + 1}`}
+                                  className="img-fluid mb-2"
+                                />
+                              )}
+                            </div>
+                          ))}
+
+                          <div className="btn-group w-100">
+                            {tempProduct.imagesUrl.length < 5 &&
+                              tempProduct.imagesUrl.length[
+                                tempProduct.imagesUrl.length - 1
+                              ] !== "" && (
+                                <button
+                                  onClick={handleAddImage}
+                                  className="btn btn-outline-primary btn-sm w-100"
+                                >
+                                  新增圖片
+                                </button>
+                              )}
+                            {tempProduct.imagesUrl.length > 1 && (
+                              <button
+                                onClick={handleRemoveImage}
+                                className="btn btn-outline-danger btn-sm w-100"
+                              >
+                                取消圖片
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="col-lg-8">
+                        <div className="row g-4">
+                          <div className="col-6">
+                            <label htmlFor="title" className="form-label">
+                              標題
+                            </label>
+                            <input
+                              value={tempProduct.title}
+                              onChange={handleModalInputChange}
+                              name="title"
+                              id="title"
                               type="text"
                               className="form-control"
-                              placeholder="請輸入ISBN"
+                              placeholder="請輸入標題"
                             />
-                            <button
-                              onClick={handleFromISBN}
-                              className="btn btn-secondary"
-                              type="button"
-                            >
-                              搜尋
-                            </button>
                           </div>
-
-                          {/* 加在這裡，搜尋成功才顯示 */}
-                          {tempProduct.googleBookUrl && (
-                            <div className="mt-2">
-                              <a
-                                href={tempProduct.googleBookUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-link p-0"
+                          <div className="col-6">
+                            <label htmlFor="maintitle" className="form-label">
+                              簡短標題
+                            </label>
+                            <input
+                              value={tempProduct.maintitle}
+                              onChange={handleModalInputChange}
+                              name="maintitle"
+                              id="maintitle"
+                              type="text"
+                              className="form-control"
+                              placeholder="請輸入簡短標題"
+                            />
+                          </div>
+                          <div className="col-12">
+                            <label htmlFor="isbn" className="form-label">
+                              ISBN
+                            </label>
+                            <div className="input-group">
+                              <input
+                                value={tempProduct.isbn}
+                                onChange={handleModalInputChange}
+                                name="isbn"
+                                id="isbn"
+                                type="text"
+                                className="form-control"
+                                placeholder="請輸入ISBN"
+                              />
+                              <button
+                                onClick={handleFromISBN}
+                                className="btn btn-secondary"
+                                type="button"
                               >
-                                🔗 查看此書在 Google 圖書
-                              </a>
+                                搜尋
+                              </button>
                             </div>
-                          )}
-                          {/* <input
+
+                            {/* 加在這裡，搜尋成功才顯示 */}
+                            {tempProduct.googleBookUrl && (
+                              <div className="mt-2">
+                                <a
+                                  href={tempProduct.googleBookUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-link p-0"
+                                >
+                                  🔗 查看此書在 Google 圖書
+                                </a>
+                              </div>
+                            )}
+                            {/* <input
                           value={tempProduct.isbn}
                           onChange={handleModalInputChange}
                           name="isbn"
@@ -687,243 +676,250 @@ export default function AdminProduct() {
                           className="form-control"
                           placeholder="請輸入ISBN"
                         /> */}
-                        </div>
-                        <div className="col-12">
-                          <label htmlFor="category" className="form-label">
-                            分類
-                          </label>
-                          <select
-                            value={tempProduct.category}
-                            onChange={handleModalInputChange}
-                            name="category"
-                            id="category"
-                            type="text"
-                            className="form-control"
-                          >
-                            <option value="" disabled>
-                              請選擇分類
-                            </option>
-                            {categoriesWithoutAll.map((category) => (
-                              <option key={category.api} value={category.api}>
-                                {category.api}
+                          </div>
+                          <div className="col-12">
+                            <label htmlFor="category" className="form-label">
+                              分類
+                            </label>
+                            <select
+                              value={tempProduct.category}
+                              onChange={handleModalInputChange}
+                              name="category"
+                              id="category"
+                              type="text"
+                              className="form-control"
+                            >
+                              <option value="" disabled>
+                                請選擇分類
                               </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="origin_price" className="form-label">
-                            原價
-                          </label>
-                          <input
-                            value={tempProduct.origin_price}
-                            onChange={handleModalInputChange}
-                            name="origin_price"
-                            id="origin_price"
-                            type="number"
-                            className="form-control"
-                            placeholder="請輸入原價"
-                            min="0"
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="price" className="form-label">
-                            售價
-                          </label>
-                          <input
-                            value={tempProduct.price}
-                            onChange={handleModalInputChange}
-                            name="price"
-                            id="price"
-                            type="number"
-                            className="form-control"
-                            placeholder="請輸入售價"
-                            min="0"
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="qty" className="form-label">
-                            數量
-                          </label>
-                          <input
-                            value={tempProduct.qty}
-                            onChange={handleModalInputChange}
-                            name="qty"
-                            id="qty"
-                            type="number"
-                            className="form-control"
-                            placeholder="請輸入數量"
-                            min="0"
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="condition" className="form-label">
-                            書況標籤
-                          </label>
-                          <select
-                            value={tempProduct.condition}
-                            onChange={handleModalInputChange}
-                            name="condition"
-                            id="condition"
-                            className="form-select"
-                          >
-                            <option value="">請選擇書況</option>
-                            <option value="A">A（極少翻閱，接近新書）</option>
-                            <option value="B">B（輕微使用痕跡）</option>
-                            <option value="C">C（可能含筆記、劃線）</option>
-                            <option value="D">
-                              D（可能嚴重泛黃、書斑、磨損）
-                            </option>
-                          </select>
-                        </div>
-                        <div className="col-12">
-                          <label
-                            htmlFor="conditionDescription"
-                            className="form-label"
-                          >
-                            書況說明
-                          </label>
-                          <textarea
-                            value={tempProduct.conditionDescription}
-                            onChange={handleModalInputChange}
-                            name="conditionDescription"
-                            id="conditionDescription"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入書況說明"
-                          ></textarea>
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="author" className="form-label">
-                            作者
-                          </label>
-                          <input
-                            value={tempProduct.author}
-                            onChange={handleModalInputChange}
-                            name="author"
-                            id="author"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入作者"
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="publisher" className="form-label">
-                            出版社
-                          </label>
-                          <input
-                            value={tempProduct.publisher}
-                            onChange={handleModalInputChange}
-                            name="publisher"
-                            id="publisher"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入出版社"
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="publishdate" className="form-label">
-                            出版日期{" "}
-                            <span className="ms-2 text-danger">
-                              （西元年/月/日）
-                            </span>
-                          </label>
-                          <input
-                            value={tempProduct.publishdate}
-                            onChange={handleModalInputChange}
-                            name="publishdate"
-                            id="publishdate"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入出版日期"
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="language" className="form-label">
-                            語言
-                          </label>
-                          <input
-                            value={tempProduct.language}
-                            onChange={handleModalInputChange}
-                            name="language"
-                            id="language"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入語言"
-                          />
-                        </div>
+                              {categoriesWithoutAll.map((category) => (
+                                <option key={category.api} value={category.api}>
+                                  {category.api}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="col-6">
+                            <label
+                              htmlFor="origin_price"
+                              className="form-label"
+                            >
+                              原價
+                            </label>
+                            <input
+                              value={tempProduct.origin_price}
+                              onChange={handleModalInputChange}
+                              name="origin_price"
+                              id="origin_price"
+                              type="number"
+                              className="form-control"
+                              placeholder="請輸入原價"
+                              min="0"
+                            />
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="price" className="form-label">
+                              售價
+                            </label>
+                            <input
+                              value={tempProduct.price}
+                              onChange={handleModalInputChange}
+                              name="price"
+                              id="price"
+                              type="number"
+                              className="form-control"
+                              placeholder="請輸入售價"
+                              min="0"
+                            />
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="qty" className="form-label">
+                              數量
+                            </label>
+                            <input
+                              value={tempProduct.qty}
+                              onChange={handleModalInputChange}
+                              name="qty"
+                              id="qty"
+                              type="number"
+                              className="form-control"
+                              placeholder="請輸入數量"
+                              min="0"
+                            />
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="condition" className="form-label">
+                              書況標籤
+                            </label>
+                            <select
+                              value={tempProduct.condition}
+                              onChange={handleModalInputChange}
+                              name="condition"
+                              id="condition"
+                              className="form-select"
+                            >
+                              <option value="">請選擇書況</option>
+                              <option value="A">A（極少翻閱，接近新書）</option>
+                              <option value="B">B（輕微使用痕跡）</option>
+                              <option value="C">C（可能含筆記、劃線）</option>
+                              <option value="D">
+                                D（可能嚴重泛黃、書斑、磨損）
+                              </option>
+                            </select>
+                          </div>
+                          <div className="col-12">
+                            <label
+                              htmlFor="conditionDescription"
+                              className="form-label"
+                            >
+                              書況說明
+                            </label>
+                            <textarea
+                              value={tempProduct.conditionDescription}
+                              onChange={handleModalInputChange}
+                              name="conditionDescription"
+                              id="conditionDescription"
+                              type="text"
+                              className="form-control"
+                              placeholder="請輸入書況說明"
+                            ></textarea>
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="author" className="form-label">
+                              作者
+                            </label>
+                            <input
+                              value={tempProduct.author}
+                              onChange={handleModalInputChange}
+                              name="author"
+                              id="author"
+                              type="text"
+                              className="form-control"
+                              placeholder="請輸入作者"
+                            />
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="publisher" className="form-label">
+                              出版社
+                            </label>
+                            <input
+                              value={tempProduct.publisher}
+                              onChange={handleModalInputChange}
+                              name="publisher"
+                              id="publisher"
+                              type="text"
+                              className="form-control"
+                              placeholder="請輸入出版社"
+                            />
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="publishdate" className="form-label">
+                              出版日期{" "}
+                              <span className="ms-2 text-danger">
+                                （西元年/月/日）
+                              </span>
+                            </label>
+                            <input
+                              value={tempProduct.publishdate}
+                              onChange={handleModalInputChange}
+                              name="publishdate"
+                              id="publishdate"
+                              type="text"
+                              className="form-control"
+                              placeholder="請輸入出版日期"
+                            />
+                          </div>
+                          <div className="col-6">
+                            <label htmlFor="language" className="form-label">
+                              語言
+                            </label>
+                            <input
+                              value={tempProduct.language}
+                              onChange={handleModalInputChange}
+                              name="language"
+                              id="language"
+                              type="text"
+                              className="form-control"
+                              placeholder="請輸入語言"
+                            />
+                          </div>
 
-                        <div className="col-12">
-                          <label htmlFor="description" className="form-label">
-                            完整簡介
-                          </label>
-                          <textarea
-                            value={tempProduct.description}
-                            onChange={handleModalInputChange}
-                            name="description"
-                            id="description"
-                            className="form-control"
-                            rows={4}
-                            placeholder="請輸入完整簡介"
-                          ></textarea>
+                          <div className="col-12">
+                            <label htmlFor="description" className="form-label">
+                              完整簡介
+                            </label>
+                            <textarea
+                              value={tempProduct.description}
+                              onChange={handleModalInputChange}
+                              name="description"
+                              id="description"
+                              className="form-control"
+                              rows={4}
+                              placeholder="請輸入完整簡介"
+                            ></textarea>
+                          </div>
+                          <div className="col-12">
+                            <label
+                              htmlFor="mainDescription"
+                              className="form-label"
+                            >
+                              簡短簡介
+                              <span className="ms-2 text-danger">
+                                （字數限制180字）
+                              </span>
+                            </label>
+                            <textarea
+                              value={tempProduct.mainDescription}
+                              onChange={handleModalInputChange}
+                              name="mainDescription"
+                              id="mainDescription"
+                              className="form-control"
+                              rows={4}
+                              placeholder="請輸入簡短簡介"
+                              maxLength={180}
+                            ></textarea>
+                          </div>
                         </div>
-                        <div className="col-12">
+                        <div className="form-check mt-4">
+                          <input
+                            checked={tempProduct.is_enabled}
+                            onChange={handleModalInputChange}
+                            name="is_enabled"
+                            type="checkbox"
+                            className="form-check-input"
+                            id="isEnabled"
+                          />
                           <label
-                            htmlFor="mainDescription"
-                            className="form-label"
+                            className="form-check-label"
+                            htmlFor="isEnabled"
                           >
-                            簡短簡介
-                            <span className="ms-2 text-danger">
-                              （字數限制180字）
-                            </span>
+                            是否啟用
                           </label>
-                          <textarea
-                            value={tempProduct.mainDescription}
-                            onChange={handleModalInputChange}
-                            name="mainDescription"
-                            id="mainDescription"
-                            className="form-control"
-                            rows={4}
-                            placeholder="請輸入簡短簡介"
-                            maxLength={180}
-                          ></textarea>
                         </div>
-                      </div>
-                      <div className="form-check mt-4">
-                        <input
-                          checked={tempProduct.is_enabled}
-                          onChange={handleModalInputChange}
-                          name="is_enabled"
-                          type="checkbox"
-                          className="form-check-input"
-                          id="isEnabled"
-                        />
-                        <label className="form-check-label" htmlFor="isEnabled">
-                          是否啟用
-                        </label>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="modal-footer border-top bg-light">
-                  <button
-                    onClick={() => closeModal()}
-                    type="button"
-                    className="btn btn-secondary"
-                  >
-                    取消
-                  </button>
-                  <button
-                    onClick={handleUpdateProduct}
-                    type="button"
-                    className="btn btn-primary"
-                  >
-                    確認
-                  </button>
+                  <div className="modal-footer border-top bg-light">
+                    <button
+                      onClick={() => closeModal()}
+                      type="button"
+                      className="btn btn-secondary"
+                    >
+                      取消
+                    </button>
+                    <button
+                      onClick={handleUpdateProduct}
+                      type="button"
+                      className="btn btn-primary"
+                    >
+                      確認
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
     </>
