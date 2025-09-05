@@ -1,15 +1,13 @@
 import axios from "axios";
+import { BASE_URL, API_PATH } from "../data/config";
 import { createContext, useEffect, useState } from "react";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_PATH = import.meta.env.VITE_API_PATH;
 
 const AppContext = createContext();
 
 export default function AppProvider({ children }) {
   // 登入狀態（全域管理）
   const [user, setUser] = useState(null);
-  const [cartData, setCartData] = useState([]);
+  const [cartData, setCartData] = useState({ carts: [] });
 
   // 取得訂單
   const [order, setOrder] = useState(null);

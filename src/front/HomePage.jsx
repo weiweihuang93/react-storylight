@@ -10,9 +10,10 @@ import "swiper/css";
 
 export default function HomePage() {
   const { addToCart, cartData } = useContext(AppContext);
+  const [loading, setLoading] = useState(true);
 
   const [productsData, setProductsData] = useState([]);
-  const [products10Data, setProducts10Data] = useState([]);
+  const [products20Data, setProducts20Data] = useState([]);
   const [featuredProductsData, setFeaturedProductsData] = useState([]);
 
   const [searchModalVisible, setSearchModalVisible] = useState(false);
@@ -24,14 +25,17 @@ export default function HomePage() {
         `${BASE_URL}/v2/api/${API_PATH}/products/all`
       );
       setProductsData(res.data.products);
-      const filter10Products = res.data.products.slice(-10);
-      setProducts10Data(filter10Products);
+      const filter20Products = res.data.products.slice(-20);
+      setProducts20Data(filter20Products);
 
       const filterFeaturedProducts = res.data.products.filter(
         (product) => product.price >= 500
       );
       setFeaturedProductsData(filterFeaturedProducts);
-    } catch (err) {}
+    } catch (err) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -258,81 +262,115 @@ export default function HomePage() {
 
           <Swiper
             className="py-3"
-            spaceBetween={16} // 卡片間距
-            slidesPerView={1} // 預設一次顯示1張
-            loop={featuredProductsData.length > 5}
+            spaceBetween={16}
+            slidesPerView={1}
+            loop={featuredProductsData.length >= 5}
             breakpoints={{
-              768: { slidesPerView: 3 }, // md
-              992: { slidesPerView: 4 }, // lg
-              1200: { slidesPerView: 5 }, // xl
+              768: { slidesPerView: 3 },
+              992: { slidesPerView: 4 },
+              1200: { slidesPerView: 5 },
             }}
           >
-            {featuredProductsData.map((product) => {
-              const isProductInCart = cartData?.carts?.some(
-                (cartItem) => cartItem.product_id === product.id
-              );
-
-              return (
-                <SwiperSlide key={product.id}>
-                  <div className="product-card card-transY">
-                    {/* 圖片區 + 書況標籤 */}
-                    <NavLink
-                      className="product-link text-dark"
-                      to={`/${product.category}/${product.id}`}
-                    >
+            {loading
+              ? Array.from({ length: 5 }).map((_, idx) => (
+                  <SwiperSlide key={idx}>
+                    <div className="product-card card-transY skeleton-card">
+                      {/* 圖片區 */}
                       <div className="card-img-wrapper">
-                        {product.imageUrl && (
-                          <img src={product.imageUrl} alt={product.title} />
-                        )}
-                        <span className="card-img-tag">
-                          {product.condition}
-                        </span>
+                        <div className="skeleton skeleton-img"></div>
                       </div>
-                    </NavLink>
 
-                    {/* 商品資訊 */}
-                    <div className="card-info">
-                      <h3 className="fs-5 mb-2 title-cp2 h-2em">
-                        {product.title}
-                      </h3>
-                      <ul className="product-list">
-                        <li className="title-cp1">ISBN：{product.isbn}</li>
-                        <li className="title-cp1">作者：{product.author}</li>
-                        <li className="title-cp1">
-                          出版社：{product.publisher}
-                        </li>
-                        <li className="title-cp1">
-                          出版日期：{product.publishdate}
-                        </li>
-                        <li className="title-cp1">語言：{product.language}</li>
-                      </ul>
-                      <p className="fs-5 text-danger fw-bold text-center">
-                        <span className="material-symbols-outlined text-primary fs-5 me-3">
-                          paid
-                        </span>
-                        {product.price}
-                      </p>
-                    </div>
+                      {/* 資訊區 */}
+                      <div className="card-info">
+                        <div className="skeleton skeleton-text title mb-2"></div>
+                        <ul className="product-list">
+                          {Array.from({ length: 5 }).map((__, i) => (
+                            <li key={i} className="skeleton skeleton-text"></li>
+                          ))}
+                        </ul>
+                        <div className="skeleton skeleton-price"></div>
+                      </div>
 
-                    {/* 操作按鈕 */}
-                    <div className="card-operation">
-                      <button className="btn btn-icon">
-                        <i className="material-symbols-outlined">favorite</i>
-                      </button>
-                      <button
-                        onClick={() => addToCart(product.id)}
-                        className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
-                        disabled={isProductInCart}
-                      >
-                        <i className="material-symbols-outlined">
-                          shopping_cart
-                        </i>
-                      </button>
+                      {/* 操作按鈕 */}
+                      <div className="card-operation">
+                        <div className="skeleton skeleton-btn"></div>
+                        <div className="skeleton skeleton-btn"></div>
+                      </div>
                     </div>
-                  </div>
-                </SwiperSlide>
-              );
-            })}
+                  </SwiperSlide>
+                ))
+              : featuredProductsData.map((product) => {
+                  const isProductInCart = cartData.carts.some(
+                    (cartItem) => cartItem.product_id === product.id
+                  );
+
+                  return (
+                    <SwiperSlide key={product.id}>
+                      <div className="product-card card-transY">
+                        {/* 圖片區 + 書況標籤 */}
+                        <NavLink
+                          className="product-link text-dark"
+                          to={`/${product.category}/${product.id}`}
+                        >
+                          <div className="card-img-wrapper">
+                            {product.imageUrl && (
+                              <img src={product.imageUrl} alt={product.title} />
+                            )}
+                            <span className="card-img-tag">
+                              {product.condition}
+                            </span>
+                          </div>
+                        </NavLink>
+
+                        {/* 商品資訊 */}
+                        <div className="card-info">
+                          <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                            {product.title}
+                          </h3>
+                          <ul className="product-list">
+                            <li className="title-cp1">ISBN：{product.isbn}</li>
+                            <li className="title-cp1">
+                              作者：{product.author}
+                            </li>
+                            <li className="title-cp1">
+                              出版社：{product.publisher}
+                            </li>
+                            <li className="title-cp1">
+                              出版日期：{product.publishdate}
+                            </li>
+                            <li className="title-cp1">
+                              語言：{product.language}
+                            </li>
+                          </ul>
+                          <p className="fs-5 text-danger fw-bold text-center">
+                            <span className="material-symbols-outlined text-primary fs-5 me-3">
+                              paid
+                            </span>
+                            {product.price}
+                          </p>
+                        </div>
+
+                        {/* 操作按鈕 */}
+                        <div className="card-operation">
+                          <button className="btn btn-icon">
+                            <i className="material-symbols-outlined">
+                              favorite
+                            </i>
+                          </button>
+                          <button
+                            onClick={() => addToCart(product.id)}
+                            className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
+                            disabled={isProductInCart}
+                          >
+                            <i className="material-symbols-outlined">
+                              shopping_cart
+                            </i>
+                          </button>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
           </Swiper>
         </div>
       </section>
@@ -346,81 +384,115 @@ export default function HomePage() {
 
           <Swiper
             className="py-3"
-            spaceBetween={16} // 卡片間距
-            slidesPerView={1} // 預設一次顯示1張
-            loop={products10Data.length > 5}
+            spaceBetween={16}
+            slidesPerView={1}
+            loop={products20Data.length >= 5}
             breakpoints={{
-              768: { slidesPerView: 3 }, // md
-              992: { slidesPerView: 4 }, // lg
-              1200: { slidesPerView: 5 }, // xl
+              768: { slidesPerView: 3 },
+              992: { slidesPerView: 4 },
+              1200: { slidesPerView: 5 },
             }}
           >
-            {products10Data.map((product) => {
-              const isProductInCart = cartData?.carts?.some(
-                (cartItem) => cartItem.product_id === product.id
-              );
-
-              return (
-                <SwiperSlide key={product.id}>
-                  <div className="product-card card-transY">
-                    {/* 圖片區 + 書況標籤 */}
-                    <NavLink
-                      className="product-link text-dark"
-                      to={`/${product.category}/${product.id}`}
-                    >
+            {loading
+              ? Array.from({ length: 5 }).map((_, idx) => (
+                  <SwiperSlide key={idx}>
+                    <div className="product-card card-transY skeleton-card">
+                      {/* 圖片區 */}
                       <div className="card-img-wrapper">
-                        {product.imageUrl && (
-                          <img src={product.imageUrl} alt={product.title} />
-                        )}
-                        <span className="card-img-tag">
-                          {product.condition}
-                        </span>
+                        <div className="skeleton skeleton-img"></div>
                       </div>
-                    </NavLink>
 
-                    {/* 商品資訊 */}
-                    <div className="card-info">
-                      <h3 className="fs-5 mb-2 title-cp2 h-2em">
-                        {product.title}
-                      </h3>
-                      <ul className="product-list">
-                        <li className="title-cp1">ISBN：{product.isbn}</li>
-                        <li className="title-cp1">作者：{product.author}</li>
-                        <li className="title-cp1">
-                          出版社：{product.publisher}
-                        </li>
-                        <li className="title-cp1">
-                          出版日期：{product.publishdate}
-                        </li>
-                        <li className="title-cp1">語言：{product.language}</li>
-                      </ul>
-                      <p className="fs-5 text-danger fw-bold text-center">
-                        <span className="material-symbols-outlined text-primary fs-5 me-3">
-                          paid
-                        </span>
-                        {product.price}
-                      </p>
-                    </div>
+                      {/* 資訊區 */}
+                      <div className="card-info">
+                        <div className="skeleton skeleton-text title mb-2"></div>
+                        <ul className="product-list">
+                          {Array.from({ length: 5 }).map((__, i) => (
+                            <li key={i} className="skeleton skeleton-text"></li>
+                          ))}
+                        </ul>
+                        <div className="skeleton skeleton-price"></div>
+                      </div>
 
-                    {/* 操作按鈕 */}
-                    <div className="card-operation">
-                      <button className="btn btn-icon">
-                        <i className="material-symbols-outlined">favorite</i>
-                      </button>
-                      <button
-                        onClick={() => addToCart(product.id)}
-                        className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
-                        disabled={isProductInCart}
-                      >
-                        <i className="material-symbols-outlined">
-                          shopping_cart
-                        </i>
-                      </button>
+                      {/* 操作按鈕 */}
+                      <div className="card-operation">
+                        <div className="skeleton skeleton-btn"></div>
+                        <div className="skeleton skeleton-btn"></div>
+                      </div>
                     </div>
-                  </div>
-                </SwiperSlide>
-              );
-            })}
+                  </SwiperSlide>
+                ))
+              : products20Data.map((product) => {
+                  const isProductInCart = cartData.carts.some(
+                    (cartItem) => cartItem.product_id === product.id
+                  );
+
+                  return (
+                    <SwiperSlide key={product.id}>
+                      <div className="product-card card-transY">
+                        {/* 圖片區 + 書況標籤 */}
+                        <NavLink
+                          className="product-link text-dark"
+                          to={`/${product.category}/${product.id}`}
+                        >
+                          <div className="card-img-wrapper">
+                            {product.imageUrl && (
+                              <img src={product.imageUrl} alt={product.title} />
+                            )}
+                            <span className="card-img-tag">
+                              {product.condition}
+                            </span>
+                          </div>
+                        </NavLink>
+
+                        {/* 商品資訊 */}
+                        <div className="card-info">
+                          <h3 className="fs-5 mb-2 title-cp2 h-2em">
+                            {product.title}
+                          </h3>
+                          <ul className="product-list">
+                            <li className="title-cp1">ISBN：{product.isbn}</li>
+                            <li className="title-cp1">
+                              作者：{product.author}
+                            </li>
+                            <li className="title-cp1">
+                              出版社：{product.publisher}
+                            </li>
+                            <li className="title-cp1">
+                              出版日期：{product.publishdate}
+                            </li>
+                            <li className="title-cp1">
+                              語言：{product.language}
+                            </li>
+                          </ul>
+                          <p className="fs-5 text-danger fw-bold text-center">
+                            <span className="material-symbols-outlined text-primary fs-5 me-3">
+                              paid
+                            </span>
+                            {product.price}
+                          </p>
+                        </div>
+
+                        {/* 操作按鈕 */}
+                        <div className="card-operation">
+                          <button className="btn btn-icon">
+                            <i className="material-symbols-outlined">
+                              favorite
+                            </i>
+                          </button>
+                          <button
+                            onClick={() => addToCart(product.id)}
+                            className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
+                            disabled={isProductInCart}
+                          >
+                            <i className="material-symbols-outlined">
+                              shopping_cart
+                            </i>
+                          </button>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
           </Swiper>
         </div>
       </section>
