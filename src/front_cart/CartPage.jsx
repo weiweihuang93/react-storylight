@@ -66,7 +66,7 @@ export default function CartPage() {
       <section className="section-cart pb-6">
         <div className="container">
           <div className="row g-3">
-            {cartData?.carts?.length > 0 ? (
+            {cartData.carts.length > 0 ? (
               <>
                 <div className="col-xl-8">
                   <div className="card-base p-5 h-100">
@@ -90,7 +90,7 @@ export default function CartPage() {
                     </div>
                     {/* 購物車列表 */}
                     <div className="card-body">
-                      {cartData?.carts?.map((cart) => (
+                      {cartData.carts.map((cart) => (
                         <div className="cart-item" key={cart.id}>
                           <img
                             src={cart.product.imageUrl}

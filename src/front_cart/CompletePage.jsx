@@ -2,24 +2,32 @@ import axios from "axios";
 import { BASE_URL, API_PATH } from "../data/config";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function CompletePage() {
   const { order } = useContext(AppContext);
+  const navigate = useNavigate();
+
   const [orderData, setOrderData] = useState({});
 
   useEffect(() => {
+    if (!order?.orderId) {
+      navigate("/cart");
+      return;
+    }
+    const getOrderId = async () => {
+      try {
+        const res = await axios.get(
+          `${BASE_URL}/v2/api/${API_PATH}/order/${order.orderId}`
+        );
+        setOrderData(res.data.order);
+      } catch (err) {
+        console.error("取得訂單失敗", err);
+        navigate("/cart");
+      }
+    };
     getOrderId();
   }, [order]);
-
-  const getOrderId = async () => {
-    try {
-      const res = await axios.get(
-        `${BASE_URL}/v2/api/${API_PATH}/order/${order.orderId}`
-      );
-      setOrderData(res.data.order);
-    } catch (err) {}
-  };
 
   return (
     <>

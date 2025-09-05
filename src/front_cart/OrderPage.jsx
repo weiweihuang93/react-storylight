@@ -1,12 +1,12 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "../data/config";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router";
 
 export default function OrderPage() {
-  const { setCartData, setOrder } = useContext(AppContext);
+  const { user, cartData, setCartData, setOrder } = useContext(AppContext);
   const navigate = useNavigate();
 
   const {
@@ -51,10 +51,18 @@ export default function OrderPage() {
         data
       );
       setOrder(res.data);
-      setCartData([]); //清空購物車資料
+      setCartData({ carts: [] });
       navigate("/cart/payment");
     } catch (err) {}
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate(`/login?redirect=/cart/order`);
+    } else if (cartData.carts.length === 0) {
+      navigate("/cart");
+    }
+  }, []);
 
   return (
     <>

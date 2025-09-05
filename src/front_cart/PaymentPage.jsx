@@ -8,16 +8,14 @@ export default function PaymentPage() {
   const { order } = useContext(AppContext);
   const navigate = useNavigate();
 
-  if (!order?.orderId) {
-    navigate("/cart");
-    return null;
-  }
-
   useEffect(() => {
+    if (!order?.orderId) {
+      navigate("/cart");
+    }
     const handlePayment = async () => {
       try {
         await axios.post(`${BASE_URL}/v2/api/${API_PATH}/pay/${order.orderId}`);
-        navigate("/cart/complete");
+        navigate("/cart/complete", { replace: true });
       } catch (err) {
         console.error("付款失敗", err);
         navigate("/cart");
