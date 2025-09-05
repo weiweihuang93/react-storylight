@@ -1,9 +1,16 @@
 import { useEffect } from "react";
-import { NavLink, Outlet } from "react-router";
+import { matchPath, NavLink, Outlet, useLocation } from "react-router";
 
 const AdminRoutes = [
   { path: "/admin/order", name: "訂單管理" },
   { path: "/admin/product", name: "商品管理" },
+];
+
+const adminRouteTitles = [
+  { path: "/admin", title: "後台首頁｜Storylight 拾光" },
+  { path: "/admin/product", title: "商品管理｜Storylight 拾光" },
+  { path: "/admin/order", title: "訂單管理｜Storylight 拾光" },
+  { path: "/admin/login", title: "後台登入｜Storylight 拾光" },
 ];
 
 export default function AdminLayout() {
@@ -19,6 +26,15 @@ export default function AdminLayout() {
       document.body.style.minHeight = "";
     };
   }, []);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const matched = adminRouteTitles.find((r) =>
+      matchPath(r.path, location.pathname)
+    );
+    document.title = matched ? matched.title : "Storylight 拾光";
+  }, [location.pathname]);
 
   return (
     <>

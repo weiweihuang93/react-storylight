@@ -1,6 +1,19 @@
 import { useContext, useEffect } from "react";
-import { Link, Outlet, useLocation } from "react-router";
+import { Link, matchPath, Outlet, useLocation } from "react-router";
 import { AppContext } from "../context/AppContext";
+
+const routeTitles = [
+  { path: "/", title: "首頁｜Storylight 拾光" },
+  { path: "/signin", title: "註冊｜Storylight 拾光" },
+  { path: "/login", title: "登入｜Storylight 拾光" },
+  { path: "/member", title: "會員中心｜Storylight 拾光" },
+  { path: "/cart", title: "購物車｜Storylight 拾光" },
+  { path: "/cart/order", title: "訂單頁｜Storylight 拾光" },
+  { path: "/cart/payment", title: "付款頁｜Storylight 拾光" },
+  { path: "/cart/complete", title: "完成訂單｜Storylight 拾光" },
+  { path: "/:categoryName", title: "商品分類｜Storylight 拾光" },
+  { path: "/:categoryName/:productId", title: "商品詳情｜Storylight 拾光" },
+];
 
 export default function FrontLayout() {
   const { cartData, user, logout } = useContext(AppContext);
@@ -17,6 +30,15 @@ export default function FrontLayout() {
 
     return null;
   }
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const matched = routeTitles.find((r) =>
+      matchPath(r.path, location.pathname)
+    );
+    document.title = matched ? matched.title : "Storylight 拾光";
+  }, [location.pathname]);
 
   return (
     <>
