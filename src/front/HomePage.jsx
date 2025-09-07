@@ -219,8 +219,12 @@ export default function HomePage() {
                 <article>
                   <h3 className="fs-lg-4 fs-5 mb-2">限時折扣</h3>
                   <p className="fs-lg-5 fs-6">
-                    迎接夏季閱讀季，指定書籍享
-                    85折優惠，數量有限，趕快把握機會！
+                    迎接夏季閱讀季，指定書籍享 8
+                    折優惠，數量有限，趕快把握機會！
+                  </p>
+                  {/* 加入優惠碼 */}
+                  <p className="fs-lg-5 fs-6 fw-bold text-accent-300 mt-3">
+                    優惠碼：SUMMER_80
                   </p>
                 </article>
               </li>
