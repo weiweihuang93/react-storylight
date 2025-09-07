@@ -4,12 +4,14 @@ import { matchPath, NavLink, Outlet, useLocation } from "react-router";
 const AdminRoutes = [
   { path: "/admin/order", name: "訂單管理" },
   { path: "/admin/product", name: "商品管理" },
+  { path: "/admin/coupon", name: "優惠券管理" },
 ];
 
 const adminRouteTitles = [
   { path: "/admin", title: "後台首頁｜Storylight 拾光" },
   { path: "/admin/product", title: "商品管理｜Storylight 拾光" },
   { path: "/admin/order", title: "訂單管理｜Storylight 拾光" },
+  { path: "/admin/coupon", title: "優惠券管理｜Storylight 拾光" },
   { path: "/admin/login", title: "後台登入｜Storylight 拾光" },
 ];
 
