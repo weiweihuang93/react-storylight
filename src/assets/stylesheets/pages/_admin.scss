@@ -1,53 +1,70 @@
-.tag-category{
+.tag-category {
   background-color: $neutral-200;
   border-radius: $border-radius-lg;
   padding: 4px 8px;
 }
 
-.section-seller{
+.section-seller {
   // 儀錶板
-  .card-list{
+  .card-list {
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: center;
 
-    li{
+    li {
       padding: 0 16px;
     }
   }
-  .dashboard-card{
+
+  .dashboard-card {
     background-color: $white;
     border-radius: $border-radius-lg;
     border: 1px solid $neutral-200;
     padding: 12px;
-    }
-    
-  .product-header {
+  }
+
+  .admin-list-header {
     display: flex;
     align-items: center;
     text-align: center;
     border-bottom: 1px solid $neutral-200;
-    
-    button{
+
+    button {
       border: 0;
       background-color: $white;
     }
   }
-  .product-item {
+
+  .admin-list-item {
     display: flex;
     align-items: center;
     text-align: center;
     border-bottom: 1px solid $neutral-200;
   }
-  .product-name {
-    flex-grow: 1;
-    text-align: left;
+
+  .admin-name,
+  .admin-date {
+    flex: 2 0 250px;
   }
-  .product-price,
-  .product-qty,
-  .product-status,
-  .product-action {
-    min-width: 100px;
+
+  .admin-action {
+    flex: 1 0 120px;
   }
+
+  .admin-flex-1-1 {
+    flex: 1 1 100px;
+  }
+
+  .admin-flex-1-0 {
+    flex: 1 0 100px;
+  }
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.min-w100 {
+  min-width: 100px;
 }

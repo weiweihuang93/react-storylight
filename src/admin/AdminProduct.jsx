@@ -133,7 +133,7 @@ export default function AdminProduct() {
   // 更新商品
   const editProduct = async () => {
     try {
-      const res = await axios.put(
+      await axios.put(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`,
         {
           data: cleanProductData(tempProduct),
@@ -146,12 +146,9 @@ export default function AdminProduct() {
   // 新增商品
   const createProduct = async () => {
     try {
-      const res = await axios.post(
-        `${BASE_URL}/v2/api/${API_PATH}/admin/product`,
-        {
-          data: cleanProductData(tempProduct),
-        }
-      );
+      await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`, {
+        data: cleanProductData(tempProduct),
+      });
       closeModal();
     } catch (err) {}
   };
@@ -176,7 +173,7 @@ export default function AdminProduct() {
   // 刪除商品
   const deleteProduct = async (product_id) => {
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${product_id}`
       );
       await getCategoryProducts();
@@ -298,10 +295,6 @@ export default function AdminProduct() {
     setFilteredProducts(filteredSearchProducts);
   }, [filteredSearchProducts]);
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
-
   return (
     <>
       <section className="section-seller py-3">
@@ -342,7 +335,7 @@ export default function AdminProduct() {
                 <div className="form-search d-flex w-100">
                   <input
                     value={search}
-                    onChange={handleSearch}
+                    onChange={(e) => setSearch(e.target.value)}
                     type="search"
                     className="form-control"
                     placeholder="請輸入書名"
@@ -377,36 +370,36 @@ export default function AdminProduct() {
               {/* 商品資料渲染 */}
               <div className="col-12">
                 {/* 標題 */}
-                <div className="product-header py-3">
-                  <span className="product-name">產品名稱</span>
-                  <span className="product-price d-none d-md-flex">
+                <div className="admin-list-header py-3">
+                  <span className="admin-name">商品名稱</span>
+                  <span className="admin-flex-1-1 d-none d-md-block">
                     <button>▼</button>
                     售價
                     <button>▲</button>
                   </span>
-                  <span className="product-qty d-none d-md-block">數量</span>
-                  <span className="product-status d-none d-md-block">狀態</span>
-                  <span className="product-action">操作</span>
+                  <span className="admin-flex-1-1 d-none d-md-block">數量</span>
+                  <span className="admin-flex-1-1 d-none d-md-block">狀態</span>
+                  <span className="admin-action">操作</span>
                 </div>
                 {/* 內容 */}
                 <div className="product-body">
                   {(search ? filteredProducts : categoryProducts)?.map(
                     (product) => (
-                      <div className="product-item py-3" key={product.id}>
-                        <span className="product-name d-flex flex-wrap align-items-center">
+                      <div className="admin-list-item py-3" key={product.id}>
+                        <span className="admin-name d-flex flex-wrap align-items-center text-start">
                           <span>{product.maintitle}</span>
                           <small className="tag-category ms-2">
                             {product.category}
                           </small>
                         </span>
-                        <span className="product-price d-none d-md-block">
+                        <span className="admin-flex-1-1 d-none d-md-block">
                           {product.price}
                         </span>
-                        <span className="product-qty d-none d-md-block">
+                        <span className="admin-flex-1-1 d-none d-md-block">
                           {product.qty}
                         </span>
                         <span
-                          className={`product-status d-none d-md-block ${
+                          className={`admin-flex-1-1 d-none d-md-block ${
                             product.is_enabled
                               ? "text-success fw-bold"
                               : "text-danger fw-bold"
@@ -414,11 +407,11 @@ export default function AdminProduct() {
                         >
                           {product.is_enabled ? "已啟用" : "未啟用"}
                         </span>
-                        <span className="product-action">
-                          <div className="d-flex gap-2">
+                        <span className="admin-action">
+                          <div className="d-flex justify-content-center gap-2">
                             <button
                               onClick={() => openModal("edit", product)}
-                              className="btn btn-sm btn-outline-primary "
+                              className="btn btn-sm btn-outline-primary"
                             >
                               編輯
                             </button>
@@ -472,7 +465,7 @@ export default function AdminProduct() {
                       )}
                       {/* 下一頁按鈕 */}
                       <li
-                        className={`page-item ${pagination.has_pre ? "disabled" : ""}`}
+                        className={`page-item ${pagination.has_next ? "" : "disabled"}`}
                       >
                         <a
                           onClick={(e) =>
@@ -501,7 +494,7 @@ export default function AdminProduct() {
                 <div className="modal-content border-0 shadow">
                   <div className="modal-header border-bottom">
                     <h5 className="modal-title">
-                      {modalMode === "create" ? "新增產品" : "編輯產品"}
+                      {modalMode === "create" ? "新增商品" : "編輯商品"}
                     </h5>
                     <button
                       onClick={() => closeModal()}
