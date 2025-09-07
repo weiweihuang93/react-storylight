@@ -1,7 +1,8 @@
 import axios from "axios";
-import { BASE_URL, API_PATH } from "../data/config";
+import { BASE_URL } from "../data/config";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
+import ScreenLoading from "../components/ScreenLoading";
 
 export default function CheckedRoute() {
   const [isAuth, setIsAuth] = useState(null);
@@ -30,7 +31,7 @@ export default function CheckedRoute() {
   }, []);
 
   if (isAuth === null) {
-    return <div>Loading...</div>;
+    return <ScreenLoading />;
   }
 
   return <Outlet />;
