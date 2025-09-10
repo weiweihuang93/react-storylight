@@ -10,13 +10,15 @@ import CartPage from "../front_cart/CartPage";
 import OrderPage from "../front_cart/OrderPage";
 import PaymentPage from "../front_cart/PaymentPage";
 import CompletePage from "../front_cart/CompletePage";
-import MemberPage from "../front/MemberPage";
 import AdminLayout from "../admin/AdminLayout";
 import CheckedRoute from "../admin/CheckedRoute";
 import AdminProduct from "../admin/AdminProduct";
 import AdminOrder from "../admin/AdminOrder";
 import AdminCoupon from "../admin/AdminCoupon";
 import AdminLogin from "../admin/AdminLogin";
+import MemberLayout from "../member/MemberLayout";
+import MemberOrderPage from "../member/MemberOrderPage";
+import WishPage from "../member/WishPage";
 
 const routes = [
   {
@@ -45,7 +47,11 @@ const routes = [
       },
       {
         path: "member",
-        element: <MemberPage />,
+        element: <MemberLayout />,
+        children: [
+          { path: "order", element: <MemberOrderPage /> },
+          { path: "wish", element: <WishPage /> },
+        ],
       },
       {
         path: "cart",

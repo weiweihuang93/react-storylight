@@ -12,7 +12,7 @@ export default function CartLayout() {
 
   return (
     <>
-      <div className="bg-neutral-100">
+      <div className="app-container bg-neutral-100">
         <section className="section-progress py-6">
           <div className="container">
             <div className="row row-cols-4">

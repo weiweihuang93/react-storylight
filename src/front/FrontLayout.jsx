@@ -8,6 +8,8 @@ const routeTitles = [
   { path: "/signin", title: "註冊｜Storylight 拾光" },
   { path: "/login", title: "登入｜Storylight 拾光" },
   { path: "/member", title: "會員中心｜Storylight 拾光" },
+  { path: "/member/order", title: "會員中心｜Storylight 拾光" },
+  { path: "/member/wish", title: "會員中心｜Storylight 拾光" },
   { path: "/cart", title: "購物車｜Storylight 拾光" },
   { path: "/cart/order", title: "訂單頁｜Storylight 拾光" },
   { path: "/cart/payment", title: "付款頁｜Storylight 拾光" },
@@ -117,6 +119,7 @@ export default function FrontLayout() {
                   </span>
                 </Link>
               </li>
+              {/* 會員下拉選單 */}
               <li className="dropdown login-dropdown">
                 <a
                   className="dropdown-toggle d-flex"
@@ -131,6 +134,7 @@ export default function FrontLayout() {
                   className="dropdown-menu dropdown-menu-position"
                   aria-labelledby="memberDropdown"
                 >
+                  {/* 使用者資訊 */}
                   <h6 className="dropdown-header">
                     <img
                       className="avatar"
@@ -142,22 +146,26 @@ export default function FrontLayout() {
                       : "訪客模式中"}
                   </h6>
 
-                  {/* 共用區塊 */}
-                  <Link to="/member" className="dropdown-item">
-                    <span className="material-symbols-outlined me-2">
-                      account_circle
-                    </span>
-                    我的帳戶
-                  </Link>
-                  <Link to="/member" className="dropdown-item">
-                    <span className="material-symbols-outlined me-2">
-                      article
-                    </span>
-                    訂單紀錄
-                  </Link>
-                  <div className="dropdown-divider"></div>
+                  {/* 登入後才顯示會員專屬選項 */}
+                  {user.username && (
+                    <>
+                      <Link to="/member/order" className="dropdown-item">
+                        <span className="material-symbols-outlined me-2">
+                          article
+                        </span>
+                        訂單紀錄
+                      </Link>
+                      <Link to="/member/wish" className="dropdown-item">
+                        <span className="material-symbols-outlined me-2">
+                          folded_hands
+                        </span>
+                        許願徵求
+                      </Link>
+                      <div className="dropdown-divider"></div>
+                    </>
+                  )}
 
-                  {/* 登入 / 登出差異 */}
+                  {/* 登入 / 登出 */}
                   {user.username ? (
                     <a className="dropdown-item" onClick={logout}>
                       <span className="material-symbols-outlined me-2">
