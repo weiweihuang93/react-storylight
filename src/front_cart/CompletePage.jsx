@@ -4,11 +4,15 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { Link, useNavigate } from "react-router";
 
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
+
 export default function CompletePage() {
   const { order } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [orderData, setOrderData] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!order?.orderId) {
@@ -22,8 +26,10 @@ export default function CompletePage() {
         );
         setOrderData(res.data.order);
       } catch (err) {
-        console.error("取得訂單失敗", err);
-        navigate("/cart");
+        const errorMessage =
+          err.response?.data?.message || "訂單讀取失敗，請稍後再試";
+        dispatch(addToast({ success: false, message: errorMessage }));
+        setTimeout(() => navigate("/cart"), 2000);
       }
     };
     getOrderId();

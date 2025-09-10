@@ -2,6 +2,9 @@ import axios from "axios";
 import { BASE_URL } from "../data/config";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import ToastComponent from "../components/ToastComponent";
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
 
 export default function AdminLogin() {
   const [account, setAccount] = useState({
@@ -9,7 +12,6 @@ export default function AdminLogin() {
     password: "",
   });
 
-  const [token, setToken] = useState();
   const navigate = useNavigate();
 
   const handleSigninInputChange = (e) => {
@@ -20,22 +22,34 @@ export default function AdminLogin() {
     });
   };
 
+  const dispatch = useDispatch();
+
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(`${BASE_URL}/v2/admin/signin`, account);
       const { token, expired } = res.data;
-      setToken(token);
-      document.cookie = `hexToken=${token}; expires=${new Date(expired).toUTCString()}`;
+
+      document.cookie = `hexToken=${token}; expires=${new Date(expired).toUTCString()}; path=/;`;
       axios.defaults.headers.common["Authorization"] = token;
 
-      // 加上提示文字
+      dispatch(
+        addToast({
+          success: true,
+          message: "登入成功！驗證中，請稍候...",
+        })
+      );
       setTimeout(() => navigate("/admin"), 2000);
-    } catch (err) {}
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "登入失敗，請稍後再試";
+      dispatch(addToast({ success: false, message: errorMessage }));
+    }
   };
 
   return (
     <>
+      <ToastComponent />
       <main>
         <div className="bg-neutral-100 vh-center">
           <div className="container d-flex justify-content-center">
@@ -88,7 +102,11 @@ export default function AdminLogin() {
 
                   {/* 登入按鈕 */}
                   <div>
-                    <button type="submit" className="btn btn-accent-300 w-100">
+                    <button
+                      type="submit"
+                      className="btn btn-accent-300 w-100"
+                      disabled={!account.username || !account.password}
+                    >
                       登入
                     </button>
                   </div>

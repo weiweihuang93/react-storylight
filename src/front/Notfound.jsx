@@ -9,7 +9,7 @@ export default function NotFound() {
 
     const timer = setTimeout(() => {
       navigate("/");
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);

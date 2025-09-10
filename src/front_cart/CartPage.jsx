@@ -5,6 +5,9 @@ import { Link, useNavigate } from "react-router";
 import { AppContext } from "../context/AppContext";
 import ScreenLoading from "../components/ScreenLoading";
 
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
+
 export default function CartPage() {
   const { user, cartData, getCartData, isScreenLoading, setIsScreenLoading } =
     useContext(AppContext);
@@ -14,12 +17,18 @@ export default function CartPage() {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(null);
 
+  const dispatch = useDispatch();
+
   const delAllCart = async () => {
     setIsScreenLoading(true);
     try {
-      await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/carts`);
+      const res = await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/carts`);
+      dispatch(addToast(res.data));
       await getCartData();
     } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "清空失敗，請稍後再試";
+      dispatch(addToast({ success: false, message: errorMessage }));
     } finally {
       setIsScreenLoading(false);
     }
@@ -28,9 +37,15 @@ export default function CartPage() {
   const delIdCart = async (cart_id) => {
     setIsScreenLoading(true);
     try {
-      await axios.delete(`${BASE_URL}/v2/api/${API_PATH}/cart/${cart_id}`);
+      const res = await axios.delete(
+        `${BASE_URL}/v2/api/${API_PATH}/cart/${cart_id}`
+      );
+      dispatch(addToast(res.data));
       await getCartData();
     } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "刪除失敗，請稍後再試";
+      dispatch(addToast({ success: false, message: errorMessage }));
     } finally {
       setIsScreenLoading(false);
     }
@@ -41,19 +56,22 @@ export default function CartPage() {
     try {
       const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/coupon`, {
         data: {
-          code: couponCode,
+          code: couponCode.trim(),
         },
       });
       setDiscount(res.data);
-      alert(res.data.message);
+      dispatch(addToast(res.data));
     } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "套用優惠券失敗，請稍後再試";
+      dispatch(addToast({ success: false, message: errorMessage }));
     } finally {
       setIsScreenLoading(false);
     }
   };
 
   const handleNextStep = () => {
-    if (!user) {
+    if (!user.username) {
       navigate(`/login?redirect=/cart/order`);
     } else {
       navigate("/cart/order");
@@ -160,6 +178,7 @@ export default function CartPage() {
                             onClick={handleCoupon}
                             className="btn btn-accent-100 text-white"
                             type="button"
+                            disabled={!couponCode}
                           >
                             <span className="material-symbols-outlined">
                               redeem

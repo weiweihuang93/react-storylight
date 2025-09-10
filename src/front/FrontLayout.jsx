@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Link, matchPath, Outlet, useLocation } from "react-router";
 import { AppContext } from "../context/AppContext";
+import ToastComponent from "../components/ToastComponent";
 
 const routeTitles = [
   { path: "/", title: "首頁｜Storylight 拾光" },
@@ -42,6 +43,7 @@ export default function FrontLayout() {
 
   return (
     <>
+      <ToastComponent />
       {/* nav */}
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container d-flex align-items-center justify-content-between">
@@ -135,7 +137,9 @@ export default function FrontLayout() {
                       src="./images/avatar-1.png"
                       alt="avatar"
                     />
-                    {user ? `歡迎回來，${user.username}` : "訪客模式中"}
+                    {user.username
+                      ? `歡迎回來，${user.username}`
+                      : "訪客模式中"}
                   </h6>
 
                   {/* 共用區塊 */}
@@ -154,7 +158,7 @@ export default function FrontLayout() {
                   <div className="dropdown-divider"></div>
 
                   {/* 登入 / 登出差異 */}
-                  {user ? (
+                  {user.username ? (
                     <a className="dropdown-item" onClick={logout}>
                       <span className="material-symbols-outlined me-2">
                         logout

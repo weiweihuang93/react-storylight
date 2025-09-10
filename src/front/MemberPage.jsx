@@ -4,12 +4,17 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router";
 
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
+
 export default function MemberPage() {
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
 
   const [search, setSearch] = useState("");
   const [orderData, setOrderData] = useState({});
+
+  const dispatch = useDispatch();
 
   // 搜尋訂單
   const handleSearch = async () => {
@@ -20,7 +25,7 @@ export default function MemberPage() {
       );
       setOrderData(res.data.order);
     } catch (err) {
-      console.error(err);
+      dispatch(addToast(err.response.data));
     }
   };
 

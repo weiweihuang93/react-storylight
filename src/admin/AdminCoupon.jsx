@@ -1,6 +1,8 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "../data/config";
 import { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
 
 const defaultModalState = {
   title: "",
@@ -20,6 +22,8 @@ export default function Coupon() {
 
   const [search, setSearch] = useState("");
 
+  const dispatch = useDispatch();
+
   // 取得所有優惠券
   const getAllCoupons = async () => {
     try {
@@ -27,7 +31,9 @@ export default function Coupon() {
         `${BASE_URL}/v2/api/${API_PATH}/admin/coupons`
       );
       setAllCoupons(res.data.coupons);
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   useEffect(() => {
@@ -37,34 +43,46 @@ export default function Coupon() {
   // 刪除
   const deleteCoupon = async (coupon_id) => {
     try {
-      await axios.delete(
+      const res = await axios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/coupon/${coupon_id}`
       );
+      dispatch(addToast(res.data));
       await getAllCoupons();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 新增
   const createCoupon = async () => {
     try {
-      await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/coupon`, {
-        data: cleanCouponData(tempCoupon),
-      });
+      const res = await axios.post(
+        `${BASE_URL}/v2/api/${API_PATH}/admin/coupon`,
+        {
+          data: cleanCouponData(tempCoupon),
+        }
+      );
+      dispatch(addToast(res.data));
       closeModal();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 更新
   const editCoupon = async () => {
     try {
-      await axios.put(
+      const res = await axios.put(
         `${BASE_URL}/v2/api/${API_PATH}/admin/coupon/${tempCoupon.id}`,
         {
           data: cleanCouponData(tempCoupon),
         }
       );
+      dispatch(addToast(res.data));
       closeModal();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   const handleUpdateCoupon = async () => {
@@ -72,7 +90,9 @@ export default function Coupon() {
     try {
       await apiCall();
       await getAllCoupons();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // Modal
@@ -245,7 +265,13 @@ export default function Coupon() {
                           "zh-TW"
                         )}
                       </span>
-                      <span className="admin-flex-1-0">
+                      <span
+                        className={`admin-flex-1-0 ${
+                          coupon.is_enabled
+                            ? "text-success fw-bold"
+                            : "text-danger fw-bold"
+                        }`}
+                      >
                         {coupon.is_enabled ? "已啟用" : "未啟用"}
                       </span>
                       <span className="admin-action">

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "../data/config";
 import { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
 
 export default function AdminOrder() {
   const [allOrders, setAllOrders] = useState([]);
@@ -16,6 +18,8 @@ export default function AdminOrder() {
   const [selectedIsPaid, setSelectedIsPaid] = useState("");
   const [selectedIsDelivery, setSelectedIsDelivery] = useState("");
   const [search, setSearch] = useState("");
+
+  const dispatch = useDispatch();
 
   // 取得所有訂單
   // 實現篩選訂單
@@ -33,7 +37,9 @@ export default function AdminOrder() {
       }));
 
       setAllOrdersWithoutPagination(ordersWithDefaults);
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 篩選
@@ -77,7 +83,9 @@ export default function AdminOrder() {
 
       setAllOrders(ordersWithDefaults);
       setPagination(res.data.pagination);
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 取得分頁訂單
@@ -115,20 +123,26 @@ export default function AdminOrder() {
           },
         }
       );
+      dispatch(addToast(res.data));
       closeModal();
       getAllOrders();
-    } catch (error) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 刪除訂單
   const deleteOrder = async (order_id) => {
     try {
-      await axios.delete(
+      const res = await axios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/order/${order_id}`
       );
+      dispatch(addToast(res.data));
       await getAllOrders();
       await getAllOrdersWithoutPagination();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   return (
@@ -245,7 +259,7 @@ export default function AdminOrder() {
                         {order.is_paid ? "已付款" : "未付款"}
                       </span>
                       <span
-                        className={`${order.is_delivery === "待確認" ? "text-danger" : "text-success"} admin-flex-1-0`}
+                        className={`${order.is_delivery === "待確認" ? "text-danger" : "text-success"} admin-flex-1-0 fw-bold`}
                       >
                         {order.is_delivery}
                       </span>
@@ -479,6 +493,7 @@ export default function AdminOrder() {
                         <option value="" disabled>
                           選擇狀態
                         </option>
+                        <option value="待確認">待確認</option>
                         <option value="已確認">已確認</option>
                         <option value="已出貨">已出貨</option>
                       </select>

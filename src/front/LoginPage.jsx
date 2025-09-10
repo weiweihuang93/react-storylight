@@ -3,9 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { AppContext } from "../context/AppContext";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const { login, user } = useContext(AppContext);
   const [account, setAccount] = useState({
     username: "",
@@ -20,19 +17,23 @@ export default function LoginPage() {
     });
   };
 
+  const navigate = useNavigate();
+
   const handleSignin = (e) => {
     e.preventDefault();
     login(account.username, account.password);
   };
 
+  const location = useLocation();
+
   // 登入後自動跳回原本頁面
   useEffect(() => {
-    if (user?.username) {
+    if (user.username) {
       const searchParams = new URLSearchParams(location.search);
       const redirect = searchParams.get("redirect") || "/member";
       navigate(redirect, { replace: true });
     }
-  }, [user]);
+  }, [user, location.search, navigate]);
 
   return (
     <>
@@ -88,7 +89,11 @@ export default function LoginPage() {
 
                   {/* 登入按鈕 */}
                   <div>
-                    <button type="submit" className="btn btn-accent-300 w-100">
+                    <button
+                      type="submit"
+                      className="btn btn-accent-300 w-100"
+                      disabled={!account.username || !account.password}
+                    >
                       登入
                     </button>
                   </div>

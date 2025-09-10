@@ -2,6 +2,8 @@ import axios from "axios";
 import { BASE_URL, API_PATH } from "../data/config";
 import { useEffect, useMemo, useState } from "react";
 import categories from "../data/categories";
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
 
 const GOOGLE_BOOKS_API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
@@ -43,6 +45,8 @@ export default function AdminProduct() {
   const [search, setSearch] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
 
+  const dispatch = useDispatch();
+
   // 取得所有商品數量
   // 實現搜尋商品功能
   const getAllProducts = async () => {
@@ -51,7 +55,9 @@ export default function AdminProduct() {
         `${BASE_URL}/v2/api/${API_PATH}/admin/products/all`
       );
       setAllProducts(Object.values(res.data.products));
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 取得所有商品 或 分類商品
@@ -65,7 +71,9 @@ export default function AdminProduct() {
       );
       setCategoryProducts(res.data.products);
       setPagination(res.data.pagination);
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   useEffect(() => {
@@ -127,30 +135,41 @@ export default function AdminProduct() {
       await apiCall();
       await getCategoryProducts();
       await getAllProducts();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 更新商品
   const editProduct = async () => {
     try {
-      await axios.put(
+      const res = await axios.put(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`,
         {
           data: cleanProductData(tempProduct),
         }
       );
+      dispatch(addToast(res.data));
       closeModal();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 新增商品
   const createProduct = async () => {
     try {
-      await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`, {
-        data: cleanProductData(tempProduct),
-      });
+      const res = await axios.post(
+        `${BASE_URL}/v2/api/${API_PATH}/admin/product`,
+        {
+          data: cleanProductData(tempProduct),
+        }
+      );
+      dispatch(addToast(res.data));
       closeModal();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 手動清理、API需另外設定
@@ -173,12 +192,15 @@ export default function AdminProduct() {
   // 刪除商品
   const deleteProduct = async (product_id) => {
     try {
-      await axios.delete(
+      const res = await axios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${product_id}`
       );
+      dispatch(addToast(res.data));
       await getCategoryProducts();
       await getAllProducts();
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 圖片上傳
@@ -200,7 +222,9 @@ export default function AdminProduct() {
         imageUrl: uploadImageUrl,
       });
       fileInput.value = "";
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   const handleImageChange = (e, index) => {
@@ -277,7 +301,9 @@ export default function AdminProduct() {
           googleBookUrl,
         };
       });
-    } catch (err) {}
+    } catch (err) {
+      dispatch(addToast(err.response.data));
+    }
   };
 
   // 搜尋書名

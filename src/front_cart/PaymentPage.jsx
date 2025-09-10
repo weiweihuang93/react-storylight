@@ -4,21 +4,35 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router";
 
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
+
 export default function PaymentPage() {
   const { order } = useContext(AppContext);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!order?.orderId) {
       navigate("/cart");
+      return;
     }
+
     const handlePayment = async () => {
       try {
-        await axios.post(`${BASE_URL}/v2/api/${API_PATH}/pay/${order.orderId}`);
-        navigate("/cart/complete", { replace: true });
+        const res = await axios.post(
+          `${BASE_URL}/v2/api/${API_PATH}/pay/${order.orderId}`
+        );
+        dispatch(addToast(res.data));
+        setTimeout(() => {
+          navigate("/cart/complete", { replace: true });
+        }, 2000);
       } catch (err) {
-        console.error("付款失敗", err);
-        navigate("/cart");
+        const errorMessage =
+          err.response?.data?.message || "訂單付款失敗，請稍後再試";
+        dispatch(addToast({ success: false, message: errorMessage }));
+        setTimeout(() => navigate("/cart"), 2000);
       }
     };
 

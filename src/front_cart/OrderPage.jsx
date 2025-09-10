@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router";
 
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
+
 export default function OrderPage() {
   const { user, cartData, setCartData, setOrder } = useContext(AppContext);
   const navigate = useNavigate();
@@ -44,6 +47,8 @@ export default function OrderPage() {
     reset();
   };
 
+  const dispatch = useDispatch();
+
   const submitOrder = async (data) => {
     try {
       const res = await axios.post(
@@ -52,12 +57,18 @@ export default function OrderPage() {
       );
       setOrder(res.data);
       setCartData({ carts: [] });
-      navigate("/cart/payment");
-    } catch (err) {}
+      dispatch(addToast(res.data));
+      setTimeout(() => navigate("/cart/payment"), 2000);
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "訂單提交失敗，請稍後再試";
+      dispatch(addToast({ success: false, message: errorMessage }));
+      setTimeout(() => navigate("/cart"), 2000);
+    }
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!user.username) {
       navigate(`/login?redirect=/cart/order`);
     } else if (cartData.carts.length === 0) {
       navigate("/cart");

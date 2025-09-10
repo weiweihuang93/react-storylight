@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { addToast } from "../redux/toastSlice";
 
 export default function SigninPage() {
-  const navigate = useNavigate();
-
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -17,14 +17,27 @@ export default function SigninPage() {
     });
   };
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleSignin = (e) => {
     e.preventDefault();
     if (account.username && account.password) {
-      // 模擬註冊成功
-      alert("註冊成功！");
-      setTimeout(() => navigate("/login"), 1000);
+      // 模擬註冊成功 發送toast
+      dispatch(
+        addToast({
+          success: true,
+          message: "註冊成功！即將導向登入頁面...",
+        })
+      );
+      setTimeout(() => navigate("/login"), 2000);
     } else {
-      alert("請輸入帳號密碼");
+      dispatch(
+        addToast({
+          success: false,
+          message: "請輸入帳號密碼",
+        })
+      );
     }
   };
 
@@ -82,7 +95,11 @@ export default function SigninPage() {
 
                   {/* 登入按鈕 */}
                   <div>
-                    <button type="submit" className="btn btn-accent-300 w-100">
+                    <button
+                      type="submit"
+                      className="btn btn-accent-300 w-100"
+                      disabled={!account.username || !account.password}
+                    >
                       註冊
                     </button>
                   </div>
