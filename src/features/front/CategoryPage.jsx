@@ -6,7 +6,8 @@ import categories from "@/data/categories";
 import { AppContext } from "@/context/AppContext";
 
 export default function CategoryPage() {
-  const { addToCart, cartData } = useContext(AppContext);
+  const { addToCart, cartData, favorites, toggleFavorite } =
+    useContext(AppContext);
   const [loading, setLoading] = useState(true);
 
   const { categoryName } = useParams();
@@ -152,7 +153,12 @@ export default function CategoryPage() {
                               </div>
                             </NavLink>
                             <div className="card-operation mt-auto">
-                              <button className="btn btn-icon">
+                              <button
+                                onClick={() => toggleFavorite(product.id)}
+                                className={`btn btn-icon ${
+                                  favorites[product.id] ? "active" : ""
+                                }`}
+                              >
                                 <i className="material-symbols-outlined">
                                   favorite
                                 </i>

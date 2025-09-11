@@ -12,7 +12,8 @@ import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
 import ProductCard from "@/components/skeleton/ProductCard";
 
 export default function ProductPage() {
-  const { addToCart, cartData } = useContext(AppContext);
+  const { addToCart, cartData, favorites, toggleFavorite } =
+    useContext(AppContext);
 
   const [productLoading, setProductLoading] = useState(true);
   const [categoryLoading, setCategoryLoading] = useState(true);
@@ -280,7 +281,12 @@ export default function ProductPage() {
 
                         {/* 操作按鈕 */}
                         <div className="card-operation mt-auto">
-                          <button className="btn btn-icon">
+                          <button
+                            onClick={() => toggleFavorite(productData.id)}
+                            className={`btn btn-icon ${
+                              favorites[productData.id] ? "active" : ""
+                            }`}
+                          >
                             <i className="material-symbols-outlined">
                               favorite
                             </i>
@@ -366,6 +372,8 @@ export default function ProductPage() {
                         product={product}
                         isProductInCart={isProductInCart}
                         addToCart={addToCart}
+                        isFavorite={!!favorites[product.id]}
+                        toggleFavorite={toggleFavorite}
                       />
                     </SwiperSlide>
                   );

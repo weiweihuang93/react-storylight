@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
 import { createContext, useEffect, useState } from "react";
-
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
 
@@ -10,6 +9,49 @@ const AppContext = createContext();
 export default function AppProvider({ children }) {
   // 登入狀態（全域管理）
   const [user, setUser] = useState({ username: "" });
+  // 收藏
+  const [favorites, setFavorites] = useState({});
+
+  // 讀取 localStorage
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  // 切換收藏
+  const toggleFavorite = (productId) => {
+    let newFavorites;
+    setFavorites((prevState) => {
+      newFavorites = {
+        ...prevState,
+        [productId]: !prevState[productId],
+      };
+      return newFavorites;
+    });
+
+    // 同步 localStorage
+    localStorage.setItem("favorites", JSON.stringify(newFavorites));
+
+    // 呼叫 toast
+    if (newFavorites[productId]) {
+      dispatch(
+        addToast({
+          success: true,
+          message: "已加入收藏",
+        })
+      );
+    } else {
+      dispatch(
+        addToast({
+          success: true,
+          message: "已取消收藏",
+        })
+      );
+    }
+  };
+
   const [cartData, setCartData] = useState({ carts: [] });
 
   // 取得訂單
@@ -90,6 +132,8 @@ export default function AppProvider({ children }) {
         addToCart,
         order,
         setOrder,
+        favorites,
+        toggleFavorite,
         isScreenLoading,
         setIsScreenLoading,
       }}

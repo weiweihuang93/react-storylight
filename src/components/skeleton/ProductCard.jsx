@@ -1,6 +1,12 @@
 import { NavLink } from "react-router";
 
-export default function ProductCard({ product, isProductInCart, addToCart }) {
+export default function ProductCard({
+  product,
+  isProductInCart,
+  addToCart,
+  isFavorite,
+  toggleFavorite,
+}) {
   return (
     <>
       <div className="product-card card-transY">
@@ -37,7 +43,10 @@ export default function ProductCard({ product, isProductInCart, addToCart }) {
 
         {/* 操作按鈕 */}
         <div className="card-operation">
-          <button className="btn btn-icon">
+          <button
+            onClick={() => toggleFavorite(product.id)}
+            className={`btn btn-icon ${isFavorite ? "active" : ""}`}
+          >
             <i className="material-symbols-outlined">favorite</i>
           </button>
           <button
