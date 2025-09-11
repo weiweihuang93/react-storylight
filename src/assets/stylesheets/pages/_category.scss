@@ -115,20 +115,14 @@
           z-index: 1;
         }
 
-        &:hover::before {
-          height: 100%;
-          background: $accent-100;
-        }
-
-        &:hover i {
-          color: $white;
-        }
-
+        /* 背景填滿動畫 */
+        &:hover::before,
         &.active::before {
           height: 100%;
           background: $accent-100;
         }
 
+        &:hover i,
         &.active i {
           color: $white;
         }
@@ -185,4 +179,10 @@
     height: 100%;
     object-fit: cover;
   }
+}
+
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

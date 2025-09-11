@@ -101,7 +101,10 @@ export default function AppProvider({ children }) {
     } catch (err) {}
   };
 
+  const [loadingId, setLoadingId] = useState(null);
+
   const addToCart = async (productId) => {
+    setLoadingId(productId);
     try {
       const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/cart`, {
         data: {
@@ -113,6 +116,8 @@ export default function AppProvider({ children }) {
       await getCartData();
     } catch (err) {
       dispatch(addToast(err.response.data));
+    } finally {
+      setLoadingId(null);
     }
   };
 
@@ -130,6 +135,7 @@ export default function AppProvider({ children }) {
         getCartData,
         setCartData,
         addToCart,
+        loadingId,
         order,
         setOrder,
         favorites,

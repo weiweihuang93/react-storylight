@@ -4,9 +4,10 @@ import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import categories from "@/data/categories";
 import { AppContext } from "@/context/AppContext";
+import ReactLoading from "react-loading";
 
 export default function CategoryPage() {
-  const { addToCart, cartData, favorites, toggleFavorite } =
+  const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
     useContext(AppContext);
   const [loading, setLoading] = useState(true);
 
@@ -165,13 +166,23 @@ export default function CategoryPage() {
                               </button>
                               <button
                                 onClick={() => addToCart(product.id)}
-                                className={`btn btn-icon ${
-                                  isProductInCart ? "active" : ""
-                                }`}
-                                disabled={isProductInCart}
+                                className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
+                                disabled={
+                                  isProductInCart || loadingId === product.id
+                                }
                               >
                                 <i className="material-symbols-outlined">
-                                  shopping_cart
+                                  {loadingId === product.id ? (
+                                    <ReactLoading
+                                      className="spinner-center"
+                                      type="spin"
+                                      height={24}
+                                      width={24}
+                                      color="#eb8629"
+                                    />
+                                  ) : (
+                                    "shopping_cart"
+                                  )}
                                 </i>
                               </button>
                             </div>

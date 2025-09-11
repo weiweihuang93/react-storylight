@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import ReactLoading from "react-loading";
 
 export default function ProductCard({
   product,
@@ -6,6 +7,7 @@ export default function ProductCard({
   addToCart,
   isFavorite,
   toggleFavorite,
+  loadingId,
 }) {
   return (
     <>
@@ -54,7 +56,19 @@ export default function ProductCard({
             className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
             disabled={isProductInCart}
           >
-            <i className="material-symbols-outlined">shopping_cart</i>
+            <i className="material-symbols-outlined">
+              {loadingId === product.id ? (
+                <ReactLoading
+                  className="spinner-center"
+                  type="spin"
+                  height={24}
+                  width={24}
+                  color="#eb8629"
+                />
+              ) : (
+                "shopping_cart"
+              )}
+            </i>
           </button>
         </div>
       </div>

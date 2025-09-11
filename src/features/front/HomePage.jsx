@@ -13,7 +13,7 @@ import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
 import ProductCard from "@/components/skeleton/ProductCard";
 
 export default function HomePage() {
-  const { addToCart, cartData, favorites, toggleFavorite } =
+  const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
     useContext(AppContext);
   const [loading, setLoading] = useState(true);
 
@@ -299,6 +299,7 @@ export default function HomePage() {
                         addToCart={addToCart}
                         isFavorite={!!favorites[product.id]}
                         toggleFavorite={toggleFavorite}
+                        loadingId={loadingId}
                       />
                     </SwiperSlide>
                   );
@@ -344,6 +345,7 @@ export default function HomePage() {
                         addToCart={addToCart}
                         isFavorite={!!favorites[product.id]}
                         toggleFavorite={toggleFavorite}
+                        loadingId={loadingId}
                       />
                     </SwiperSlide>
                   );

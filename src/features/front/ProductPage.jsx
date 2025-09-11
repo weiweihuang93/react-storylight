@@ -10,9 +10,10 @@ import "swiper/css";
 import "swiper/css/thumbs";
 import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
 import ProductCard from "@/components/skeleton/ProductCard";
+import ReactLoading from "react-loading";
 
 export default function ProductPage() {
-  const { addToCart, cartData, favorites, toggleFavorite } =
+  const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
     useContext(AppContext);
 
   const [productLoading, setProductLoading] = useState(true);
@@ -307,7 +308,17 @@ export default function ProductPage() {
                             )}
                           >
                             <i className="material-symbols-outlined">
-                              shopping_cart
+                              {loadingId === productData.id ? (
+                                <ReactLoading
+                                  className="spinner-center"
+                                  type="spin"
+                                  height={24}
+                                  width={24}
+                                  color="#eb8629"
+                                />
+                              ) : (
+                                "shopping_cart"
+                              )}
                             </i>
                           </button>
                         </div>

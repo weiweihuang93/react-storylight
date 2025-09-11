@@ -7,7 +7,7 @@ import ProductCard from "@/components/skeleton/ProductCard";
 import { Link } from "react-router";
 
 export default function FavoritesPage() {
-  const { addToCart, cartData, favorites, toggleFavorite } =
+  const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
     useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [productsData, setProductsData] = useState([]);
@@ -82,6 +82,7 @@ export default function FavoritesPage() {
                     addToCart={addToCart}
                     isFavorite={!!favorites[product.id]}
                     toggleFavorite={toggleFavorite}
+                    loadingId={loadingId}
                   />
                 </div>
               );
