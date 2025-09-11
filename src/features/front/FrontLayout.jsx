@@ -146,11 +146,11 @@ export default function FrontLayout() {
                   {/* 登入後才顯示會員專屬選項 */}
                   {user.username && (
                     <>
-                      <Link to="/member/order" className="dropdown-item">
+                      <Link to="/member/favorites" className="dropdown-item">
                         <span className="material-symbols-outlined me-2">
-                          article
+                          favorite
                         </span>
-                        訂單紀錄
+                        我的收藏
                       </Link>
                       <Link to="/member/wish" className="dropdown-item">
                         <span className="material-symbols-outlined me-2">
@@ -158,6 +158,13 @@ export default function FrontLayout() {
                         </span>
                         許願徵求
                       </Link>
+                      <Link to="/member/order" className="dropdown-item">
+                        <span className="material-symbols-outlined me-2">
+                          article
+                        </span>
+                        訂單紀錄
+                      </Link>
+
                       <div className="dropdown-divider"></div>
                     </>
                   )}
@@ -171,7 +178,10 @@ export default function FrontLayout() {
                       登出
                     </a>
                   ) : (
-                    <Link to="/login" className="dropdown-item">
+                    <Link
+                      to="/login?redirect=/member/favorites"
+                      className="dropdown-item"
+                    >
                       <span className="material-symbols-outlined me-2">
                         login
                       </span>

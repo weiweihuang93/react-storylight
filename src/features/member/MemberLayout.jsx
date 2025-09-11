@@ -18,13 +18,14 @@ export default function MemberLayout() {
       <div className="py-6">
         <nav className="d-flex justify-content-center gap-3 mb-4">
           <NavLink
-            to="/member/order"
+            to="/member/favorites"
             className={({ isActive }) =>
               `member-button ${isActive ? "active" : ""}`
             }
           >
-            訂單紀錄
+            我的收藏
           </NavLink>
+
           <NavLink
             to="/member/wish"
             className={({ isActive }) =>
@@ -32,6 +33,14 @@ export default function MemberLayout() {
             }
           >
             許願徵求
+          </NavLink>
+          <NavLink
+            to="/member/order"
+            className={({ isActive }) =>
+              `member-button ${isActive ? "active" : ""}`
+            }
+          >
+            訂單紀錄
           </NavLink>
         </nav>
         <Outlet />

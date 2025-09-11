@@ -19,6 +19,7 @@ import AdminLogin from "../features/admin/AdminLogin";
 import MemberLayout from "../features/member/MemberLayout";
 import MemberOrderPage from "../features/member/MemberOrderPage";
 import WishPage from "../features/member/WishPage";
+import FavoritesPage from "../features/member/FavoritesPage";
 
 const routes = [
   {
@@ -49,8 +50,9 @@ const routes = [
         path: "member",
         element: <MemberLayout />,
         children: [
-          { path: "order", element: <MemberOrderPage /> },
+          { path: "favorites", element: <FavoritesPage /> },
           { path: "wish", element: <WishPage /> },
+          { path: "order", element: <MemberOrderPage /> },
         ],
       },
       {

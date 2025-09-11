@@ -87,7 +87,7 @@ export default function WishPage() {
           {/* 模擬已提交列表 */}
           <div className="col-12">
             <div className="card-base p-4 h-100">
-              <h2 className="fs-5 text-center mb-4">許願池</h2>
+              <h2 className="fs-4 text-center mb-4">許願池</h2>
               {requests.length > 0 ? (
                 <div className="row g-3">
                   {requests.map((r) => (
@@ -111,7 +111,7 @@ export default function WishPage() {
           {/* 表單 */}
           <div className="col-12">
             <div className="card-base p-4 h-100">
-              <h1 className="fs-5 text-center mb-4">新增徵求</h1>
+              <h1 className="fs-4 text-center mb-4">新增徵求</h1>
               <form className="row g-3" onSubmit={handleSubmit(onSubmit)}>
                 <div className="col-12">
                   <label htmlFor="title" className="form-label fw-bold mb-2">
