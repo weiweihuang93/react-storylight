@@ -1,15 +1,15 @@
 import axios from "axios";
-import { BASE_URL, API_PATH } from "../data/config";
+import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "@/context/AppContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/thumbs";
-import SkeletonProduct from "../components/skeleton/SkeletonProduct";
-import ProductCard from "../components/skeleton/ProductCard";
+import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
+import ProductCard from "@/components/skeleton/ProductCard";
 
 export default function ProductPage() {
   const { addToCart, cartData } = useContext(AppContext);

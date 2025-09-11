@@ -1,8 +1,8 @@
 import axios from "axios";
-import { BASE_URL, API_PATH } from "../data/config";
+import { BASE_URL, API_PATH } from "@/data/config";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addToast } from "../redux/toastSlice";
+import { addToast } from "@/redux/toastSlice";
 
 export default function MemberOrderPage() {
   const dispatch = useDispatch();

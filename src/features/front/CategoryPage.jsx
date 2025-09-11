@@ -1,9 +1,9 @@
 import axios from "axios";
-import { BASE_URL, API_PATH } from "../data/config";
+import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
-import categories from "../data/categories";
-import { AppContext } from "../context/AppContext";
+import categories from "@/data/categories";
+import { AppContext } from "@/context/AppContext";
 
 export default function CategoryPage() {
   const { addToCart, cartData } = useContext(AppContext);

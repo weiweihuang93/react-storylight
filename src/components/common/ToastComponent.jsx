@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeToast } from "../redux/toastSlice";
+import { removeToast } from "../../redux/toastSlice";
 
 export default function ToastComponent() {
   const messages = useSelector((state) => state.toast);

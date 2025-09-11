@@ -1,7 +1,8 @@
 import { useContext, useEffect } from "react";
 import { Link, matchPath, Outlet, useLocation } from "react-router";
-import { AppContext } from "../context/AppContext";
-import ToastComponent from "../components/ToastComponent";
+import { AppContext } from "@/context/AppContext";
+import ToastComponent from "@/components/common/ToastComponent";
+import { avatar, logo, logoWhite, icFB, icIG, icLINE } from "@/data/images.js";
 
 const routeTitles = [
   { path: "/", title: "首頁｜Storylight 拾光" },
@@ -64,7 +65,7 @@ export default function FrontLayout() {
 
           {/* logo */}
           <Link to="/">
-            <img className="logo" src="./images/logo.png" alt="logo" />
+            <img className="logo" src={logo} alt="logo" />
           </Link>
 
           {/* 導覽選單 */}
@@ -136,11 +137,7 @@ export default function FrontLayout() {
                 >
                   {/* 使用者資訊 */}
                   <h6 className="dropdown-header">
-                    <img
-                      className="avatar"
-                      src="./images/avatar-1.png"
-                      alt="avatar"
-                    />
+                    <img className="avatar" src={avatar} alt="avatar" />
                     {user.username
                       ? `歡迎回來，${user.username}`
                       : "訪客模式中"}
@@ -196,38 +193,21 @@ export default function FrontLayout() {
       {/* footer */}
       <footer className="footer">
         <div className="bg py-6">
-          {/* <img className="wave" src="/images/footer.png" alt="" /> */}
           <div className="container">
             <div className="footer-info">
               <Link to="/" className="logo-link">
-                <img
-                  className="logo"
-                  src="./images/logo-white.png"
-                  alt="logo"
-                />
+                <img className="logo" src={logoWhite} alt="logo" />
               </Link>
               <div className="info-txt">
                 <div className="contact-info">
                   <a>
-                    <img
-                      className="contact"
-                      src="./images/ic-social-fb.png"
-                      alt="contact-fb"
-                    />
+                    <img className="contact" src={icFB} alt="contact-fb" />
                   </a>
                   <a>
-                    <img
-                      className="contact"
-                      src="./images/ic-social-ig.png"
-                      alt="contact-ig"
-                    />
+                    <img className="contact" src={icIG} alt="contact-ig" />
                   </a>
                   <a>
-                    <img
-                      className="contact"
-                      src="./images/ic-social-line.png"
-                      alt="contact-line"
-                    />
+                    <img className="contact" src={icLINE} alt="contact-line" />
                   </a>
                 </div>
                 <p className="fs-5">拾光尋書，等你續寫</p>

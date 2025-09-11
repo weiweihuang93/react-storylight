@@ -1,10 +1,11 @@
 import axios from "axios";
-import { BASE_URL } from "../data/config";
+import { BASE_URL } from "@/data/config";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import ToastComponent from "../components/ToastComponent";
+import ToastComponent from "@/components/common/ToastComponent";
 import { useDispatch } from "react-redux";
-import { addToast } from "../redux/toastSlice";
+import { addToast } from "@/redux/toastSlice";
+import { logo } from "@/data/images.js";
 
 export default function AdminLogin() {
   const [account, setAccount] = useState({
@@ -57,7 +58,7 @@ export default function AdminLogin() {
               <div className="card-base p-5">
                 <div className="text-center mb-4">
                   <a>
-                    <img className="logo" src="./images/logo.png" alt="logo" />
+                    <img className="logo" src={logo} alt="logo" />
                   </a>
                 </div>
                 <h1 className="fs-5 text-accent-300 text-center">管理員登入</h1>

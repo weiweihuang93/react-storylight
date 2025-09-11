@@ -1,10 +1,10 @@
 import axios from "axios";
-import { BASE_URL } from "../data/config";
+import { BASE_URL } from "@/data/config";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
-import ScreenLoading from "../components/ScreenLoading";
+import ScreenLoading from "@/components/common/ScreenLoading";
 import { useDispatch } from "react-redux";
-import { addToast } from "../redux/toastSlice";
+import { addToast } from "@/redux/toastSlice";
 
 export default function CheckedRoute() {
   const [isAuth, setIsAuth] = useState(null);

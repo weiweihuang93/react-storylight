@@ -1,15 +1,16 @@
 import axios from "axios";
-import { BASE_URL, API_PATH } from "../data/config";
+import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
-import categories from "../data/categories";
-import { AppContext } from "../context/AppContext";
+import categories from "@/data/categories";
+import { banner, icAbout1, icAbout2, icAbout3 } from "@/data/images.js";
+import { AppContext } from "@/context/AppContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-import SkeletonProduct from "../components/skeleton/SkeletonProduct";
-import ProductCard from "../components/skeleton/ProductCard";
+import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
+import ProductCard from "@/components/skeleton/ProductCard";
 
 export default function HomePage() {
   const { addToCart, cartData } = useContext(AppContext);
@@ -72,7 +73,7 @@ export default function HomePage() {
       {/* <!-- 輪播圖 --> */}
       <header className="header-banner">
         <div className="header-img">
-          <img src="./images/banner.png" alt="header-banner" />
+          <img src={banner} alt="header-banner" />
           <div className="overlay"></div>
         </div>
         <div className="header-info">
@@ -365,7 +366,7 @@ export default function HomePage() {
               <div className="col-12 col-md-4 d-flex">
                 <div className="about-card card-transY">
                   <div className="bg-diamond-wrapper mb-4">
-                    <img src="./images/ic-1.png" alt="安心清潔" />
+                    <img src={icAbout1} alt="安心清潔" />
                   </div>
                   <div className="about-info">
                     <h3 className="title-badge fs-5">安心清潔</h3>
@@ -379,7 +380,7 @@ export default function HomePage() {
               <div className="col-12 col-md-4 d-flex">
                 <div className="about-card card-transY">
                   <div className="bg-diamond-wrapper mb-4">
-                    <img src="./images/ic-2.png" alt="書況分級" />
+                    <img src={icAbout2} alt="書況分級" />
                   </div>
                   <div className="about-info">
                     <h3 className="title-badge fs-5">書況分級</h3>
@@ -393,7 +394,7 @@ export default function HomePage() {
               <div className="col-12 col-md-4 d-flex">
                 <div className="about-card card-transY">
                   <div className="bg-diamond-wrapper mb-4">
-                    <img src="./images/ic-3.png" alt="快速出貨" />
+                    <img src={icAbout3} alt="快速出貨" />
                   </div>
                   <div className="about-info">
                     <h3 className="title-badge fs-5">快速出貨</h3>

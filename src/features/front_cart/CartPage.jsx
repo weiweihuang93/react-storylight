@@ -1,12 +1,12 @@
 import axios from "axios";
-import { BASE_URL, API_PATH } from "../data/config";
+import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { AppContext } from "../context/AppContext";
-import ScreenLoading from "../components/ScreenLoading";
+import { AppContext } from "@/context/AppContext";
+import ScreenLoading from "@/components/common/ScreenLoading";
 
 import { useDispatch } from "react-redux";
-import { addToast } from "../redux/toastSlice";
+import { addToast } from "@/redux/toastSlice";
 
 export default function CartPage() {
   const { user, cartData, getCartData, isScreenLoading, setIsScreenLoading } =

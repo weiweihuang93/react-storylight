@@ -1,11 +1,11 @@
 import axios from "axios";
-import { BASE_URL, API_PATH } from "../data/config";
+import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "@/context/AppContext";
 import { Link, useNavigate } from "react-router";
 
 import { useDispatch } from "react-redux";
-import { addToast } from "../redux/toastSlice";
+import { addToast } from "@/redux/toastSlice";
 
 export default function CompletePage() {
   const { order } = useContext(AppContext);

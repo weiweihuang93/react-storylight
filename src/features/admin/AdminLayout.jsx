@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "../data/config";
+import { BASE_URL } from "@/data/config";
 import { useEffect } from "react";
 import {
   matchPath,
@@ -8,9 +8,9 @@ import {
   useLocation,
   useNavigate,
 } from "react-router";
-import ToastComponent from "../components/ToastComponent";
+import ToastComponent from "@/components/common/ToastComponent";
 import { useDispatch } from "react-redux";
-import { addToast } from "../redux/toastSlice";
+import { addToast } from "@/redux/toastSlice";
 
 const AdminRoutes = [
   { path: "/admin/order", name: "訂單管理" },
