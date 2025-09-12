@@ -26,7 +26,6 @@
   .title {
     color: $neutral-300;
     font-weight: $font-weight-bold;
-
   }
 
   // active 狀態統一在 col 控制
@@ -40,12 +39,13 @@
   }
 }
 
-.section-cart{
-  .cart-title{
+.section-cart {
+  .cart-title {
     display: flex;
     justify-content: space-between;
   }
-  .card-header, .cart-item{
+  .card-header,
+  .cart-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -68,11 +68,11 @@
     text-align: center;
   }
   // 訂單明細定位
-  .sticky{
+  .sticky {
     position: sticky;
     top: 150px;
   }
-  .cart-button{
+  .cart-button {
     width: 100%;
 
     @media (max-width: 1200px) {
@@ -83,7 +83,7 @@
   }
 }
 
-.section-order{
+.section-order {
   .icon-circle {
     background-color: $light;
     color: $success;
@@ -95,12 +95,12 @@
   }
 
   // complete
-  .order-list{
+  .order-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
-  & li{
+  & li {
     display: flex;
     justify-content: space-between;
   }

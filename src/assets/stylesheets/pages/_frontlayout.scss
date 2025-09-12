@@ -22,7 +22,7 @@
   position: sticky;
   top: 0;
   z-index: 999;
-  
+
   .navbar-toggler {
     border: none;
     font-size: 1.5rem;
@@ -88,7 +88,6 @@
     .nav-sub {
       display: block;
     }
-  
   }
   // 大尺寸 memberbar
   .memberbar {
@@ -99,8 +98,9 @@
       margin: 0;
       padding: 0;
     }
-  
-    .icon-badge, .login-dropdown {
+
+    .icon-badge,
+    .login-dropdown {
       position: relative;
       display: flex;
       align-items: center;
@@ -114,16 +114,16 @@
       transition:
         transform 0.2s ease,
         background-color 0.3s ease;
-  
+
       &:hover {
         background-color: darken($accent-100, 10%);
         transform: translateY(-2px);
       }
-  
+
       &:active {
         transform: scale(0.95);
       }
-  
+
       .badge-count {
         position: absolute;
         top: -6px;
@@ -148,19 +148,18 @@
         left: auto;
       }
 
-      .dropdown-header{
+      .dropdown-header {
         display: flex;
         align-items: center;
-         gap: 8px;
+        gap: 8px;
         padding: 8px 12px;
       }
 
-      .dropdown-item{
+      .dropdown-item {
         display: flex;
         align-items: center;
         padding: 12px 24px;
       }
-
     }
   }
 }
@@ -172,17 +171,7 @@
 
   .bg {
     background-color: $accent-300;
-    // border-radius: 80px 80px 0 0;
     position: relative;
-
-    // .wave {
-    //   position: absolute;
-    //   top: -20px;
-    //   left: 0;
-    //   width: 100%;
-    //   height: auto;
-    //   z-index: 1;
-    // }
   }
 
   .footer-info {
@@ -208,7 +197,7 @@
     }
   }
 
-  .copyright{
+  .copyright {
     font-size: 14px;
   }
 
@@ -218,7 +207,7 @@
       justify-content: center;
       align-items: center;
     }
-    
+
     .contact-info {
       .contact {
         width: 36px;

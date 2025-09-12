@@ -124,8 +124,8 @@
 
 // 新書上架
 // 館藏推薦
-.section-dynamic{
-  .dynamic-info{
+.section-dynamic {
+  .dynamic-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -133,16 +133,16 @@
   }
 
   @media (max-width: 768px) {
-    .dynamic-info{
+    .dynamic-info {
       flex-direction: column;
       align-items: start;
     }
 
-    .info-txt{
+    .info-txt {
       margin-bottom: 1rem;
     }
 
-    .btn-transX{
+    .btn-transX {
       margin-left: auto;
     }
   }
@@ -244,7 +244,7 @@
     left: 10px;
     font-size: 24px;
   }
-  
+
   .accordion-body {
     background: $neutral-200;
   }
