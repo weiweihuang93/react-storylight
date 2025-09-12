@@ -432,10 +432,13 @@ export default function HomePage() {
                   </span>
                 </p>
               </div>
-              <button className="btn btn-lg btn-accent-300 btn-flex btn-transX mt-4">
+              <Link
+                to="/login?redirect=/member/wish"
+                className="btn btn-lg btn-accent-300 btn-flex btn-transX mt-4"
+              >
                 立即徵求
                 <span className="material-symbols-outlined">arrow_forward</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
