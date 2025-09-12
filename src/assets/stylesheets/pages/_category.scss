@@ -122,8 +122,12 @@
           background: $accent-100;
         }
 
-        &:hover i,
-        &.active i {
+        &:hover i {
+          color: $white;
+        }
+
+        &.active {
+          background-color: #fff;
           color: $white;
         }
       }

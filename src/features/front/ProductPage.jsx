@@ -302,10 +302,13 @@ export default function ProductPage() {
                                 ? "active"
                                 : ""
                             }`}
-                            disabled={cartData?.carts?.some(
-                              (cartItem) =>
-                                cartItem.product_id === productData.id
-                            )}
+                            disabled={
+                              loadingId === productData.id ||
+                              cartData?.carts?.some(
+                                (cartItem) =>
+                                  cartItem.product_id === productData.id
+                              )
+                            }
                           >
                             <i className="material-symbols-outlined">
                               {loadingId === productData.id ? (
@@ -314,7 +317,7 @@ export default function ProductPage() {
                                   type="spin"
                                   height={24}
                                   width={24}
-                                  color="#eb8629"
+                                  color="#fff"
                                 />
                               ) : (
                                 "shopping_cart"
@@ -385,6 +388,7 @@ export default function ProductPage() {
                         addToCart={addToCart}
                         isFavorite={!!favorites[product.id]}
                         toggleFavorite={toggleFavorite}
+                        loadingId={loadingId}
                       />
                     </SwiperSlide>
                   );

@@ -178,7 +178,7 @@ export default function CategoryPage() {
                                       type="spin"
                                       height={24}
                                       width={24}
-                                      color="#eb8629"
+                                      color="#fff"
                                     />
                                   ) : (
                                     "shopping_cart"

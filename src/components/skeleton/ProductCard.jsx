@@ -54,7 +54,7 @@ export default function ProductCard({
           <button
             onClick={() => addToCart(product.id)}
             className={`btn btn-icon ${isProductInCart ? "active" : ""}`}
-            disabled={isProductInCart}
+            disabled={isProductInCart || loadingId === product.id}
           >
             <i className="material-symbols-outlined">
               {loadingId === product.id ? (
@@ -63,7 +63,7 @@ export default function ProductCard({
                   type="spin"
                   height={24}
                   width={24}
-                  color="#eb8629"
+                  color="#fff"
                 />
               ) : (
                 "shopping_cart"
