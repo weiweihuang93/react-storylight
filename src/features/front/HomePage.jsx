@@ -1,73 +1,20 @@
-import axios from "axios";
-import { BASE_URL, API_PATH } from "@/data/config";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useMemo } from "react";
 import { Link, NavLink } from "react-router";
 import categories from "@/data/categories";
 import { banner, icAbout1, icAbout2, icAbout3 } from "@/data/images.js";
-import { AppContext } from "@/context/AppContext";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-
-import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
-import ProductCard from "@/components/skeleton/ProductCard";
+import { ProductContext } from "@/context/ProductContext";
+import ProductSwiper from "@/components/product/ProductSwiper";
+import SearchBar from "@/components/product/SearchBar";
 
 export default function HomePage() {
-  const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
-    useContext(AppContext);
-  const [loading, setLoading] = useState(true);
+  const { productsData, loading } = useContext(ProductContext);
 
-  const [productsData, setProductsData] = useState([]);
-  const [products20Data, setProducts20Data] = useState([]);
-  const [featuredProductsData, setFeaturedProductsData] = useState([]);
-
-  const [searchModalVisible, setSearchModalVisible] = useState(false);
-
-  // 取得商品
-  const getAllProducts = async () => {
-    try {
-      const res = await axios.get(
-        `${BASE_URL}/v2/api/${API_PATH}/products/all`
-      );
-      setProductsData(res.data.products);
-      const filter20Products = res.data.products.slice(-20);
-      setProducts20Data(filter20Products);
-
-      const filterFeaturedProducts = res.data.products.filter(
-        (product) => product.price >= 500
-      );
-      setFeaturedProductsData(filterFeaturedProducts);
-    } catch (err) {
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getAllProducts();
-  }, []);
-
-  // 搜尋商品
-  const [keyword, setKeyword] = useState("");
-  const [results, setResults] = useState([]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!keyword.trim()) return;
-
-    // 先篩選 使用商品名稱 (title) 或描述 (description) 進行比對
-    const filteredAndSorted = productsData
-      .filter(
-        (product) =>
-          product.title.toLowerCase().includes(keyword.toLowerCase()) ||
-          product.description.toLowerCase().includes(keyword.toLowerCase())
-      )
-      // 再排序
-      .sort((a, b) => a.price - b.price);
-
-    setResults(filteredAndSorted);
-    setSearchModalVisible(true);
-  };
+  const products20Data = useMemo(() => productsData.slice(-20), [productsData]);
+  const featuredProductsData = useMemo(
+    () => productsData.filter((product) => product.price >= 500),
+    [productsData]
+  );
 
   return (
     <>
@@ -83,24 +30,9 @@ export default function HomePage() {
             <h2 className="fs-lg-3 fs-6 mb-4">
               追尋時光，從經典到絕版，帶你發現更多閱讀寶藏
             </h2>
-            <form className="d-flex align-items-center" onSubmit={handleSearch}>
-              <input
-                className="form-control mx-w-search"
-                type="search"
-                placeholder="請輸入關鍵字"
-                aria-label="Search"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="btn btn-accent-300 btn-arrow border-0"
-                data-bs-toggle="modal"
-                data-bs-target="#searchModal"
-              >
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </button>
-            </form>
+
+            <SearchBar productsData={productsData} />
+
             <Link
               to="/#category"
               className="btn btn-lg btn-accent-300 btn-flex btn-transX mt-4"
@@ -110,85 +42,6 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-
-        {/* <!-- 搜尋結果 Modal --> */}
-        {searchModalVisible && (
-          <div
-            className="modal fade show d-block"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-          >
-            <div className="modal-dialog modal-lg modal-dialog-centered">
-              <div className="modal-content rounded-3 shadow">
-                {/* header */}
-                <div className="modal-header">
-                  <h5 className="modal-title fw-bold">搜尋結果</h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setSearchModalVisible(false)}
-                  ></button>
-                </div>
-
-                {/* body */}
-                <div className="modal-body">
-                  <p className="text-muted mb-4">
-                    關鍵字：「
-                    <span className="fw-semibold text-dark">{keyword}</span>
-                    」共找到{" "}
-                    <span className="fw-semibold">{results.length}</span> 筆結果
-                  </p>
-
-                  {results.length > 0 ? (
-                    <div className="list-group">
-                      {results.map((product) => (
-                        <NavLink
-                          key={product.id}
-                          to={`/${product.category}/${product.id}`}
-                          className="text-decoration-none text-dark"
-                          onClick={() => setSearchModalVisible(false)} // 點擊後關閉
-                        >
-                          <div className="list-group-item d-flex align-items-center">
-                            <img
-                              src={product.imageUrl}
-                              alt={product.title}
-                              className="me-3 rounded"
-                              style={{
-                                width: "60px",
-                                height: "80px",
-                                objectFit: "cover",
-                              }}
-                            />
-                            <div>
-                              <h6 className="mb-1 fw-semibold">
-                                {product.title}
-                              </h6>
-                              <small className="text-muted">
-                                NT$ {product.price}
-                              </small>
-                            </div>
-                          </div>
-                        </NavLink>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-danger">沒有找到相關商品</p>
-                  )}
-                </div>
-
-                {/* footer */}
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setSearchModalVisible(false)}
-                  >
-                    關閉
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </header>
 
       {/* 最新消息 */}
@@ -263,96 +116,18 @@ export default function HomePage() {
       </section>
 
       {/* 館藏推薦 */}
-      <section className="section-product">
-        <div className="container py-6">
-          <div className="section-title mb-6">
-            <h2 className="fs-lg-2 fs-3 title-decoration">館藏推薦</h2>
-          </div>
-
-          <Swiper
-            className="py-3"
-            spaceBetween={16}
-            slidesPerView={1}
-            loop={featuredProductsData.length >= 5}
-            breakpoints={{
-              768: { slidesPerView: 3 },
-              992: { slidesPerView: 4 },
-              1200: { slidesPerView: 5 },
-            }}
-          >
-            {loading
-              ? Array.from({ length: 5 }).map((_, idx) => (
-                  <SwiperSlide key={idx}>
-                    <SkeletonProduct />
-                  </SwiperSlide>
-                ))
-              : featuredProductsData.map((product) => {
-                  const isProductInCart = cartData.carts.some(
-                    (cartItem) => cartItem.product_id === product.id
-                  );
-
-                  return (
-                    <SwiperSlide key={product.id}>
-                      <ProductCard
-                        product={product}
-                        isProductInCart={isProductInCart}
-                        addToCart={addToCart}
-                        isFavorite={!!favorites[product.id]}
-                        toggleFavorite={toggleFavorite}
-                        loadingId={loadingId}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-          </Swiper>
-        </div>
-      </section>
+      <ProductSwiper
+        title="館藏推薦"
+        productsData={featuredProductsData}
+        loading={loading}
+      />
 
       {/* 新書上架 */}
-      <section className="section-product">
-        <div className="container py-6">
-          <div className="section-title mb-6">
-            <h2 className="fs-lg-2 fs-3 title-decoration">新書上架</h2>
-          </div>
-
-          <Swiper
-            className="py-3"
-            spaceBetween={16}
-            slidesPerView={1}
-            loop={products20Data.length >= 5}
-            breakpoints={{
-              768: { slidesPerView: 3 },
-              992: { slidesPerView: 4 },
-              1200: { slidesPerView: 5 },
-            }}
-          >
-            {loading
-              ? Array.from({ length: 5 }).map((_, idx) => (
-                  <SwiperSlide key={idx}>
-                    <SkeletonProduct />
-                  </SwiperSlide>
-                ))
-              : products20Data.map((product) => {
-                  const isProductInCart = cartData.carts.some(
-                    (cartItem) => cartItem.product_id === product.id
-                  );
-
-                  return (
-                    <SwiperSlide key={product.id}>
-                      <ProductCard
-                        product={product}
-                        isProductInCart={isProductInCart}
-                        addToCart={addToCart}
-                        isFavorite={!!favorites[product.id]}
-                        toggleFavorite={toggleFavorite}
-                        loadingId={loadingId}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-          </Swiper>
-        </div>
-      </section>
+      <ProductSwiper
+        title="最新上架"
+        productsData={products20Data}
+        loading={loading}
+      />
 
       {/* 關於我們｜書籍如何處理？ */}
       <section id="about" className="section-about py-5">

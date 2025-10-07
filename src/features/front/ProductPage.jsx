@@ -8,8 +8,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/thumbs";
-import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
-import ProductCard from "@/components/skeleton/ProductCard";
+import SkeletonProduct from "@/components/product/SkeletonProduct";
+import ProductCard from "@/components/product/ProductCard";
 import ReactLoading from "react-loading";
 
 export default function ProductPage() {
