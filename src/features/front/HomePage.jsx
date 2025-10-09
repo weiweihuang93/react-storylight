@@ -116,18 +116,29 @@ export default function HomePage() {
       </section>
 
       {/* 館藏推薦 */}
-      <ProductSwiper
-        title="館藏推薦"
-        productsData={featuredProductsData}
-        loading={loading}
-      />
+      <section className="section-product">
+        <div className="container py-6">
+          <div className="section-title mb-6">
+            <h2 className="fs-lg-2 fs-3 title-decoration">館藏推薦</h2>
+          </div>
+
+          <ProductSwiper
+            productsData={featuredProductsData}
+            loading={loading}
+          />
+        </div>
+      </section>
 
       {/* 新書上架 */}
-      <ProductSwiper
-        title="最新上架"
-        productsData={products20Data}
-        loading={loading}
-      />
+      <section className="section-product">
+        <div className="container py-6">
+          <div className="section-title mb-6">
+            <h2 className="fs-lg-2 fs-3 title-decoration">最新上架</h2>
+          </div>
+
+          <ProductSwiper productsData={products20Data} loading={loading} />
+        </div>
+      </section>
 
       {/* 關於我們｜書籍如何處理？ */}
       <section id="about" className="section-about py-5">
