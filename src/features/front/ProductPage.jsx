@@ -1,32 +1,31 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import { AppContext } from "@/context/AppContext";
+import { ProductContext } from "@/context/ProductContext";
+import ProductSwiper from "@/components/product/ProductSwiper";
+import ReactLoading from "react-loading";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/thumbs";
-import SkeletonProduct from "@/components/product/SkeletonProduct";
-import ProductCard from "@/components/product/ProductCard";
-import ReactLoading from "react-loading";
 
 export default function ProductPage() {
+  const { categoryName, productId } = useParams();
   const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
     useContext(AppContext);
 
-  const [productLoading, setProductLoading] = useState(true);
-  const [categoryLoading, setCategoryLoading] = useState(true);
+  const { productsData, loading } = useContext(ProductContext);
 
+  const [productLoading, setProductLoading] = useState(false);
   const [productData, setProductData] = useState(null);
-  const [productsData, setProductsData] = useState([]);
-  const { categoryName, productId } = useParams();
-
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // 取得商品Id
   const getProductId = async () => {
+    setProductLoading(true);
     try {
       const res = await axios.get(
         `${BASE_URL}/v2/api/${API_PATH}/product/${productId}`
@@ -38,25 +37,9 @@ export default function ProductPage() {
     }
   };
 
-  // 取得分類商品
-  const getCategoryProducts = async (category) => {
-    try {
-      const res = await axios.get(`${BASE_URL}/v2/api/${API_PATH}/products`, {
-        params: { category },
-      });
-
-      const filter10Products = res.data.products.slice(-10);
-      setProductsData(filter10Products);
-    } catch (err) {
-    } finally {
-      setCategoryLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    setCategoryLoading(true);
-    getCategoryProducts(categoryName);
-  }, [categoryName]);
+  const getCategoryProducts = useMemo(() => {
+    return productsData.filter((product) => product.category === categoryName);
+  }, [productData, categoryName]);
 
   useEffect(() => {
     setThumbsSwiper(null); // 先清掉舊的縮圖
@@ -358,42 +341,7 @@ export default function ProductPage() {
           <h2 className="fs-lg-4 fs-5 text-accent-300 text-center mb-6">
             瀏覽此商品的人，也瀏覽...
           </h2>
-          <Swiper
-            className="py-3"
-            spaceBetween={16}
-            slidesPerView={1}
-            loop={productsData.length >= 5}
-            breakpoints={{
-              768: { slidesPerView: 3 },
-              992: { slidesPerView: 4 },
-              1200: { slidesPerView: 5 },
-            }}
-          >
-            {categoryLoading
-              ? Array.from({ length: 5 }).map((_, idx) => (
-                  <SwiperSlide key={idx}>
-                    <SkeletonProduct />
-                  </SwiperSlide>
-                ))
-              : productsData.map((product) => {
-                  const isProductInCart = cartData.carts.some(
-                    (cartItem) => cartItem.product_id === product.id
-                  );
-
-                  return (
-                    <SwiperSlide key={product.id}>
-                      <ProductCard
-                        product={product}
-                        isProductInCart={isProductInCart}
-                        addToCart={addToCart}
-                        isFavorite={!!favorites[product.id]}
-                        toggleFavorite={toggleFavorite}
-                        loadingId={loadingId}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-          </Swiper>
+          <ProductSwiper productsData={getCategoryProducts} loading={loading} />
         </div>
       </section>
     </>
