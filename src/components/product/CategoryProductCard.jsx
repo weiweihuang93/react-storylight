@@ -2,10 +2,11 @@ import { memo, useContext } from "react";
 import { NavLink } from "react-router";
 import ReactLoading from "react-loading";
 import { AppContext } from "@/context/AppContext";
+import { CartContext } from "@/context/CartContext";
 
 export default memo(function CategoryProductCard({ product }) {
-  const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
-    useContext(AppContext);
+  const { favorites, toggleFavorite } = useContext(AppContext);
+  const { addToCart, cartData, loadingId } = useContext(CartContext);
 
   const isProductInCart = cartData.carts.some(
     (cartItem) => cartItem.product_id === product.id
