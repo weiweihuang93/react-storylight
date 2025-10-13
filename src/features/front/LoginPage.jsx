@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { AppContext } from "@/context/AppContext";
+import { UserContext } from "@/context/UserContext";
 import { logo } from "@/data/images.js";
 
 export default function LoginPage() {
-  const { login, user } = useContext(AppContext);
+  const { login, user } = useContext(UserContext);
   const [account, setAccount] = useState({
     username: "",
     password: "",

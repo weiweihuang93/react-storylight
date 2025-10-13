@@ -1,13 +1,13 @@
 import { useContext } from "react";
-import { AppContext } from "@/context/AppContext";
 import SkeletonProduct from "@/components/product/SkeletonProduct";
 import ProductCard from "@/components/product/ProductCard";
+import { FavoritesContext } from "@/context/FavoritesContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 export default function ProductSwiper({ productsData, loading }) {
-  const { favorites, toggleFavorite } = useContext(AppContext);
+  const { favorites, toggleFavorite } = useContext(FavoritesContext);
 
   return (
     <Swiper

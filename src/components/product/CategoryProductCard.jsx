@@ -1,11 +1,11 @@
 import { memo, useContext } from "react";
 import { NavLink } from "react-router";
 import ReactLoading from "react-loading";
-import { AppContext } from "@/context/AppContext";
+import { FavoritesContext } from "@/context/FavoritesContext";
 import { CartContext } from "@/context/CartContext";
 
 export default memo(function CategoryProductCard({ product }) {
-  const { favorites, toggleFavorite } = useContext(AppContext);
+  const { favorites, toggleFavorite } = useContext(FavoritesContext);
   const { addToCart, cartData, loadingId } = useContext(CartContext);
 
   const isProductInCart = cartData.carts.some(

@@ -1,8 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, matchPath, Outlet, useLocation } from "react-router";
-import { AppContext } from "@/context/AppContext";
+import { logo, logoWhite, icFB, icIG, icLINE } from "@/data/images.js";
+
 import ToastComponent from "@/components/common/ToastComponent";
-import { avatar, logo, logoWhite, icFB, icIG, icLINE } from "@/data/images.js";
+import CartIcon from "@/components/cart/CartIcon";
+import MemberIcon from "@/components/member/MemberIcon";
 
 const routeTitles = [
   { path: "/", title: "首頁｜Storylight 拾光" },
@@ -20,8 +22,6 @@ const routeTitles = [
 ];
 
 export default function FrontLayout() {
-  const { cartData, user, logout } = useContext(AppContext);
-
   function ScrollToHash() {
     const { hash } = useLocation();
 
@@ -110,86 +110,9 @@ export default function FrontLayout() {
           {/* memberbar */}
           <div className="memberbar order-2 order-lg-3">
             <ul>
-              <li className="icon-badge">
-                <Link to="/cart" className="d-flex">
-                  <span className="material-symbols-outlined">
-                    shopping_cart{" "}
-                    <span className="badge badge-secondary badge-count">
-                      {cartData?.carts?.length}
-                    </span>
-                  </span>
-                </Link>
-              </li>
+              <CartIcon />
               {/* 會員下拉選單 */}
-              <li className="dropdown login-dropdown">
-                <a
-                  className="dropdown-toggle d-flex"
-                  id="memberDropdown"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <span className="material-symbols-outlined">person</span>
-                </a>
-
-                <div
-                  className="dropdown-menu dropdown-menu-position"
-                  aria-labelledby="memberDropdown"
-                >
-                  {/* 使用者資訊 */}
-                  <h6 className="dropdown-header">
-                    <img className="avatar" src={avatar} alt="avatar" />
-                    {user.username
-                      ? `歡迎回來，${user.username}`
-                      : "訪客模式中"}
-                  </h6>
-
-                  {/* 登入後才顯示會員專屬選項 */}
-                  {user.username && (
-                    <>
-                      <Link to="/member/favorites" className="dropdown-item">
-                        <span className="material-symbols-outlined me-2">
-                          favorite
-                        </span>
-                        我的收藏
-                      </Link>
-                      <Link to="/member/wish" className="dropdown-item">
-                        <span className="material-symbols-outlined me-2">
-                          folded_hands
-                        </span>
-                        許願徵求
-                      </Link>
-                      <Link to="/member/order" className="dropdown-item">
-                        <span className="material-symbols-outlined me-2">
-                          article
-                        </span>
-                        訂單紀錄
-                      </Link>
-
-                      <div className="dropdown-divider"></div>
-                    </>
-                  )}
-
-                  {/* 登入 / 登出 */}
-                  {user.username ? (
-                    <a className="dropdown-item" onClick={logout}>
-                      <span className="material-symbols-outlined me-2">
-                        logout
-                      </span>
-                      登出
-                    </a>
-                  ) : (
-                    <Link
-                      to="/login?redirect=/member/favorites"
-                      className="dropdown-item"
-                    >
-                      <span className="material-symbols-outlined me-2">
-                        login
-                      </span>
-                      登入
-                    </Link>
-                  )}
-                </div>
-              </li>
+              <MemberIcon />
             </ul>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { memo, useContext } from "react";
-import { AppContext } from "@/context/AppContext";
+import { FavoritesContext } from "@/context/FavoritesContext";
 import { CartContext } from "@/context/CartContext";
 import ReactLoading from "react-loading";
 
@@ -13,7 +13,7 @@ export default memo(function ProductDetailCard({
   thumbsSwiper,
   setThumbsSwiper,
 }) {
-  const { favorites, toggleFavorite } = useContext(AppContext);
+  const { favorites, toggleFavorite } = useContext(FavoritesContext);
   const { addToCart, cartData, loadingId } = useContext(CartContext);
 
   return (

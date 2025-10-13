@@ -1,19 +1,18 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "@/context/AppContext";
+import { UserContext } from "@/context/UserContext";
 import { useNavigate } from "react-router";
 
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
 
 export default function MemberPage() {
-  const navigate = useNavigate();
-  const { user } = useContext(AppContext);
-
+  const { user } = useContext(UserContext);
   const [search, setSearch] = useState("");
   const [orderData, setOrderData] = useState({});
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // 搜尋訂單

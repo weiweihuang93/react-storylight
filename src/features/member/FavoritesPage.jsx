@@ -1,14 +1,15 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "@/context/AppContext";
-import SkeletonProduct from "@/components/skeleton/SkeletonProduct";
-import ProductCard from "@/components/skeleton/ProductCard";
 import { Link } from "react-router";
+import SkeletonProduct from "@/components/product/SkeletonProduct";
+import ProductCard from "@/components/product/ProductCard";
+import { FavoritesContext } from "@/context/FavoritesContext";
+import { CartContext } from "@/context/CartContext";
 
 export default function FavoritesPage() {
-  const { addToCart, cartData, loadingId, favorites, toggleFavorite } =
-    useContext(AppContext);
+  const { cartData, addToCart, loadingId } = useContext(CartContext);
+  const { favorites, toggleFavorite } = useContext(FavoritesContext);
   const [loading, setLoading] = useState(true);
   const [productsData, setProductsData] = useState([]);
 

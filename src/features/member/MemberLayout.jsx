@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
-import { AppContext } from "@/context/AppContext";
+import { UserContext } from "@/context/UserContext";
 import { Outlet, NavLink, useNavigate } from "react-router";
 
 export default function MemberLayout() {
-  const { user } = useContext(AppContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   // 基本驗證

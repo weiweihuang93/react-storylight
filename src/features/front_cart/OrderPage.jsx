@@ -2,14 +2,17 @@ import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { AppContext } from "@/context/AppContext";
-import { useNavigate } from "react-router";
-
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
+import { useNavigate } from "react-router";
+import { UserContext } from "@/context/UserContext";
+import { CartContext } from "@/context/CartContext";
+import { OrderContext } from "@/context/OrderContext";
 
 export default function OrderPage() {
-  const { user, cartData, setCartData, setOrder } = useContext(AppContext);
+  const { user } = useContext(UserContext);
+  const { cartData, setCartData } = useContext(CartContext);
+  const { setOrder } = useContext(OrderContext);
   const navigate = useNavigate();
 
   const {

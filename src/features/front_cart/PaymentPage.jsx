@@ -1,16 +1,14 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useEffect } from "react";
-import { AppContext } from "@/context/AppContext";
 import { useNavigate } from "react-router";
-
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
+import { OrderContext } from "@/context/OrderContext";
 
 export default function PaymentPage() {
-  const { order } = useContext(AppContext);
+  const { order } = useContext(OrderContext);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   useEffect(() => {

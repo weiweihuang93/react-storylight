@@ -2,22 +2,23 @@ import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { AppContext } from "@/context/AppContext";
+import { UserContext } from "@/context/UserContext";
+import { CartContext } from "@/context/CartContext";
 import ScreenLoading from "@/components/common/ScreenLoading";
 
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
 
 export default function CartPage() {
-  const { user, cartData, getCartData, isScreenLoading, setIsScreenLoading } =
-    useContext(AppContext);
+  const { user } = useContext(UserContext);
+  const { cartData, getCartData } = useContext(CartContext);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [couponCode, setCouponCode] = useState("");
+  const [isScreenLoading, setIsScreenLoading] = useState(false);
   const [discount, setDiscount] = useState(null);
-
-  const dispatch = useDispatch();
 
   const delAllCart = async () => {
     setIsScreenLoading(true);
