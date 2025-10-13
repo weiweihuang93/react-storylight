@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
 
@@ -17,37 +17,40 @@ export default function FavoritesProvider({ children }) {
     }
   }, []);
 
-  // 切換收藏
-  const toggleFavorite = (productId) => {
-    let newFavorites;
-    setFavorites((prevState) => {
-      newFavorites = {
-        ...prevState,
-        [productId]: !prevState[productId],
-      };
-      return newFavorites;
-    });
+  // 使用 useCallback 穩定函數引用
+  const toggleFavorite = useCallback(
+    (productId) => {
+      let newFavorites;
+      setFavorites((prevState) => {
+        newFavorites = {
+          ...prevState,
+          [productId]: !prevState[productId],
+        };
+        return newFavorites;
+      });
 
-    // 同步 localStorage
-    localStorage.setItem("favorites", JSON.stringify(newFavorites));
+      // 同步 localStorage
+      localStorage.setItem("favorites", JSON.stringify(newFavorites));
 
-    // 呼叫 toast
-    if (newFavorites[productId]) {
-      dispatch(
-        addToast({
-          success: true,
-          message: "已加入收藏",
-        })
-      );
-    } else {
-      dispatch(
-        addToast({
-          success: true,
-          message: "已取消收藏",
-        })
-      );
-    }
-  };
+      // 呼叫 toast
+      if (newFavorites[productId]) {
+        dispatch(
+          addToast({
+            success: true,
+            message: "已加入收藏",
+          })
+        );
+      } else {
+        dispatch(
+          addToast({
+            success: true,
+            message: "已取消收藏",
+          })
+        );
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <FavoritesContext.Provider

@@ -1,14 +1,13 @@
 import { NavLink } from "react-router";
 import ReactLoading from "react-loading";
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import { CartContext } from "@/context/CartContext";
 
-export default function ProductCard({ product, isFavorite, toggleFavorite }) {
-  const { addToCart, cartData, loadingId } = useContext(CartContext);
+function ProductCard({ product, isFavorite, toggleFavorite }) {
+  const { addToCart, cartProductIds, loadingId } = useContext(CartContext);
 
-  const isProductInCart = cartData.carts.some(
-    (cartItem) => cartItem.product_id === product.id
-  );
+  // 使用 Set 進行 O(1) 查詢，取代原本的 O(n) 遍歷
+  const isProductInCart = cartProductIds.has(product.id);
 
   return (
     <div className="product-card card-transY">
@@ -19,7 +18,11 @@ export default function ProductCard({ product, isFavorite, toggleFavorite }) {
       >
         <div className="card-img-wrapper">
           {product.imageUrl && (
-            <img src={product.imageUrl} alt={product.title} />
+            <img
+              src={product.imageUrl}
+              alt={product.title}
+              loading="lazy"
+            />
           )}
           <span className="card-img-tag">{product.condition}</span>
         </div>
@@ -74,3 +77,6 @@ export default function ProductCard({ product, isFavorite, toggleFavorite }) {
     </div>
   );
 }
+
+// 使用 memo 避免不必要的重新渲染
+export default memo(ProductCard);

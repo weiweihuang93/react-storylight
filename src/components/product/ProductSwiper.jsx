@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import SkeletonProduct from "@/components/product/SkeletonProduct";
 import ProductCard from "@/components/product/ProductCard";
 import { FavoritesContext } from "@/context/FavoritesContext";
@@ -6,7 +6,7 @@ import { FavoritesContext } from "@/context/FavoritesContext";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-export default function ProductSwiper({ productsData, loading }) {
+function ProductSwiper({ productsData, loading }) {
   const { favorites, toggleFavorite } = useContext(FavoritesContext);
 
   return (
@@ -39,3 +39,6 @@ export default function ProductSwiper({ productsData, loading }) {
     </Swiper>
   );
 }
+
+// 使用 memo 避免不必要的重新渲染
+export default memo(ProductSwiper);

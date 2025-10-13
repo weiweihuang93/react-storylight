@@ -14,7 +14,7 @@ export default memo(function ProductDetailCard({
   setThumbsSwiper,
 }) {
   const { favorites, toggleFavorite } = useContext(FavoritesContext);
-  const { addToCart, cartData, loadingId } = useContext(CartContext);
+  const { addToCart, cartProductIds, loadingId } = useContext(CartContext);
 
   return (
     <div className="" key={productData.id}>
@@ -34,7 +34,11 @@ export default memo(function ProductDetailCard({
                 .map((url, index) => (
                   <SwiperSlide key={index}>
                     <div className="card-img-wrapper">
-                      <img src={url} alt={`book-${index}`} />
+                      <img
+                        src={url}
+                        alt={`book-${index}`}
+                        loading={index === 0 ? "eager" : "lazy"}
+                      />
                       <span className="card-img-tag">
                         {productData.condition}
                       </span>
@@ -54,7 +58,7 @@ export default memo(function ProductDetailCard({
                 .filter((url) => url)
                 .map((url, index) => (
                   <SwiperSlide key={index}>
-                    <img src={url} alt={`thumb-${index}`} />
+                    <img src={url} alt={`thumb-${index}`} loading="lazy" />
                   </SwiperSlide>
                 ))}
             </Swiper>
@@ -118,17 +122,11 @@ export default memo(function ProductDetailCard({
               <button
                 onClick={() => addToCart(productData.id)}
                 className={`btn btn-icon ${
-                  cartData?.carts?.some(
-                    (cartItem) => cartItem.product_id === productData.id
-                  )
-                    ? "active"
-                    : ""
+                  cartProductIds.has(productData.id) ? "active" : ""
                 }`}
                 disabled={
                   loadingId === productData.id ||
-                  cartData?.carts?.some(
-                    (cartItem) => cartItem.product_id === productData.id
-                  )
+                  cartProductIds.has(productData.id)
                 }
               >
                 <i className="material-symbols-outlined">

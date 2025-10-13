@@ -6,11 +6,10 @@ import { CartContext } from "@/context/CartContext";
 
 export default memo(function CategoryProductCard({ product }) {
   const { favorites, toggleFavorite } = useContext(FavoritesContext);
-  const { addToCart, cartData, loadingId } = useContext(CartContext);
+  const { addToCart, cartProductIds, loadingId } = useContext(CartContext);
 
-  const isProductInCart = cartData.carts.some(
-    (cartItem) => cartItem.product_id === product.id
-  );
+  // 使用 Set 進行 O(1) 查詢
+  const isProductInCart = cartProductIds.has(product.id);
 
   return (
     <div className="product-card card-transY">
@@ -22,7 +21,11 @@ export default memo(function CategoryProductCard({ product }) {
             to={`/${product.category}/${product.id}`}
           >
             <div className="card-img-wrapper">
-              <img src={product.imageUrl} alt={product.title} />
+              <img
+                src={product.imageUrl}
+                alt={product.title}
+                loading="lazy"
+              />
               <span className="card-img-tag">{product.condition}</span>
             </div>
           </NavLink>

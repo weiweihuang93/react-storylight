@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_URL, API_PATH } from "@/data/config";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useMemo, useCallback } from "react";
 
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
@@ -12,6 +12,11 @@ export default function CartProvider({ children }) {
   const [loadingId, setLoadingId] = useState(null);
   const dispatch = useDispatch();
 
+  // 使用 Set 快速查詢商品是否在購物車中 O(1)
+  const cartProductIds = useMemo(() => {
+    return new Set(cartData.carts.map((item) => item.product_id));
+  }, [cartData.carts]);
+
   // 取得購物車資料
   const getCartData = async () => {
     try {
@@ -20,23 +25,27 @@ export default function CartProvider({ children }) {
     } catch (err) {}
   };
 
-  const addToCart = async (productId) => {
-    setLoadingId(productId);
-    try {
-      const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/cart`, {
-        data: {
-          product_id: productId,
-          qty: 1,
-        },
-      });
-      dispatch(addToast(res.data));
-      await getCartData();
-    } catch (err) {
-      dispatch(addToast(err.response.data));
-    } finally {
-      setLoadingId(null);
-    }
-  };
+  // 使用 useCallback 穩定函數引用
+  const addToCart = useCallback(
+    async (productId) => {
+      setLoadingId(productId);
+      try {
+        const res = await axios.post(`${BASE_URL}/v2/api/${API_PATH}/cart`, {
+          data: {
+            product_id: productId,
+            qty: 1,
+          },
+        });
+        dispatch(addToast(res.data));
+        await getCartData();
+      } catch (err) {
+        dispatch(addToast(err.response.data));
+      } finally {
+        setLoadingId(null);
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     getCartData();
@@ -44,7 +53,14 @@ export default function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ cartData, setCartData, addToCart, loadingId, getCartData }}
+      value={{
+        cartData,
+        setCartData,
+        addToCart,
+        loadingId,
+        getCartData,
+        cartProductIds, // 提供 Set 給子元件使用
+      }}
     >
       {children}
     </CartContext.Provider>
