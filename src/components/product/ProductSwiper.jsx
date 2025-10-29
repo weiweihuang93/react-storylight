@@ -1,14 +1,10 @@
-import { useContext, memo } from "react";
 import SkeletonProduct from "@/components/product/SkeletonProduct";
 import ProductCard from "@/components/product/ProductCard";
-import { FavoritesContext } from "@/context/FavoritesContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-function ProductSwiper({ productsData, loading }) {
-  const { favorites, toggleFavorite } = useContext(FavoritesContext);
-
+export default function ProductSwiper({ productsData, loading }) {
   return (
     <Swiper
       className="py-3"
@@ -29,16 +25,9 @@ function ProductSwiper({ productsData, loading }) {
           ))
         : productsData.map((product) => (
             <SwiperSlide key={product.id}>
-              <ProductCard
-                product={product}
-                isFavorite={!!favorites[product.id]}
-                toggleFavorite={toggleFavorite}
-              />
+              <ProductCard product={product} />
             </SwiperSlide>
           ))}
     </Swiper>
   );
 }
-
-// 使用 memo 避免不必要的重新渲染
-export default memo(ProductSwiper);

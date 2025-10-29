@@ -1,42 +1,20 @@
-import axios from "axios";
-import { BASE_URL, API_PATH } from "@/data/config";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router";
 import SkeletonProduct from "@/components/product/SkeletonProduct";
 import ProductCard from "@/components/product/ProductCard";
 import { FavoritesContext } from "@/context/FavoritesContext";
-import { CartContext } from "@/context/CartContext";
+import { ProductContext } from "@/context/ProductContext";
 
 export default function FavoritesPage() {
-  const { cartData, addToCart, loadingId } = useContext(CartContext);
-  const { favorites, toggleFavorite } = useContext(FavoritesContext);
-  const [loading, setLoading] = useState(true);
-  const [productsData, setProductsData] = useState([]);
-
-  // 取得商品
-  const getAllProducts = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `${BASE_URL}/v2/api/${API_PATH}/products/all`
-      );
-      setProductsData(res.data.products);
-    } catch (err) {
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getAllProducts();
-  }, []);
+  const { favorites } = useContext(FavoritesContext);
+  const { productsData, loading } = useContext(ProductContext);
 
   // 取得收藏的商品 ID
   const favoriteId = Object.keys(favorites).filter((id) => favorites[id]);
 
   // 篩選收藏商品
   const favoriteProducts = productsData.filter((product) =>
-    favoriteId.includes(product.id.toString())
+    favoriteId.includes(product.id)
   );
 
   return (
@@ -71,23 +49,11 @@ export default function FavoritesPage() {
             </div>
           ) : (
             // 顯示收藏商品
-            favoriteProducts.map((product) => {
-              const isProductInCart = cartData.carts.some(
-                (cartItem) => cartItem.product_id === product.id
-              );
-              return (
-                <div className="col-12 col-md-4" key={product.id}>
-                  <ProductCard
-                    product={product}
-                    isProductInCart={isProductInCart}
-                    addToCart={addToCart}
-                    isFavorite={!!favorites[product.id]}
-                    toggleFavorite={toggleFavorite}
-                    loadingId={loadingId}
-                  />
-                </div>
-              );
-            })
+            favoriteProducts.map((product) => (
+              <div className="col-12 col-md-4" key={product.id}>
+                <ProductCard product={product} />
+              </div>
+            ))
           )}
         </div>
       </div>

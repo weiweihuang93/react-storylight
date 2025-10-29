@@ -4,7 +4,7 @@ import categories from "@/data/categories";
 
 import { ProductContext } from "@/context/ProductContext";
 import SkeletonCategoryProduct from "@/components/product/SkeletonCategoryProduct";
-import CategoryProductList from "@/components/product/CategoryProductList";
+import CategoryProductCard from "@/components/product/CategoryProductCard";
 import Pagination from "@/components/common/Pagination";
 
 export default function CategoryPage() {
@@ -73,7 +73,11 @@ export default function CategoryPage() {
               </div>
             ) : (
               <>
-                <CategoryProductList products={currentProducts} />
+                <div className="row g-3">
+                  {currentProducts.map((product) => (
+                    <CategoryProductCard key={product.id} product={product} />
+                  ))}
+                </div>
                 <Pagination
                   pagination={{
                     current_page: currentPage,

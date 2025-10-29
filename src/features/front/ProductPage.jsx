@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import { ProductContext } from "@/context/ProductContext";
 import ProductSwiper from "@/components/product/ProductSwiper";
@@ -11,15 +11,12 @@ export default function ProductPage() {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // 取單一商品資料
-  const productData = useMemo(
-    () => productsData.find((p) => p.id === productId),
-    [productsData, productId]
-  );
+  const productData = productsData.find((p) => p.id === productId);
 
   // 取同分類商品
-  const categoryProducts = useMemo(() => {
-    return productsData.filter((product) => product.category === categoryName);
-  }, [productsData, categoryName]);
+  const categoryProducts = productsData.filter(
+    (product) => product.category === categoryName
+  );
 
   useEffect(() => {
     setThumbsSwiper(null); // 先清掉舊的縮圖

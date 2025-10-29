@@ -1,4 +1,4 @@
-import { memo, useContext } from "react";
+import { useContext } from "react";
 import { FavoritesContext } from "@/context/FavoritesContext";
 import { CartContext } from "@/context/CartContext";
 import ReactLoading from "react-loading";
@@ -8,7 +8,7 @@ import { Thumbs } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/thumbs";
 
-export default memo(function ProductDetailCard({
+export default function ProductDetailCard({
   productData,
   thumbsSwiper,
   setThumbsSwiper,
@@ -161,4 +161,4 @@ export default memo(function ProductDetailCard({
       </div>
     </div>
   );
-});
+}

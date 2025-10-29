@@ -1,10 +1,10 @@
-import { memo, useContext } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router";
 import ReactLoading from "react-loading";
 import { FavoritesContext } from "@/context/FavoritesContext";
 import { CartContext } from "@/context/CartContext";
 
-export default memo(function CategoryProductCard({ product }) {
+export default function CategoryProductCard({ product }) {
   const { favorites, toggleFavorite } = useContext(FavoritesContext);
   const { addToCart, cartProductIds, loadingId } = useContext(CartContext);
 
@@ -89,4 +89,4 @@ export default memo(function CategoryProductCard({ product }) {
       </div>
     </div>
   );
-});
+}
