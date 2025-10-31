@@ -1,6 +1,4 @@
-import axios from "axios";
-import { BASE_URL } from "@/data/config";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import {
   matchPath,
   NavLink,
@@ -11,6 +9,7 @@ import {
 import ToastComponent from "@/components/common/ToastComponent";
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
+import { AdminContext } from "@/context/AdminContext";
 
 const AdminRoutes = [
   { path: "/admin/order", name: "訂單管理" },
@@ -27,7 +26,10 @@ const adminRouteTitles = [
 ];
 
 export default function AdminLayout() {
+  const { logout } = useContext(AdminContext);
+  const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // 設置 body 背景色
@@ -42,8 +44,6 @@ export default function AdminLayout() {
     };
   }, []);
 
-  const location = useLocation();
-
   useEffect(() => {
     const matched = adminRouteTitles.find((r) =>
       matchPath(r.path, location.pathname)
@@ -51,36 +51,19 @@ export default function AdminLayout() {
     document.title = matched ? matched.title : "Storylight 拾光";
   }, [location.pathname]);
 
-  const dispatch = useDispatch();
-
-  const handleLogout = async (e) => {
-    e.preventDefault();
+  const handleLogout = async () => {
     try {
-      const res = await axios.post(`${BASE_URL}/v2/logout`);
-
-      // 清掉 cookie
-      document.cookie =
-        "hexToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-
-      delete axios.defaults.headers.common["Authorization"];
-      dispatch(addToast(res.data));
-      setTimeout(() => {
-        (navigate("/admin/login"), { replace: true });
-      }, 2000);
+      await logout();
+      dispatch(addToast({ success: true, message: "已成功登出" }));
+      navigate("/admin/login", { replace: true });
     } catch (err) {
-      // 清掉 cookie
-      document.cookie =
-        "hexToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-
-      delete axios.defaults.headers.common["Authorization"];
-
-      const errorMessage =
-        err.response?.data?.message ||
-        "登出失敗，已清除本地登入資訊，請稍候再試";
-      dispatch(addToast({ success: false, message: errorMessage }));
-      setTimeout(() => {
-        (navigate("/admin/login"), { replace: true });
-      }, 2000);
+      dispatch(
+        addToast({
+          success: false,
+          message: err.response?.data?.message || "登出失敗，請稍後再試",
+        })
+      );
+      navigate("/admin/login", { replace: true });
     }
   };
 

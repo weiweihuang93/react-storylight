@@ -1,19 +1,16 @@
-import axios from "axios";
-import { BASE_URL } from "@/data/config";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import ToastComponent from "@/components/common/ToastComponent";
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
 import { logo } from "@/data/images.js";
+import { AdminContext } from "@/context/AdminContext";
 
 export default function AdminLogin() {
-  const [account, setAccount] = useState({
-    username: "",
-    password: "",
-  });
-
+  const { login } = useContext(AdminContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [account, setAccount] = useState({ username: "", password: "" });
 
   const handleSigninInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,17 +20,10 @@ export default function AdminLogin() {
     });
   };
 
-  const dispatch = useDispatch();
-
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${BASE_URL}/v2/admin/signin`, account);
-      const { token, expired } = res.data;
-
-      document.cookie = `hexToken=${token}; expires=${new Date(expired).toUTCString()}; path=/;`;
-      axios.defaults.headers.common["Authorization"] = token;
-
+      await login(account);
       dispatch(
         addToast({
           success: true,

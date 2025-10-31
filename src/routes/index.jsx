@@ -1,3 +1,6 @@
+import FrontProviders from "../providers/FrontProviders";
+import AdminProviders from "../providers/AdminProviders";
+
 import FrontLayout from "../features/front/FrontLayout";
 import HomePage from "../features/front/HomePage";
 import CategoryPage from "../features/front/CategoryPage";
@@ -24,7 +27,11 @@ import FavoritesPage from "../features/member/FavoritesPage";
 const routes = [
   {
     path: "/",
-    element: <FrontLayout />,
+    element: (
+      <FrontProviders>
+        <FrontLayout />
+      </FrontProviders>
+    ),
     children: [
       {
         path: "",
@@ -69,32 +76,30 @@ const routes = [
   },
   {
     path: "/admin",
-    element: <CheckedRoute />,
+    element: (
+      <AdminProviders>
+        <CheckedRoute />
+      </AdminProviders>
+    ),
     children: [
       {
         path: "",
         element: <AdminLayout />,
         children: [
-          {
-            path: "product",
-            element: <AdminProduct />,
-          },
-          {
-            path: "order",
-            element: <AdminOrder />,
-          },
-          {
-            path: "coupon",
-            element: <AdminCoupon />,
-          },
+          { path: "product", element: <AdminProduct /> },
+          { path: "order", element: <AdminOrder /> },
+          { path: "coupon", element: <AdminCoupon /> },
         ],
       },
-      ,
     ],
   },
   {
     path: "/admin/login",
-    element: <AdminLogin />,
+    element: (
+      <AdminProviders>
+        <AdminLogin />
+      </AdminProviders>
+    ),
   },
   {
     path: "*",
