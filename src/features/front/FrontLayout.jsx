@@ -28,7 +28,10 @@ export default function FrontLayout() {
     useEffect(() => {
       if (hash) {
         const el = document.querySelector(hash);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
       }
     }, [hash]);
 
