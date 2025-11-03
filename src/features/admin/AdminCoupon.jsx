@@ -3,6 +3,7 @@ import { BASE_URL, API_PATH } from "@/data/config";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
+import { swalConfirm } from "@/data/swalConfirm";
 
 const defaultModalState = {
   title: "",
@@ -49,6 +50,9 @@ export default function AdminCoupon() {
 
   // 刪除
   const deleteCoupon = async (coupon_id) => {
+    const confirmed = await swalConfirm("確定要刪除這筆優惠券嗎？");
+    if (!confirmed) return;
+
     try {
       const res = await adminAxios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/coupon/${coupon_id}`

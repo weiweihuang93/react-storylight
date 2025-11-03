@@ -6,6 +6,7 @@ import categories from "@/data/categories";
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
 import Pagination from "@/components/common/Pagination";
+import { swalConfirm } from "@/data/swalConfirm";
 
 const GOOGLE_BOOKS_API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 
@@ -188,6 +189,9 @@ export default function AdminProduct() {
 
   // 刪除商品
   const deleteProduct = async (product_id) => {
+    const confirmed = await swalConfirm("確定要刪除這筆商品嗎？");
+    if (!confirmed) return;
+
     try {
       const res = await adminAxios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${product_id}`

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToast } from "@/redux/toastSlice";
 import Pagination from "@/components/common/Pagination";
+import { swalConfirm } from "@/data/swalConfirm";
 
 export default function AdminOrder() {
   const [allOrders, setAllOrders] = useState([]);
@@ -117,6 +118,9 @@ export default function AdminOrder() {
 
   // 刪除訂單
   const deleteOrder = async (order_id) => {
+    const confirmed = await swalConfirm("確定要刪除這筆訂單嗎？");
+    if (!confirmed) return;
+
     try {
       const res = await adminAxios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/order/${order_id}`
