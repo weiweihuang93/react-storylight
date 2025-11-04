@@ -71,11 +71,14 @@
 ## 技術棧
 
 - **前端框架**: React 18 + Vite
-- **路由**: React Router v7
+- **路由**: React Router v7（使用 Hash Router 以支援 GitHub Pages）
 - **狀態管理**: Redux Toolkit（Toast 狀態管理）+ React Context（模擬登入狀態）
 - **表單驗證**: react-hook-form
-- **UI / 樣式**: SCSS、Bootstrap（含變數管理）、Material Symbols / Icons
-- **其他**: Axios（API 請求）、Google Books API（書籍相關資訊）
+- **UI 框架**: Bootstrap 5
+- **樣式處理**: SCSS + Material Symbols / Icons
+- **UI 元件**: SweetAlert2（對話框）、Swiper（輪播）
+- **HTTP 請求**: Axios
+- **其他**: Google Books API（書籍相關資訊）
 
 ---
 
@@ -85,6 +88,8 @@
 - **ScreenLoading**：畫面切換時的載入動畫
 - **SkeletonLoading**：商品卡片等資料讀取前的骨架畫面
 - **ReactLoading**：按鈕或局部元件的 loading spinner
+- **SweetAlert2**：確認對話框、操作提示（刪除確認等）
+- **Swiper**：書籍輪播元件（首頁推薦書籍展示）
 
 ---
 
@@ -96,45 +101,108 @@ storylight/
 ├─ src/
 │   ├─ assets/                     # 靜態資源統一管理
 │   │   ├─ images/                 # 圖片，例如 logo、icon、banner
-│   │   ├─ stylesheets/            # SCSS 樣式
-│   │   │   ├─ base/               # 基礎樣式
-│   │   │   ├─ helpers/            # 工具變數、mixin、functions (colors, spacing)
-│   │   │   ├─ pages/              # 頁面專屬樣式
-│   │   │   └─ skeleton/           # skeleton loading 樣式
-│   │   │   all.scss               # 全域樣式入口
+│   │   └─ stylesheets/            # SCSS 樣式
+│   │       ├─ base/               # 基礎樣式
+│   │       ├─ helpers/            # 工具變數、mixin、functions (colors, spacing)
+│   │       ├─ pages/              # 頁面專屬樣式
+│   │       ├─ skeleton/           # skeleton loading 樣式
+│   │       └─ all.scss            # 全域樣式入口
 │   │
 │   ├─ components/                 # 可重複使用的 UI 元件
 │   │   ├─ common/                 # 全站共用元件
 │   │   └─ skeleton/               # Skeleton loading 元件
 │   │
-│   ├─ context/                    # React Context
-│   │   └─ AppContext.jsx
+│   ├─ context/                    # React Context（狀態管理）
+│   │   ├─ AppContext.jsx          # 應用程式全域狀態
+│   │   ├─ CartContext.jsx         # 購物車狀態
+│   │   ├─ FavoritesContext.jsx    # 收藏功能狀態
+│   │   ├─ UserContext.jsx         # 用戶資訊狀態
+│   │   ├─ ProductContext.jsx      # 產品資料狀態
+│   │   ├─ OrderContext.jsx        # 訂單資料狀態
+│   │   └─ AdminContext.jsx        # 後台專用狀態
 │   │
-│   ├─ data/                       # 資料檔案
-│   │   ├─ categories.js           # 書籍分類
+│   ├─ providers/                  # Context Providers 包裝層
+│   │   ├─ FrontProviders.jsx      # 前台 Providers 組合
+│   │   └─ AdminProviders.jsx      # 後台 Providers 組合
+│   │
+│   ├─ data/                       # 資料檔案與工具
+│   │   ├─ categories.js           # 書籍分類資料
 │   │   ├─ config.js               # API 路徑 / BASE_URL, API_PATH
-│   │   └─ images.js               # 圖片路徑常數
+│   │   ├─ images.js               # 圖片路徑常數
+│   │   ├─ adminAxios.js           # Admin 專用 Axios 實例
+│   │   └─ swalConfirm.js          # SweetAlert2 確認對話框工具
 │   │
-│   ├─ features/                   # 各頁面
-│   │   ├─ admin/                  # 後台頁面
-│   │   └─ front/                  # 前台頁面
-│   │   └─ front_cart/             # 前台購物車頁面
+│   ├─ features/                   # 功能頁面（Feature-based）
+│   │   ├─ admin/                  # 後台管理頁面
+│   │   ├─ front/                  # 前台頁面
+│   │   ├─ front_cart/             # 前台購物車流程頁面
 │   │   └─ member/                 # 會員中心頁面
 │   │
-│   ├─ redux/                      # Redux slice（各功能狀態管理）
-│   │   └─ toastSlice.js
+│   ├─ redux/                      # Redux slice（UI 狀態管理）
+│   │   └─ toastSlice.js           # Toast 通知狀態
 │   │
-│   ├─ routes/                     # 路由表
-│   │   └─ index.jsx
+│   ├─ routes/                     # 路由配置
+│   │   └─ index.jsx               # 路由表定義
 │   │
-│   └─ store/                      # Redux store 入口與設定（整合所有 slice）
-│   │   └─ store.js
+│   ├─ store/                      # Redux store 設定
+│   │   └─ store.js                # Store 入口（整合所有 slice）
+│   │
+│   └─ main.jsx                    # React 應用程式入口
 │
-├─ main.jsx                        # React 入口
+├─ public/                         # 靜態資源（部署用）
+├─ .env                            # 環境變數（不納入版控）
 ├─ vite.config.js                  # Vite 配置
 ├─ package.json                    # 依賴套件與腳本
-├─ package-lock.json               # 依賴鎖定版本
 └─ README.md                       # 專案說明文件
+```
+
+---
+
+## 架構設計
+
+### 狀態管理策略
+
+專案採用 **Redux Toolkit** + **React Context** 混合架構：
+
+- **Redux Store**：集中管理 UI 狀態（Toast 通知）
+- **React Context**：分層管理應用程式狀態，依功能領域拆分為 7 個 Context
+
+### Context 分層說明
+
+#### 前台 Context
+
+- **AppContext**：應用程式全域狀態（載入狀態、錯誤處理）
+- **UserContext**：用戶認證與個人資訊
+- **CartContext**：購物車資料與操作
+- **FavoritesContext**：收藏清單管理（LocalStorage 持久化）
+- **ProductContext**：商品資料與篩選
+- **OrderContext**：訂單資料與歷史紀錄
+
+#### 後台 Context
+
+- **AdminContext**：後台管理專用狀態（商品/訂單/優惠券管理）
+
+### Provider 包裝模式
+
+使用 **Provider Composition Pattern** 統一管理 Context 注入：
+
+- **FrontProviders**：包裝所有前台 Context，提供給前台路由使用
+- **AdminProviders**：包裝後台 Context，提供給後台路由使用
+
+### 路由架構
+
+採用 **Hash Router** 支援 GitHub Pages 部署：
+
+```
+/ (FrontProviders)          # 前台路由群組
+├─ 首頁、分類、商品詳情
+├─ 購物車流程
+└─ 會員中心
+
+/admin (AdminProviders)     # 後台路由群組
+├─ 商品管理
+├─ 訂單管理
+└─ 優惠券管理
 ```
 
 ---
@@ -170,33 +238,90 @@ storylight/
 
 ---
 
-## 安裝與執行 (Installation)
+## 安裝與執行
+
+### 1. 取得專案
 
 ```bash
-# 取得專案
-git clone <repo-url>
-cd project-name
+git clone https://github.com/weiweihuang93/react-storylight.git
+cd react-storylight
+```
 
-# 安裝依賴
+### 2. 安裝依賴
+
+```bash
 npm install
+```
 
-# 啟動開發伺服器
+### 3. 環境變數設定
+
+在專案根目錄建立 `.env` 檔案（請參考下方「環境變數設定」章節）
+
+### 4. 開發指令
+
+```bash
+# 啟動開發伺服器（預設 http://localhost:5173）
 npm run dev
 
-# 打包專案
+# 執行 ESLint 檢查
+npm run lint
+
+# 建置生產版本
 npm run build
+
+# 預覽生產版本
+npm run preview
+
+# 部署到 GitHub Pages
+npm run deploy
 ```
 
 ---
 
 ## 環境變數設定
 
-請在專案根目錄建立 .env 檔案，並依需求填入以下參數：
+請在專案根目錄建立 `.env` 檔案，並依需求填入以下參數：
 
 ```env
-VITE_BASE_URL=''
-VITE_API_PATH=''
-VITE_GOOGLE_BOOKS_API_KEY=''
+VITE_BASE_URL=''              # API 基礎網址
+VITE_API_PATH=''              # API 路徑
+VITE_GOOGLE_BOOKS_API_KEY=''  # Google Books API 金鑰
 ```
 
-⚠️ 請勿將 .env 檔案上傳至 GitHub，避免洩漏敏感資訊。
+⚠️ **注意事項**：
+
+- `.env` 檔案已加入 `.gitignore`，請勿上傳至 GitHub
+- 環境變數必須以 `VITE_` 開頭才能在前端使用
+- 修改環境變數後需重新啟動開發伺服器
+
+---
+
+## 部署說明
+
+### GitHub Pages 部署
+
+本專案已配置 GitHub Pages 自動部署：
+
+#### 部署步驟
+
+```bash
+# 1. 建置生產版本
+npm run build
+
+# 2. 部署到 gh-pages 分支
+npm run deploy
+```
+
+#### 部署配置
+
+- **Base Path**: `/react-storylight/` (設定於 `vite.config.js`)
+- **Router 模式**: Hash Router（相容 GitHub Pages）
+- **部署分支**: `gh-pages`
+
+#### 存取網址
+
+部署成功後，可透過以下網址存取：
+
+```
+https://weiweihuang93.github.io/react-storylight/
+```
